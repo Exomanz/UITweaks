@@ -1,0 +1,32 @@
+﻿<vertical xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' 
+		  xsi:schemaLocation='https://monkeymanboy.github.io/BSML-Docs/ 
+		  https://raw.githubusercontent.com/monkeymanboy/BSML-Docs/gh-pages/BSMLSchema.xsd'
+		  child-control-height='False'>
+	<vertical bg='panel-top' vertical-fit='PreferredSize' pref-width='110' pad-top='1' spacing='-3'>
+		<text text='Multiplier' font-size='9' italics='True' align='Center'/>
+	</vertical>
+	<vertical vertical-fit='PreferredSize'>
+		<horizontal bg='round-rect-panel' pref-width='130' spacing='5' pad='2' bg-color='black'>
+			<vertical bg='round-rect-panel' bg-color='gray' pref-width='55' pad='2'>
+				<bool-setting text='Enabled' value='MultiplierModEnabled' apply-on-change='True'/>
+				<bool-setting text='Rainbow Animation' value='RainbowAnim' 
+							  hover-hint='Enable/Disable The Rainbow Animation On 8x' apply-on-change='True'
+							  interactable='~IsModEnabled'/>
+			</vertical>
+			<vertical bg='round-rect-panel' bg-color='gray' pref-width='70' pad='2'>
+				<color-setting text='1x Multiplier Color' value='1xColor' apply-on-change='True' interactable='~IsModEnabled'/>
+				<color-setting text='2x Multiplier Color' value='2xColor' apply-on-change='True' interactable='~IsModEnabled'/>
+				<color-setting text='4x Multiplier Color' value='4xColor' apply-on-change='True' interactable='~IsModEnabled'/>
+				<color-setting text='8x Multiplier Color' value='8xColor' 
+							   apply-on-change='True' interactable='~IsRainbowEnabled'/>
+			</vertical>
+		</horizontal>
+	</vertical>
+	<vertical>
+		<horizontal spacing='2'>
+			<text text='Developed by  :' font-size='5' align='Center' italics='True'/>
+			<text text='Exomanz#8083' font-size='5' align='Center'
+							italics='True' font-color='Lime'/>
+		</horizontal>
+	</vertical>
+</vertical>
