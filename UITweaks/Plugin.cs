@@ -18,7 +18,7 @@ namespace UITweaks
 
             zen.OnApp<UIAppInstaller>().WithParameters(pConf);
             zen.OnMenu<UIMenuInstaller>();
-            zen.OnGame<UIGameInstaller>().ShortCircuitForTutorial();
+            zen.OnGame<UIGameInstaller>().OnlyForStandard();
         }
 
         [OnEnable]
