@@ -7,22 +7,20 @@ namespace UITweaks.Services
     public class MultiplierColorer : IInitializable, ITickable
     {
         PluginConfig.MultiplierConfig _config;
-        ScoreMultiplierUIController _ui;
         CurvedTextMeshPro[] _mainTextGO;
         ImageView _bg;
         ImageView _fg;
 
-        public MultiplierColorer(PluginConfig.MultiplierConfig config, ScoreMultiplierUIController scoreMultiplierUIController)
+        public MultiplierColorer(PluginConfig.MultiplierConfig config)
         {
-            _ui = scoreMultiplierUIController;
             _config = config;
         }
 
         public void Initialize()
         {
-            var text = _ui.transform.Find("TextPanel").GetComponentsInChildren<CurvedTextMeshPro>();
-            var bg = _ui.transform.Find("BGCircle").GetComponent<ImageView>();
-            var fg = _ui.transform.Find("FGCircle").GetComponent<ImageView>();
+            var text = GameObject.Find("TextPanel").GetComponentsInChildren<CurvedTextMeshPro>();
+            var bg = GameObject.Find("BGCircle").GetComponent<ImageView>();
+            var fg = GameObject.Find("FGCircle").GetComponent<ImageView>();
 
             _mainTextGO = text;
             _bg = bg;
