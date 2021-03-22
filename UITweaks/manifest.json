@@ -10,6 +10,5 @@
     "BSIPA": "^4.1.6",
     "SiraUtil": "^2.5.2",
     "BeatSaberMarkupLanguage": "^1.5.1"
-  },
-  "features": []
+  }
 }
