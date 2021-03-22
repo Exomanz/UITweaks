@@ -7,19 +7,21 @@ namespace UITweaks.Services
     public class EnergyBarColorer : IInitializable, ITickable
     {
         PluginConfig.EnergyBarConfig _config;
-        GameEnergyCounter _energy;
+        IGameEnergyCounter _energy;
+        GameEnergyUIPanel _panel;
         ImageView _bar;
 
-        public EnergyBarColorer(PluginConfig.EnergyBarConfig config) =>
+        public EnergyBarColorer(PluginConfig.EnergyBarConfig config, IGameEnergyCounter gameEnergyCounter, GameEnergyUIPanel gameEnergyUIPanel)
+        {
+            _energy = gameEnergyCounter;
+            _panel = gameEnergyUIPanel;
             _config = config;
+        }
 
         public void Initialize()
         {
-            var bar = GameObject.Find("EnergyBar").GetComponent<ImageView>();
+            var bar = _panel.transform.Find("EnergyBar").GetComponent<ImageView>();
             _bar = bar;
-
-            var energy = GameObject.Find("GameplayData").GetComponent<GameEnergyCounter>();
-            _energy = energy;
         }
 
         public void Tick()

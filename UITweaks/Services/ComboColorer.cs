@@ -7,15 +7,19 @@ namespace UITweaks.Services
 {
     public class ComboColorer : IInitializable
     {
+        ComboUIController _comboUIController;
         PluginConfig.ComboConfig _config;
         ImageView[] _fcLines;
 
-        public ComboColorer(PluginConfig.ComboConfig config) =>
+        public ComboColorer(PluginConfig.ComboConfig config, ComboUIController comboUIController)
+        {
+            _comboUIController = comboUIController;
             _config = config;
+        }
 
         public void Initialize()
         { 
-            var comboFCLines = GameObject.Find("ComboPanel").GetComponentsInChildren<ImageView>();
+            var comboFCLines = _comboUIController.GetComponentsInChildren<ImageView>();
             _fcLines = comboFCLines;
 
             ReflectionUtil.SetField(_fcLines[0], "_gradient", true);
