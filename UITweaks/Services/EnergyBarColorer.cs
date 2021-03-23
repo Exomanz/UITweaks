@@ -1,5 +1,7 @@
 ﻿using HMUI;
+using IPA.Utilities;
 using UnityEngine;
+using UnityEngine.UI;
 using Zenject;
 
 namespace UITweaks.Services
@@ -7,19 +9,21 @@ namespace UITweaks.Services
     public class EnergyBarColorer : IInitializable, ITickable
     {
         PluginConfig.EnergyBarConfig _config;
-        GameEnergyCounter _energy;
-        ImageView _bar;
+        IGameEnergyCounter _energy;
+        GameEnergyUIPanel _panel;
+        Image _bar;
 
-        public EnergyBarColorer(PluginConfig.EnergyBarConfig config) =>
+        public EnergyBarColorer(PluginConfig.EnergyBarConfig config, IGameEnergyCounter gameEnergyCounter, GameEnergyUIPanel gameEnergyUIPanel)
+        {
+            _energy = gameEnergyCounter;
+            _panel = gameEnergyUIPanel;
             _config = config;
+        }
 
         public void Initialize()
         {
-            var bar = GameObject.Find("EnergyBar").GetComponent<ImageView>();
+            var bar = _panel.GetField<Image, GameEnergyUIPanel>("_energyBar");
             _bar = bar;
-
-            var energy = GameObject.Find("GameplayData").GetComponent<GameEnergyCounter>();
-            _energy = energy;
         }
 
         public void Tick()

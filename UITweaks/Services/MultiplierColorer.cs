@@ -11,7 +11,10 @@ namespace UITweaks.Services
         ImageView _bg;
         ImageView _fg;
 
-        public MultiplierColorer(PluginConfig.MultiplierConfig config) => _config = config;
+        public MultiplierColorer(PluginConfig.MultiplierConfig config)
+        {
+            _config = config;
+        }
 
         public void Initialize()
         {
