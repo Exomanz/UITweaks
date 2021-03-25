@@ -28,31 +28,31 @@ namespace UITweaks.Settings
         [UIValue("1xColor")]
         protected Color IColor
         {
-            get => _config.IColor;
-            set => _config.IColor = value;
+            get => _config.Color1;
+            set => _config.Color1 = value;
         }
 
         [UIValue("2xColor")]
         protected Color IIColor
         {
-            get => _config.IIColor;
-            set => _config.IIColor = value;
+            get => _config.Color2;
+            set => _config.Color2 = value;
         }
 
         [UIValue("4xColor")]
         protected Color IVColor
         {
-            get => _config.IVColor;
-            set => _config.IVColor = value;
+            get => _config.Color4;
+            set => _config.Color4 = value;
         }
 
         [UIValue("RainbowAnim")]
         protected bool RainbowAnim
         {
-            get => _config.RainbowAnimOnIIX;
+            get => _config.RainbowAnimOn8;
             set
             {
-                _config.RainbowAnimOnIIX = value;
+                _config.RainbowAnimOn8 = value;
                 NotifyPropertyChanged(nameof(IsRainbowEnabled));
             }
         }
@@ -60,8 +60,8 @@ namespace UITweaks.Settings
         [UIValue("8xColor")]
         protected Color IIXColor
         {
-            get => _config.IIXColor;
-            set => _config.IIXColor = value;
+            get => _config.Color8;
+            set => _config.Color8 = value;
         }
 
         [UIValue("IsModEnabled")]

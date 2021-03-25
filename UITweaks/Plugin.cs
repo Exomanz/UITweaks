@@ -7,7 +7,7 @@ using UITweaks.Installers;
 
 namespace UITweaks
 {
-    [Plugin(RuntimeOptions.SingleStartInit)]
+    [Plugin(RuntimeOptions.DynamicInit)]
     public class Plugin
     {
         [Init]
@@ -18,7 +18,12 @@ namespace UITweaks
 
             zen.OnApp<UIAppInstaller>().WithParameters(pConf);
             zen.OnMenu<UIMenuInstaller>();
-            zen.OnGame<UIGameInstaller>().Expose<ComboUIController>().Expose<GameEnergyUIPanel>().ShortCircuitForTutorial().ShortCircuitForMultiplayer();
+
+            zen.OnGame<UIGameInstaller>().Expose<ComboUIController>().Expose<GameEnergyUIPanel>()
+                .Expose<ScoreMultiplierUIController>().ShortCircuitForTutorial().ShortCircuitForMultiplayer();
+
+            zen.OnGame<UIGameInstaller>(false).Expose<ComboUIController>().Expose<GameEnergyUIPanel>()
+                .Expose<ScoreMultiplierUIController>().OnlyForMultiplayer();
         }
 
         [OnEnable]

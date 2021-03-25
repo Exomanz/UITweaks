@@ -13,11 +13,11 @@
 							  hover-hint='Enable/Disable The Rainbow Animation On 8x' apply-on-change='True'
 							  interactable='~IsModEnabled'/>
 			</vertical>
-			<vertical bg='round-rect-panel' bg-color='gray' pref-width='70' pad='2'>
+			<vertical bg='round-rect-panel' bg-color='gray' pref-width='70' pad='2' child-control-height='False'>
 				<color-setting text='1x Multiplier Color' value='1xColor' apply-on-change='True' interactable='~IsModEnabled'/>
 				<color-setting text='2x Multiplier Color' value='2xColor' apply-on-change='True' interactable='~IsModEnabled'/>
 				<color-setting text='4x Multiplier Color' value='4xColor' apply-on-change='True' interactable='~IsModEnabled'/>
-				<color-setting text='8x Multiplier Color' value='8xColor' 
+				<color-setting text='8x Multiplier Color' value='8xColor'
 							   apply-on-change='True' interactable='~IsRainbowEnabled'/>
 			</vertical>
 		</horizontal>

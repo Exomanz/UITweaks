@@ -134,6 +134,7 @@
     <Compile Include="Services\EnergyBarColorer.cs" />
     <Compile Include="Services\HSBColor.cs" />
     <Compile Include="Services\MultiplierColorer.cs" />
+    <Compile Include="Settings\ComboPanelSettingsController.cs" />
     <Compile Include="Settings\EnergyBarSettingsController.cs" />
     <Compile Include="Settings\MultiplierSettingsController.cs" />
     <Compile Include="Settings\UIFlowCoordinator.cs" />
@@ -147,6 +148,7 @@
     <None Include="Directory.Build.targets" Condition="Exists('Directory.Build.targets')" />
     <EmbeddedResource Include="Settings\Views\multiplierSettings.bsml" />
     <EmbeddedResource Include="Settings\Views\energyBarSettings.bsml" />
+    <None Include="Settings\Views\comboSettings.bsml" />
     <None Include="UITweaks.csproj.user" Condition="Exists('UITweaks.csproj.user')" />
   </ItemGroup>
   <ItemGroup>
@@ -156,5 +158,6 @@
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

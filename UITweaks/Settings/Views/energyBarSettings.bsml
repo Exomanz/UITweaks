@@ -9,8 +9,12 @@
 	<vertical bg='round-rect-panel' bg-color='black' pad='2' vertical-fit='PreferredSize'>
 		<vertical bg='round-rect-panel' pad='2'>
 			<bool-setting text='Enabled' value='EnergyBarModEnabled' apply-on-change='True'/>
-			<color-setting text='Low Energy Color' value='LowEnergyColor' apply-on-change='True'/>
-			<color-setting text='High Energy Color' value='HighEnergyColor' apply-on-change='True'/>
+			<color-setting text='Low Energy Color' value='LowEnergyColor' 
+						   apply-on-change='True' interactable='~IsModEnabled'/>
+			<color-setting text='High Energy Color' value='HighEnergyColor' 
+						   apply-on-change='True' interactable='~IsModEnabled'/>
+			<bool-setting text='Rainbow Animation' hover-hint='Rainbow animation on full energy, similar to the Redbar mod.'
+						  value='RainbowAnimOnFull' interactable='~IsModEnabled' apply-on-change='True'/>
 		</vertical>
 	</vertical>
 </vertical>

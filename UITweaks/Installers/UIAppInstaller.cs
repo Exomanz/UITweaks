@@ -1,4 +1,5 @@
-﻿using Zenject;
+﻿using SiraUtil.Zenject;
+using Zenject;
 
 namespace UITweaks.Installers
 {

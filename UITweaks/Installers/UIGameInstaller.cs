@@ -1,5 +1,4 @@
-﻿using SiraUtil;
-using UITweaks.Services;
+﻿using UITweaks.Services;
 using Zenject;
 
 namespace UITweaks.Installers

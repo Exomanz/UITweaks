@@ -8,15 +8,17 @@ namespace UITweaks.Settings
     {
         MultiplierSettingsController _multi;
         EnergyBarSettingsController _energy;
+        ComboPanelSettingsController _combo;
         MainFlowCoordinator _mainFlow;
 
         [Inject]
         public void Construct(MultiplierSettingsController multi, EnergyBarSettingsController energy, 
-            MainFlowCoordinator mainFlow)
+            MainFlowCoordinator mainFlow, ComboPanelSettingsController combo)
         {
             _multi = multi;
             _energy = energy;
             _mainFlow = mainFlow;
+            _combo = combo;
         }
 
         protected override void DidActivate(bool firstActivation, bool addedToHierarchy, bool screenSystemEnabling)
@@ -25,7 +27,7 @@ namespace UITweaks.Settings
             {
                 SetTitle("UI Tweaks", ViewController.AnimationType.In);
                 showBackButton = true;
-                ProvideInitialViewControllers(_multi, _energy);
+                ProvideInitialViewControllers(_multi, _energy, _combo);
             }
         }
 

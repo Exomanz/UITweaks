@@ -12,6 +12,7 @@ namespace UITweaks.Installers
 
             Container.Bind<MultiplierSettingsController>().FromNewComponentAsViewController().AsSingle();
             Container.Bind<EnergyBarSettingsController>().FromNewComponentAsViewController().AsSingle();
+            Container.Bind<ComboPanelSettingsController>().FromNewComponentAsViewController().AsSingle();
 
             Container.BindInterfacesAndSelfTo<UIMenuManager>().AsSingle();
         }

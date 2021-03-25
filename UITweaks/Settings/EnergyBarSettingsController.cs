@@ -21,7 +21,7 @@ namespace UITweaks.Settings
             set
             {
                 _config.EnableBar = value;
-                //NotifyPropertyChanged(object name);
+                NotifyPropertyChanged(nameof(IsModEnabled));
             }
         }
 
@@ -37,6 +37,23 @@ namespace UITweaks.Settings
         {
             get => _config.HighEnergyColor;
             set => _config.HighEnergyColor = value;
+        }
+
+        [UIValue("RainbowAnimOnFull")]
+        protected bool RainbowAnimOnFull
+        {
+            get => _config.RainbowAnimOnFull;
+            set => _config.RainbowAnimOnFull = value;
+        }
+
+        [UIValue("IsModEnabled")]
+        protected bool IsModEnabled
+        {
+            get { 
+                return EnergyBarModEnabled switch {
+                    true => true,
+                    false => false, };
+            }
         }
     }
 }

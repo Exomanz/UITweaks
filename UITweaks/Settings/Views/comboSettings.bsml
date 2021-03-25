@@ -1,0 +1,42 @@
+﻿<vertical xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
+		  xsi:schemaLocation='https://monkeymanboy.github.io/BSML-Docs/ 
+		  https://raw.githubusercontent.com/monkeymanboy/BSML-Docs/gh-pages/BSMLSchema.xsd'
+		  child-control-height='False'>
+	<vertical bg='panel-top' vertical-fit='PreferredSize' pref-width='150' pad-top='1' spacing='-3'>
+		<text text='Combo Panel' font-size='8' italics='True' align='Center'/>
+	</vertical>
+	<vertical vertical-fit='PreferredSize' bg='round-rect-panel' bg-color='black' pad='2'>
+		<horizontal pref-width='135' spacing='5'>
+			<vertical bg='round-rect-panel' pad='2' pref-width='65'>
+				<vertical bg='round-rect-panel' bg-color='black' pref-height='3' 
+						  pad-left='5' pad-right='5' pad-top='1'>
+					<text text='Non-Gradient Settings' font-size='7' italics='True' align='Center'/>
+				</vertical>
+				<bool-setting text='Enabled' value='EnableComboMod' 
+							  apply-on-change='True'/>
+				<color-setting text='Top Line Color' value='TopLineColorNoGrad' 
+							   apply-on-change='True' interactable='~IsModEnabled'/>
+				<color-setting text='Bottom Line Color' value='BottomLineColorNoGrad' 
+							   apply-on-change='True' interactable='~IsModEnabled'/>
+			</vertical>
+			<vertical bg='round-rect-panel' pad='2' pref-width='65'>
+				<vertical bg='round-rect-panel' pad-left='10' pad-right='10' 
+						  pad-top='1' bg-color='black' pref-height='10'>
+					<text text='Gradient Settings' font-size='7' align='Center' italics='True'/>
+				</vertical>
+				<bool-setting text='Gradient Lines' value='GradientLines' 
+							  apply-on-change='True' interactable='~IsModEnabled'/>
+				<color-setting text='TOP: Left' value='TopLineGradColor0' 
+							   apply-on-change='True' interactable='~IsGradientEnabled'/>
+				<color-setting text='TOP: Right' value='TopLineGradColor1' 
+							   apply-on-change='True' interactable='~IsGradientEnabled'/>
+				<bool-setting text='Bottom Opposite Top' value='IsBottomOppositeTop' 
+							  apply-on-change='True' interactable='~IsGradientEnabled'/>
+				<color-setting text='BOTTOM: Left' value='BottomLineGradColor0' 
+							   apply-on-change='True' interactable='~IsBottomOppositeTopOn'/>
+				<color-setting text='BOTTOM: Right' value='BottomLineGradColor1' 
+							   apply-on-change='True' interactable='~IsBottomOppositeTopOn'/>
+			</vertical>
+		</horizontal>
+	</vertical>
+</vertical>
