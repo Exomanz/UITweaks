@@ -43,16 +43,28 @@ namespace UITweaks.Settings
         protected bool RainbowAnimOnFull
         {
             get => _config.RainbowAnimOnFull;
-            set => _config.RainbowAnimOnFull = value;
+            set
+            {
+                _config.RainbowAnimOnFull = value;
+                NotifyPropertyChanged(nameof(IsRainbowEnabled));
+            }
         }
 
-        [UIValue("IsModEnabled")]
         protected bool IsModEnabled
         {
             get { 
                 return EnergyBarModEnabled switch {
                     true => true,
                     false => false, };
+            }
+        }
+
+        protected bool IsRainbowEnabled
+        {
+            get {
+                return RainbowAnimOnFull switch {
+                    true => true,
+                    false => false };
             }
         }
     }
