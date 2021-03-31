@@ -44,7 +44,7 @@ namespace UITweaks
             [UseConverter(typeof(HexColorConverter))]
             public virtual Color T_GradientColor1 { get; set; } = new Color(1f, 1f, 0.5f);
 
-            public virtual bool IsOppositeTopLine { get; set; } = true;
+            public virtual bool SeparateLineColors { get; set; } = true;
 
             [UseConverter(typeof(HexColorConverter))]
             public virtual Color B_GradientColor0 { get; set; } = Color.yellow;

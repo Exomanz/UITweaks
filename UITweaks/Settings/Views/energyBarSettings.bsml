@@ -1,20 +1,24 @@
 ﻿<vertical xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
 		  xsi:schemaLocation='https://monkeymanboy.github.io/BSML-Docs/ 
 		  https://raw.githubusercontent.com/monkeymanboy/BSML-Docs/gh-pages/BSMLSchema.xsd' 
-		  child-control-height='False'
-		  spacing='-25'>
-	<vertical bg='panel-top' vertical-fit='PreferredSize' pref-width='150' pad-top='1' spacing='-3'>
-		<text text='Energy Bar' font-size='8' italics='True' align='Center'/>
+		  child-control-height='False' spacing='-20'>
+	<vertical bg='panel-top' vertical-fit='PreferredSize' pref-width='150' pad-top='1'>
+		<text text='Energy Bar' font-size='9' italics='True' align='Center'/>
 	</vertical>
+	<horizontal bg='panel-top' bg-color='#356DF3'
+				horizontal-fit='PreferredSize' pref-width='80' pad-left='5' pad-right='5' pad='1'>
+		<bool-setting text='Enable Energy Bar Colorer' value='EnergyBarModEnabled' apply-on-change='True'/>
+	</horizontal>
 	<vertical bg='round-rect-panel' bg-color='black' pad='2' vertical-fit='PreferredSize'>
-		<vertical bg='round-rect-panel' pad='2' child-control-height='false'>
-			<bool-setting text='Enabled' value='EnergyBarModEnabled' apply-on-change='True'/>
+		<vertical bg='round-rect-panel' pad='2'>
 			<bool-setting text='Rainbow Animation' hover-hint='Rainbow animation on full energy, similar to the Redbar mod.'
 						  value='RainbowAnimOnFull' interactable='~IsModEnabled' apply-on-change='True'/>
 			<color-setting text='Low Energy Color' value='LowEnergyColor' 
-						   apply-on-change='True' strikethrough='~IsRainbowEnabled'/>
+						   apply-on-change='True' strikethrough='~StrikeOnEnable'
+						   interactable='~InteractOnEnable'/>
 			<color-setting text='High Energy Color' value='HighEnergyColor' 
-						   apply-on-change='True' strikethrough='~IsRainbowEnabled'/>
+						   apply-on-change='True' strikethrough='~StrikeOnEnable'
+						   interactable='~InteractOnEnable'/>
 		</vertical>
 	</vertical>
 </vertical>

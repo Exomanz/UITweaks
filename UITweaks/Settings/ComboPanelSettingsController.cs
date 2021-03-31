@@ -64,14 +64,15 @@ namespace UITweaks.Settings
             set => _config.T_GradientColor1 = value;
         }
 
-        [UIValue("IsBottomOppositeTop")]
-        protected bool IsBottomOppositeTop
+        [UIValue("SeparateLineColors")]
+        protected bool SeparateLineColors
         {
-            get => _config.IsOppositeTopLine;
+            get => _config.SeparateLineColors;
             set
             {
-                _config.IsOppositeTopLine = value;
-                NotifyPropertyChanged(nameof(IsBottomOppositeTopOn));
+                _config.SeparateLineColors = value;
+                NotifyPropertyChanged(nameof(OnSeparateLines));
+                NotifyPropertyChanged(nameof(OffSeparateLines));
             }
         }
 
@@ -90,6 +91,7 @@ namespace UITweaks.Settings
         }
         #endregion
 
+        #region Switch Properties
         protected bool IsModEnabled
         {
             get {
@@ -108,13 +110,23 @@ namespace UITweaks.Settings
             }
         }
 
-        protected bool IsBottomOppositeTopOn
+        protected bool OnSeparateLines
         {
             get {
-                return IsBottomOppositeTop switch {
-                    true => false,
-                    false => true };
+                return SeparateLineColors switch {
+                    true => true,
+                    false => false };
             }
         }
+
+        protected bool OffSeparateLines
+        {
+            get {
+                return SeparateLineColors switch {
+                    true => false,
+                    false => true, };
+            }
+        }
+        #endregion
     }
 }

@@ -1,32 +1,39 @@
 ﻿<vertical xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' 
 		  xsi:schemaLocation='https://monkeymanboy.github.io/BSML-Docs/ 
 		  https://raw.githubusercontent.com/monkeymanboy/BSML-Docs/gh-pages/BSMLSchema.xsd'
-		  child-control-height='False'>
-	<vertical bg='panel-top' vertical-fit='PreferredSize' pref-width='110' pad-top='1' spacing='-3'>
+		  child-control-height='False' spacing='-3'>
+	<vertical bg='panel-top' vertical-fit='PreferredSize' pref-width='110' pad-top='1'>
 		<text text='Multiplier' font-size='9' italics='True' align='Center'/>
 	</vertical>
+	<horizontal bg='panel-top' bg-color='#2988D6' 
+				horizontal-fit='PreferredSize' pref-width='80' pad-left='5' pad-right='5' pad='1'>
+		<bool-setting text='Enable Multiplier Colorer' value='MultiplierModEnabled' apply-on-change='True'/>
+	</horizontal>
 	<vertical vertical-fit='PreferredSize'>
-		<horizontal bg='round-rect-panel' pref-width='130' spacing='5' pad='2' bg-color='black'>
-			<vertical bg='round-rect-panel' bg-color='gray' pref-width='55' pad='2'>
-				<bool-setting text='Enabled' value='MultiplierModEnabled' apply-on-change='True'/>
-				<bool-setting text='Rainbow Animation' value='RainbowAnim' 
-							  hover-hint='Enable/Disable The Rainbow Animation On 8x' apply-on-change='True'
-							  interactable='~IsModEnabled'/>
+		<horizontal bg='round-rect-panel' pref-width='130' spacing='3' pad='2' bg-color='black'>
+			<vertical bg='round-rect-panel' bg-color='gray' pref-width='55' pad='2' spacing='-3'>
+				<text text='Info' align='Center' font-size='7' italics='True'/>
+				<text text='---------------' align='Center'/>
+				<text text='This settings panel controls the 
+					  different colors of the multiplier ring on certain values. In order to color on 8x, 
+					  rainbow animation MUST be disabled!' align='Center'/>
 			</vertical>
-			<vertical bg='round-rect-panel' bg-color='gray' pref-width='70' pad='2' child-control-height='False'>
-				<color-setting text='1x Multiplier Color' value='1xColor' apply-on-change='True' interactable='~IsModEnabled'/>
-				<color-setting text='2x Multiplier Color' value='2xColor' apply-on-change='True' interactable='~IsModEnabled'/>
-				<color-setting text='4x Multiplier Color' value='4xColor' apply-on-change='True' interactable='~IsModEnabled'/>
-				<color-setting text='8x Multiplier Color' value='8xColor'
-							   apply-on-change='True' interactable='~IsRainbowEnabled'/>
+			<vertical bg='round-rect-panel' bg-color='gray' pref-width='70' pad='2'>
+				<vertical bg='round-rect-panel' bg-color='black' pref-width='60' pad-left='2' pad-right='2' pad='1'>
+					<bool-setting text='Rainbow Animation' value='RainbowAnim' 
+								  apply-on-change='True' interactable='~IsModEnabled'
+								  strikethrough='~ConditionalStrikethroughM' 
+								  hover-hint='Enable/Disable The Rainbow Animation On 8x'/>
+				</vertical>
+				<color-setting text='1x Multiplier Color' value='1xColor' apply-on-change='True' 
+							   interactable='~IsModEnabled' strikethrough='~ConditionalStrikethroughM'/>
+				<color-setting text='2x Multiplier Color' value='2xColor' apply-on-change='True' 
+							   interactable='~IsModEnabled' strikethrough='~ConditionalStrikethroughM'/>
+				<color-setting text='4x Multiplier Color' value='4xColor' apply-on-change='True' 
+							   interactable='~IsModEnabled' strikethrough='~ConditionalStrikethroughM'/>
+				<color-setting text='8x Multiplier Color' value='8xColor' apply-on-change='True' 
+							   strikethrough='~ConditionalStrikethrough' interactable='~ConditionalInteractable'/>
 			</vertical>
-		</horizontal>
-	</vertical>
-	<vertical>
-		<horizontal spacing='2'>
-			<text text='Developed by  :' font-size='5' align='Center' italics='True'/>
-			<text text='Exomanz#8083' font-size='5' align='Center'
-							italics='True' font-color='Lime'/>
 		</horizontal>
 	</vertical>
 </vertical>

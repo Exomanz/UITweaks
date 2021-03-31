@@ -136,6 +136,7 @@
     <Compile Include="Services\MultiplierColorer.cs" />
     <Compile Include="Settings\ComboPanelSettingsController.cs" />
     <Compile Include="Settings\EnergyBarSettingsController.cs" />
+    <Compile Include="Settings\ExtraSettingsController.cs" />
     <Compile Include="Settings\MultiplierSettingsController.cs" />
     <Compile Include="Settings\UIFlowCoordinator.cs" />
     <Compile Include="Settings\UIMenuManager.cs" />
@@ -148,7 +149,8 @@
     <None Include="Directory.Build.targets" Condition="Exists('Directory.Build.targets')" />
     <EmbeddedResource Include="Settings\Views\multiplierSettings.bsml" />
     <EmbeddedResource Include="Settings\Views\energyBarSettings.bsml" />
-    <None Include="Settings\Views\comboSettings.bsml" />
+    <EmbeddedResource Include="Settings\Views\comboSettings.bsml" />
+    <EmbeddedResource Include="Settings\Views\extraSettings.bsml" />
     <None Include="UITweaks.csproj.user" Condition="Exists('UITweaks.csproj.user')" />
   </ItemGroup>
   <ItemGroup>

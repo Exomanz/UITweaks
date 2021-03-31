@@ -22,6 +22,7 @@ namespace UITweaks.Settings
             {
                 _config.EnableMultiplier = value;
                 NotifyPropertyChanged(nameof(IsModEnabled));
+                NotifyPropertyChanged(nameof(ConditionalStrikethroughM));
             }
         }
 
@@ -53,7 +54,10 @@ namespace UITweaks.Settings
             set
             {
                 _config.RainbowAnimOn8 = value;
-                NotifyPropertyChanged(nameof(IsRainbowEnabled));
+
+                //Pepega Section
+                NotifyPropertyChanged(nameof(ConditionalStrikethrough));
+                NotifyPropertyChanged(nameof(ConditionalInteractable));
             }
         }
 
@@ -64,7 +68,7 @@ namespace UITweaks.Settings
             set => _config.Color8 = value;
         }
 
-        [UIValue("IsModEnabled")]
+        #region Enabled/Disabled Properties
         protected bool IsModEnabled
         {
             get {
@@ -74,14 +78,35 @@ namespace UITweaks.Settings
             }
         }
 
-        [UIValue("IsRainbowEnabled")]
-        protected bool IsRainbowEnabled
+        protected bool ConditionalStrikethroughM
+        {
+            get 
+            {
+                return MultiplierModEnabled switch {
+                    true => false,
+                    false => true };
+            }
+        }
+        #endregion
+
+        #region Rainbow Animation Properties
+        protected bool ConditionalStrikethrough
         {
             get {
+                return RainbowAnim switch {
+                    true => true, 
+                    false => false, };
+            }
+        }
+
+        protected bool ConditionalInteractable
+        {
+            get { 
                 return RainbowAnim switch {
                     true => false,
                     false => true, };
             }
         }
+        #endregion
     }
 }

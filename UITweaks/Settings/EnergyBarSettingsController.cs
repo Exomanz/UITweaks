@@ -46,7 +46,8 @@ namespace UITweaks.Settings
             set
             {
                 _config.RainbowAnimOnFull = value;
-                NotifyPropertyChanged(nameof(IsRainbowEnabled));
+                NotifyPropertyChanged(nameof(StrikeOnEnable));
+                NotifyPropertyChanged(nameof(InteractOnEnable));
             }
         }
 
@@ -59,12 +60,21 @@ namespace UITweaks.Settings
             }
         }
 
-        protected bool IsRainbowEnabled
+        protected bool StrikeOnEnable
         {
             get {
                 return RainbowAnimOnFull switch {
                     true => true,
                     false => false };
+            }
+        }
+
+        protected bool InteractOnEnable
+        {
+            get {
+                return RainbowAnimOnFull switch {
+                    true => false,
+                    false => true, };
             }
         }
     }

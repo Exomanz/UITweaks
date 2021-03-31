@@ -29,7 +29,7 @@ namespace UITweaks.Services
                 _fcLines[0].color1 = _config.T_GradientColor1;
 
                 ReflectionUtil.SetField(_fcLines[1], "_gradient", true);
-                if (_config.IsOppositeTopLine)
+                if (!_config.SeparateLineColors)
                 {
                     ReflectionUtil.SetField(_fcLines[1], "_flipGradientColors", true);
                     _fcLines[1].color0 = _config.T_GradientColor0;
