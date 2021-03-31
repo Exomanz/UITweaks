@@ -8,8 +8,8 @@ A Beat Saber mod that aims to bring more color to the in-game HUD!
 - Complete configuration
 
 ## Roadpath
-- Color the progress bar and text
-- Rearrange the settings menu to make everything less confusing.
+- Color the progress bar and respective text
+- Color some things in multiplayer
 
 ## Requirements:
 - BSIPA v4.1.6+
