@@ -1,0 +1,67 @@
+﻿<vertical xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' 
+		  xsi:schemaLocation='https://monkeymanboy.github.io/BSML-Docs/ https://raw.githubusercontent.com/monkeymanboy/BSML-Docs/gh-pages/BSMLSchema.xsd'
+		  child-control-height='False'>
+	<tab-selector tab-tag='tabs' id='tabSelector'/>
+	
+	<!--Multiplier Tab-->
+	<tab tags='tabs' tab-name='Mutliplier'>
+		<modifier-container child-expand-width='True' horizontal-fit='PreferredSize'>
+			<checkbox text='Enabled' value='MultiEnabled' apply-on-change='True'/>
+			<color-setting text='1x Color' value='Color1' apply-on-change='True' bind-value='True' interactable='~MultiEnabled'/>
+			<color-setting text='2x Color' value='Color2' apply-on-change='True' bind-value='True' interactable='~MultiEnabled'/>
+			<color-setting text='4x Color' value='Color4' apply-on-change='True' bind-value='True' interactable='~MultiEnabled'/>
+			<checkbox text='Rainbow Animation On 8x' value='MultiRainbowAnim' apply-on-change='True'
+					  hover-hint='Must be disabled to color on 8x!' bind-value='True' interactable='~MultiEnabled'/>
+			<color-setting text='8x Color' value='Color8' apply-on-change='True' bind-value='True' active='~M_FlipRainbowAnim'/>
+		</modifier-container>
+	</tab>
+
+	<!--Energy Bar Tab-->
+	<tab tags='tabs' tab-name='Energy Bar'>
+		<modifier-container child-expand-width='True' horizontal-fit='PreferredSize'>
+			<checkbox text='Enabled' value='BarEnabled' bind-value='True' apply-on-change='True'/>
+			<color-setting text='Low Energy Color' value='LowEnergyColor' bind-value='True' apply-on-change='True' interactable='~BarEnabled'/>
+			<color-setting text='High Energy Color' value='HighEnergyColor' bind-value='True' apply-on-change='True' interactable='~BarEnabled'/>
+			<checkbox text='Rainbow Animation On Full' value='BarRainbowAnim' bind-value='True' apply-on-change='True' interactable='~BarEnabled'/>
+		</modifier-container>
+	</tab>
+	
+	<!--Combo Tab-->
+	<tab tags='tabs' tab-name='Combo Lines'>
+		<modifier-container child-expand-width='True' horizontal-fit='PreferredSize'>
+			<checkbox text='Enabled' value='ComboEnabled' apply-on-change='True' bind-value='True'/>
+			<color-setting text='Top Line Color' value='NoGradient_TopLine' apply-on-change='True' bind-value='True' interactable='~ComboEnabled'/>
+			<color-setting text='Bottom Line Color' value='NoGradient_BottomLine' apply-on-change='True' bind-value='True' interactable='~ComboEnabled'/>
+			<checkbox text='Gradient Lines' value='GradientLines' apply-on-change='True' interactable='~ComboEnabled' bind-value='True'/>
+			<button text='Gradient Settings' click-event='openGradientSettings' interactable='~GradientLines'/>
+
+			<modal show-event='openGradientSettings' hide-event='hideAllModals' click-off-closes='True' move-to-center='True'
+				   size-delta-x='130' size-delta-y='52'>
+				<vertical pref-height='50' vertical-fit='PreferredSize'>
+					<horizontal spacing='5'>
+						<vertical pad='2' pref-width='60' pref-height='20' child-control-height='False'>
+							<horizontal bg='panel-top' pad-left='5' pad-right='5' pad-top='1'>
+								<text text='Top Line' font-size='6' align='Center'/>
+							</horizontal>
+							<color-setting text='Left Color' value='Gradient_TopLineColor0' bind-value='True' apply-on-change='True'/>
+							<color-setting text='Right Color' value='Gradient_TopLineColor1' bind-value='True' apply-on-change='True'/>
+						</vertical>
+						<vertical pad='2' pref-width='60' pref-height='20' child-control-height='False'>
+							<horizontal bg='panel-top' pad-left='5' pad-right='5' pad-top='1'>
+								<text text='Bottom Line' font-size='6' align='Center'/>
+							</horizontal>
+							<checkbox text='Separate Line Colors' value='SeparateLines' bind-value='True' apply-on-change='True'
+									  hover-hint='If this setting is disabled, the bottom line will be opposite the top line.'/>
+							<color-setting text='Left Color' value='Gradient_BottomLineColor0' bind-value='True' apply-on-change='True'
+										   active='~SeparateLines'/>
+							<color-setting text='Right Color' value='Gradient_BottomLineColor1' bind-value='True' apply-on-change='True'
+										   active='~SeparateLines'/>
+						</vertical>
+					</horizontal>
+					<button text='Close' click-event='hideAllModals'/>
+				</vertical>
+			</modal>
+		</modifier-container>
+	</tab>
+	
+</vertical>

@@ -1,9 +1,9 @@
 ﻿using IPA;
 using IPA.Config.Stores;
-using IPAConfig = IPA.Config.Config;
-using IPALogger = IPA.Logging.Logger;
+using IPA.Logging;
 using SiraUtil.Zenject;
 using UITweaks.Installers;
+using IPAConfig = IPA.Config.Config;
 
 namespace UITweaks
 {
@@ -11,17 +11,18 @@ namespace UITweaks
     public class Plugin
     {
         [Init]
-        public Plugin(IPALogger logger, IPAConfig config, Zenjector zen)
+        public Plugin(Logger logger, IPAConfig config, Zenjector zen)
         {
-            Logger.log = logger;
             PluginConfig pConf = config.Generated<PluginConfig>();
 
-            zen.OnApp<UIAppInstaller>().WithParameters(pConf);
+            zen.OnApp<UIAppInstaller>().WithParameters(logger, pConf);
             zen.OnMenu<UIMenuInstaller>();
 
+            //Standard And Campaign
             zen.OnGame<UIGameInstaller>().Expose<ComboUIController>().Expose<GameEnergyUIPanel>()
                 .Expose<ScoreMultiplierUIController>().ShortCircuitForTutorial().ShortCircuitForMultiplayer();
 
+            //Multiplayer
             zen.OnGame<UIGameInstaller>(false).Expose<ComboUIController>().Expose<GameEnergyUIPanel>()
                 .Expose<ScoreMultiplierUIController>().OnlyForMultiplayer();
         }

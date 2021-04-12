@@ -19,13 +19,13 @@ namespace UITweaks.Installers
 
         public override void InstallBindings()
         {
-            if (_multi.EnableMultiplier) 
+            if (_multi.Enabled) 
                 Container.BindInterfacesAndSelfTo<MultiplierColorer>().AsSingle();
 
-            if (_energy.EnableBar) 
+            if (_energy.Enabled) 
                 Container.BindInterfacesAndSelfTo<EnergyBarColorer>().AsSingle();
 
-            if (_combo.EnableCombo) 
+            if (_combo.Enabled) 
                 Container.BindInterfacesAndSelfTo<ComboColorer>().AsSingle();
         }
     }

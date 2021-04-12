@@ -3,8 +3,8 @@
   "id": "UITweaks",
   "name": "UITweaks",
   "author": "Exomanz",
-  "version": "1.1.1",
-  "description": "Aims to bring more color to the HUD! Highly customizable.",
+  "version": "1.1.2",
+  "description": "Aims to bring more color to the in-game HUD! Highly configurable.",
   "gameVersion": "1.14.0",
   "dependsOn": {
     "BSIPA": "^4.1.6",

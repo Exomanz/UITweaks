@@ -46,6 +46,9 @@
       <Private>False</Private>
       <SpecificVersion>False</SpecificVersion>
     </Reference>
+    <Reference Include="Counters+">
+      <HintPath>..\..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\Beat Saber\Plugins\Counters+.dll</HintPath>
+    </Reference>
     <Reference Include="GameplayCore">
       <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\GameplayCore.dll</HintPath>
       <Private>False</Private>
@@ -55,6 +58,9 @@
       <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\HMRendering.dll</HintPath>
       <Private>False</Private>
       <SpecificVersion>False</SpecificVersion>
+    </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\Beat Saber\Libs\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="SiraUtil">
       <HintPath>$(BeatSaberDir)\Plugins\SiraUtil.dll</HintPath>
@@ -126,7 +132,6 @@
     <Compile Include="Installers\UIAppInstaller.cs" />
     <Compile Include="Installers\UIGameInstaller.cs" />
     <Compile Include="Installers\UIMenuInstaller.cs" />
-    <Compile Include="Logger.cs" />
     <Compile Include="Plugin.cs" />
     <Compile Include="PluginConfig.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -134,12 +139,10 @@
     <Compile Include="Services\EnergyBarColorer.cs" />
     <Compile Include="Services\HSBColor.cs" />
     <Compile Include="Services\MultiplierColorer.cs" />
-    <Compile Include="Settings\ComboPanelSettingsController.cs" />
-    <Compile Include="Settings\EnergyBarSettingsController.cs" />
     <Compile Include="Settings\ExtraSettingsController.cs" />
-    <Compile Include="Settings\MultiplierSettingsController.cs" />
     <Compile Include="Settings\UIFlowCoordinator.cs" />
     <Compile Include="Settings\UIMenuManager.cs" />
+    <Compile Include="Settings\UISettingsController.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="manifest.json" />
@@ -147,10 +150,8 @@
   <ItemGroup>
     <None Include="Directory.Build.props" Condition="Exists('Directory.Build.props')" />
     <None Include="Directory.Build.targets" Condition="Exists('Directory.Build.targets')" />
-    <EmbeddedResource Include="Settings\Views\multiplierSettings.bsml" />
-    <EmbeddedResource Include="Settings\Views\energyBarSettings.bsml" />
-    <EmbeddedResource Include="Settings\Views\comboSettings.bsml" />
     <EmbeddedResource Include="Settings\Views\extraSettings.bsml" />
+    <EmbeddedResource Include="Settings\Views\mainSettingsController.bsml" />
     <None Include="UITweaks.csproj.user" Condition="Exists('UITweaks.csproj.user')" />
   </ItemGroup>
   <ItemGroup>

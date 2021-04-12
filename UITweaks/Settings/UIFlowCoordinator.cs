@@ -7,20 +7,15 @@ namespace UITweaks.Settings
     public class UIFlowCoordinator : FlowCoordinator
     {
         MainFlowCoordinator _mainFlow;
-        MultiplierSettingsController _multi;
-        EnergyBarSettingsController _energy;
-        ComboPanelSettingsController _combo;
+        UISettingsController _settings;
         ExtraSettingsController _extra;
 
         [Inject]
-        public void Construct(MainFlowCoordinator mainFlow, MultiplierSettingsController multi,
-            EnergyBarSettingsController energy, ComboPanelSettingsController combo, 
+        public void Construct(MainFlowCoordinator mainFlow, UISettingsController settings,
             ExtraSettingsController extra)
         {
             _mainFlow = mainFlow;
-            _multi = multi;
-            _energy = energy;
-            _combo = combo;
+            _settings = settings;
             _extra = extra;
         }
 
@@ -30,7 +25,7 @@ namespace UITweaks.Settings
             {
                 SetTitle("UI Tweaks", ViewController.AnimationType.In);
                 showBackButton = true;
-                ProvideInitialViewControllers(_multi, _energy, _combo, _extra);
+                ProvideInitialViewControllers(_settings, null, null, _extra);
             }
         }
 
