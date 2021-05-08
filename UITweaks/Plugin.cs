@@ -1,4 +1,5 @@
-﻿using IPA;
+﻿using BeatSaberMarkupLanguage.GameplaySetup;
+using IPA;
 using IPA.Config.Stores;
 using IPA.Logging;
 using SiraUtil.Zenject;
@@ -11,26 +12,26 @@ namespace UITweaks
     public class Plugin
     {
         [Init]
-        public Plugin(Logger logger, IPAConfig config, Zenjector zen)
+        public Plugin(Logger logger, IPAConfig config, Zenjector zenj)
         {
             PluginConfig pConf = config.Generated<PluginConfig>();
 
-            zen.OnApp<UIAppInstaller>().WithParameters(logger, pConf);
-            zen.OnMenu<UIMenuInstaller>();
+            zenj.OnApp<UIAppInstaller>().WithParameters(logger, pConf);
+            zenj.OnMenu<UIMenuInstaller>();
 
-            //Standard And Campaign
-            zen.OnGame<UIGameInstaller>().Expose<ComboUIController>().Expose<GameEnergyUIPanel>()
-                .Expose<ScoreMultiplierUIController>().ShortCircuitForTutorial().ShortCircuitForMultiplayer();
+            //Standard, Campaign and Party Modes
+            zenj.OnGame<UICoreInstaller>().Expose<ScoreMultiplierUIController>().Expose<GameEnergyUIPanel>()
+                .Expose<ComboUIController>().Expose<SongProgressUIController>().ShortCircuitForTutorial().ShortCircuitForMultiplayer();
 
-            //Multiplayer
-            zen.OnGame<UIGameInstaller>(false).Expose<ComboUIController>().Expose<GameEnergyUIPanel>()
-                .Expose<ScoreMultiplierUIController>().OnlyForMultiplayer();
+            //Multiplayer Specific
+            zenj.OnGame<UICoreInstaller>(false).Expose<ScoreMultiplierUIController>().Expose<GameEnergyUIPanel>()
+                .Expose<ComboUIController>().Expose<SongProgressUIController>().Expose<MultiplayerPositionHUDController>().OnlyForMultiplayer();
         }
 
         [OnEnable]
-        public void OnEnable() { }
+        public void Enable() { }
 
         [OnDisable]
-        public void OnDisable() { }
+        public void Disable() { }
     }
 }

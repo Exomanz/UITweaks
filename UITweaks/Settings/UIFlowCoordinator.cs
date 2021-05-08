@@ -1,5 +1,7 @@
 ﻿using HMUI;
 using BeatSaberMarkupLanguage;
+using UITweaks.Utilities;
+using UnityEngine;
 using Zenject;
 
 namespace UITweaks.Settings
@@ -7,15 +9,16 @@ namespace UITweaks.Settings
     public class UIFlowCoordinator : FlowCoordinator
     {
         MainFlowCoordinator _mainFlow;
-        UISettingsController _settings;
+        MainSettingsController _settings;
+        ObjectPreviewPanelController _preview;
         ExtraSettingsController _extra;
 
         [Inject]
-        public void Construct(MainFlowCoordinator mainFlow, UISettingsController settings,
-            ExtraSettingsController extra)
+        public void Construct(MainFlowCoordinator mainFlow, MainSettingsController settings, ObjectPreviewPanelController preview, ExtraSettingsController extra)
         {
             _mainFlow = mainFlow;
             _settings = settings;
+            _preview = preview;
             _extra = extra;
         }
 
@@ -23,16 +26,18 @@ namespace UITweaks.Settings
         {
             if (firstActivation)
             {
-                SetTitle("UI Tweaks", ViewController.AnimationType.In);
+                SetTitle("UI Tweaks", ViewController.AnimationType.Out);
                 showBackButton = true;
-                ProvideInitialViewControllers(_settings, null, null, _extra);
+                ProvideInitialViewControllers(_settings, null, _preview, _extra);
+
+                DontDestroyOnLoad(new GameObject("UITweaksPanelGrabber").AddComponent<PanelGrabber>());
             }
         }
 
         protected override void BackButtonWasPressed(ViewController topViewController)
         {
             base.BackButtonWasPressed(topViewController);
-            _mainFlow.DismissFlowCoordinator(this, null, ViewController.AnimationDirection.Horizontal, false);
+            _mainFlow.DismissFlowCoordinator(this, null, ViewController.AnimationDirection.Vertical, false);
         }
     }
 }

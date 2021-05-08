@@ -3,12 +3,12 @@
   "id": "UITweaks",
   "name": "UITweaks",
   "author": "Exomanz",
-  "version": "1.1.2",
+  "version": "1.2.0",
   "description": "Aims to bring more color to the in-game HUD! Highly configurable.",
-  "gameVersion": "1.14.0",
+  "gameVersion": "1.15.0",
   "dependsOn": {
     "BSIPA": "^4.1.6",
-    "SiraUtil": "^2.5.2",
-    "BeatSaberMarkupLanguage": "^1.5.1"
+    "SiraUtil": "^2.5.3",
+    "BeatSaberMarkupLanguage": "^1.5.2"
   }
 }

@@ -1,7 +1,7 @@
 ﻿<vertical xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' 
 		  xsi:schemaLocation='https://monkeymanboy.github.io/BSML-Docs/ https://raw.githubusercontent.com/monkeymanboy/BSML-Docs/gh-pages/BSMLSchema.xsd'
 		  child-control-height='False'>
-	<tab-selector tab-tag='tabs' id='tabSelector'/>
+	<tab-selector tab-tag='tabs' id='tabSelector' select-cell='UpdateSelectedTab'/>
 	
 	<!--Multiplier Tab-->
 	<tab tags='tabs' tab-name='Mutliplier'>
@@ -21,8 +21,10 @@
 		<modifier-container child-expand-width='True' horizontal-fit='PreferredSize'>
 			<checkbox text='Enabled' value='BarEnabled' bind-value='True' apply-on-change='True'/>
 			<color-setting text='Low Energy Color' value='LowEnergyColor' bind-value='True' apply-on-change='True' interactable='~BarEnabled'/>
+			<color-setting text='Middle Energy Color' value='MiddleEnergyColor' bind-value='True' apply-on-change='True' interactable='~BarEnabled'/>
 			<color-setting text='High Energy Color' value='HighEnergyColor' bind-value='True' apply-on-change='True' interactable='~BarEnabled'/>
 			<checkbox text='Rainbow Animation On Full' value='BarRainbowAnim' bind-value='True' apply-on-change='True' interactable='~BarEnabled'/>
+			<slider-setting text='Preview Fill Amount' min='0.01' max='1' increment='0.01' on-change='UpdateFillAmount' interactable='~BarEnabled'/>
 		</modifier-container>
 	</tab>
 	
@@ -61,6 +63,30 @@
 					<button text='Close' click-event='hideAllModals'/>
 				</vertical>
 			</modal>
+		</modifier-container>
+	</tab>
+	
+	<!--Progress Bar Tab-->
+	<tab tags='tabs' tab-name='Progress Bar'>
+		<modifier-container child-expand-width='True' horizontal-fit='PreferredSize'>
+			<checkbox text='Enabled' value='ProgressEnabled' bind-value='True' apply-on-change='True'/>
+			<color-setting text='Fill Color' value='FillColor' bind-value='True' apply-on-change='True' interactable='~ProgressEnabled'/>
+			<color-setting text='Handle Color' value='HandleColor' bind-value='True' apply-on-change='True' interactable='~ProgressEnabled'/>
+			<color-setting text='Background Color' value='BackgroundColor' bind-value='True' apply-on-change='True' interactable='~ProgressEnabled'/>
+		</modifier-container>
+	</tab>
+	
+	<!--Position Tab-->
+	<tab tags='tabs' tab-name='Position (MP)'>
+		<modifier-container child-expand-width='True' horizontal-fit='PreferredSize'>
+			<checkbox text='Enabled' value='PosEnabled' bind-value='True' apply-on-change='True'/>
+			<checkbox text='Hide First Place Animation' value='HideFirstPlaceAnim' bind-value='True' 
+					  apply-on-change='True' interactable='~PosEnabled'/>
+			<color-setting text='First Place' value='FirstPlace' bind-value='True' apply-on-change='True' interactable='~PosEnabled'/>
+			<color-setting text='Second Place' value='SecondPlace' bind-value='True' apply-on-change='True' interactable='~PosEnabled'/>
+			<color-setting text='Third Place' value='ThirdPlace' bind-value='True' apply-on-change='True' interactable='~PosEnabled'/>
+			<color-setting text='Fourth Place' value='FourthPlace' bind-value='True' apply-on-change='True' interactable='~PosEnabled'/>
+			<color-setting text='Fifth Place' value='FifthPlace' bind-value='True' apply-on-change='True' interactable='~PosEnabled'/>
 		</modifier-container>
 	</tab>
 	
