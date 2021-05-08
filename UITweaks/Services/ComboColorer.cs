@@ -9,11 +9,13 @@ namespace UITweaks.Services
 {
     public class ComboColorer : IInitializable
     {
+        //..ctor
         PluginConfig.ComboConfig _config;
-
-        ImageView[] _fcLines;
         ComboUIController _comboUIController;
         SiraLog _log;
+
+        //GameObjects
+        ImageView[] _fcLines;
 
         public ComboColorer(PluginConfig.ComboConfig config, ComboUIController comboUIController, SiraLog log) 
         {
@@ -24,13 +26,12 @@ namespace UITweaks.Services
 
         public async void Initialize()
         {
-            await Task.Run(() => Thread.Sleep(100));
+            await Task.Run(() => Thread.Sleep(50));
 
             if (_comboUIController.isActiveAndEnabled)
             {
                 _log.Logger.Debug("Combo Panel Present");
-                var comboFCLines = _comboUIController.GetComponentsInChildren<ImageView>();
-                _fcLines = comboFCLines;
+                _fcLines = _comboUIController.GetComponentsInChildren<ImageView>();
                 _log.Logger.Debug("Got FC Lines");
 
                 if (_config.GradientLines)
@@ -46,14 +47,12 @@ namespace UITweaks.Services
                         _fcLines[1].color0 = _config.T_GradientColor0;
                         _fcLines[1].color1 = _config.T_GradientColor1;
                     }
-
                     else
                     {
                         _fcLines[1].color0 = _config.B_GradientColor0;
                         _fcLines[1].color1 = _config.B_GradientColor1;
                     }
                 }
-
                 else
                 {
                     _fcLines[0].color = _config.T_Color;
