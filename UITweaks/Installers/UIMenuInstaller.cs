@@ -10,7 +10,8 @@ namespace UITweaks.Installers
         {
             Container.Bind<UIFlowCoordinator>().FromNewComponentOnNewGameObject(nameof(UIFlowCoordinator)).AsSingle();
 
-            Container.Bind<UISettingsController>().FromNewComponentAsViewController().AsSingle();
+            Container.Bind<MainSettingsController>().FromNewComponentAsViewController().AsSingle();
+            Container.Bind<ObjectPreviewPanelController>().FromNewComponentAsViewController().AsSingle();
             Container.Bind<ExtraSettingsController>().FromNewComponentAsViewController().AsSingle();
 
             Container.BindInterfacesAndSelfTo<UIMenuManager>().AsSingle();
