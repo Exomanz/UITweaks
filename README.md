@@ -16,3 +16,10 @@ A Beat Saber mod that aims to bring more color to the in-game HUD!
 - BSIPA v4.1.6+
 - SiraUtil v2.5.3+
 - BeatSaberMarkupLanguage v1.5.2+
+
+## Previews:
+### Standard Gameplay
+![Standard Gameplay](/UITweaks/Images/standard.jpg)
+
+### Online:
+![Online Gameplay](/UITweaks/Images/online.jpg)
