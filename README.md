@@ -10,6 +10,7 @@ A Beat Saber mod that aims to bring more color to the in-game HUD!
 
 ## Roadpath
 - Color the progress bar text.
+- While this mod is already compatible with Counters+, add support C+'s own counters.
 - Add a tab to the gameplay setup panel for easier configuration.
 
 ## Requirements:
@@ -18,7 +19,7 @@ A Beat Saber mod that aims to bring more color to the in-game HUD!
 - BeatSaberMarkupLanguage v1.5.2+
 
 ## Previews:
-### Standard Gameplay
+### Standard Gameplay:
 ![Standard Gameplay](/UITweaks/Images/standard.jpg)
 
 ### Online:
