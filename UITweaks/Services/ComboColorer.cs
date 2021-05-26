@@ -9,7 +9,6 @@ namespace UITweaks.Services
 {
     public class ComboColorer : IInitializable
     {
-        //..ctor
         PluginConfig.ComboConfig _config;
         ComboUIController _comboUIController;
         SiraLog _log;

@@ -62,6 +62,11 @@
     <Reference Include="Newtonsoft.Json">
       <HintPath>..\..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\Beat Saber\Libs\Newtonsoft.Json.dll</HintPath>
     </Reference>
+    <Reference Include="ScoreSaber">
+      <HintPath>$(BeatSaberDir)\Plugins\ScoreSaber.dll</HintPath>
+      <Private>False</Private>
+      <SpecificVersion>False</SpecificVersion>
+    </Reference>
     <Reference Include="SiraUtil">
       <HintPath>$(BeatSaberDir)\Plugins\SiraUtil.dll</HintPath>
       <Private>False</Private>
@@ -147,6 +152,7 @@
     <Compile Include="Settings\UIMenuManager.cs" />
     <Compile Include="Settings\MainSettingsController.cs" />
     <Compile Include="Utilities\PanelGrabber.cs" />
+    <Compile Include="Utilities\Utils.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="manifest.json" />

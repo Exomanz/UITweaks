@@ -8,7 +8,6 @@ namespace UITweaks.Services
 {
     public class PositionColorer : IInitializable, ITickable
     {
-        //..ctor stuff
         MultiplayerPositionHUDController _pos;
         PluginConfig.PositionConfig _config;
         SiraLog _log;

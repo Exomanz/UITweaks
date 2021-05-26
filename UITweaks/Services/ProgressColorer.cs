@@ -8,7 +8,6 @@ namespace UITweaks.Services
 {
     public class ProgressColorer : IInitializable
     {
-        //..ctor stuff
         PluginConfig.ProgressConfig _config;
         SongProgressUIController _ui;
         SiraLog _log;

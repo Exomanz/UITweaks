@@ -5,6 +5,7 @@ using HMUI;
 using IPA.Utilities;
 using SiraUtil.Tools;
 using System.Collections;
+using UITweaks.Utilities;
 using UnityEngine;
 using UnityEngine.UI;
 using Zenject;
@@ -20,9 +21,8 @@ namespace UITweaks.Settings
         PluginConfig.MultiplierConfig _multiConfig;
         PluginConfig.PositionConfig _posConfig;
         PluginConfig.ProgressConfig _progressConfig;
-        ObjectPreviewPanelController _preview;
         SiraLog _log;
-        int selectedTab = 0;
+        public int selectedTab = 0;
 
         //Multiplier Ring
         CurvedTextMeshPro[] multiplierTextGOs;
@@ -41,35 +41,35 @@ namespace UITweaks.Settings
         Image[] progressBarImages;
 
         //Position Panel
-        CurvedTextMeshPro[] positionPanelTextGOs;
+        //CurvedTextMeshPro[] positionPanelTextGOs;
 
         [Inject]
         public void Construct(PluginConfig.ComboConfig combo, PluginConfig.EnergyBarConfig bar, PluginConfig.MultiplierConfig multi,
-            PluginConfig.PositionConfig pos, PluginConfig.ProgressConfig progress, ObjectPreviewPanelController preview, SiraLog log)
+            PluginConfig.PositionConfig pos, PluginConfig.ProgressConfig progress, SiraLog log)
         {
             _comboConfig = combo;
             _barConfig = bar;
             _multiConfig = multi;
             _progressConfig = progress;
             _posConfig = pos;
-            _preview = preview;
             _log = log;
         }
 
         internal void LateUpdate()
         {
-            if (_preview.multiPanel || _preview.energyBar || _preview.comboPanel)
+            if (PanelGrabber.MultiplierPanel || PanelGrabber.EnergyBar || PanelGrabber.ComboPanel || PanelGrabber.ProgressBar/* || PanelGrabber.PositionPanel*/)
             {
                 if (selectedTab == 0)
                 {
-                    _preview.multiPanel.transform.localPosition = Vector3.zero;
+                    PanelGrabber.MultiplierPanel.transform.localPosition = Vector3.zero;
+
                     if (isOn8x && _multiConfig.RainbowAnim)
                         circles[0].color = HSBColor.ToColor(new HSBColor(Mathf.PingPong(Time.time * 0.5f, 1), 1, 1));
-                    if (_multiConfig.Enabled) _preview.multiPanel.SetActive(true);
-                    else _preview.multiPanel.transform.localPosition = new Vector3(0f, -1000f, 0f);
+                    if (_multiConfig.Enabled) PanelGrabber.MultiplierPanel.SetActive(true);
+                    else PanelGrabber.MultiplierPanel.transform.localPosition = new Vector3(0f, -1000f, 0f);
                 }
                 //POV: You're the multiplier panel and I don't feel like disabling you when I switch tabs
-                else _preview.multiPanel.transform.localPosition = new Vector3(0f, -1000f, 0f);
+                else PanelGrabber.MultiplierPanel.transform.localPosition = new Vector3(0f, -1000f, 0f);
 
                 if (selectedTab == 1)
                 {
@@ -80,41 +80,32 @@ namespace UITweaks.Settings
                             energyBar.color = HSBColor.ToColor(new HSBColor(Mathf.PingPong(Time.time * 0.5f, 1), 1, 1));
                         else energyBar.color = _barConfig.HighEnergyColor;
                     }
-                    if (!_barConfig.Enabled) _preview.energyBar.SetActive(false);
+                    if (!_barConfig.Enabled) PanelGrabber.EnergyBar.SetActive(false);
                 }
-                else _preview.energyBar.SetActive(false);
+                else PanelGrabber.EnergyBar.SetActive(false);
 
                 if (selectedTab == 2)
                 {
                     ComboPanelPreviewObjectHelper();
-                    if (!_comboConfig.Enabled) _preview.comboPanel.SetActive(false);
+                    if (!_comboConfig.Enabled) PanelGrabber.ComboPanel.SetActive(false);
                 }
-                else _preview.comboPanel.SetActive(false);
+                else PanelGrabber.ComboPanel.SetActive(false);
 
                 if (selectedTab == 3)
                 {
                     ProgressBarPreviewObjectHelper();
-                    if (!_progressConfig.Enabled) _preview.progressBar.SetActive(false);
+                    if (!_progressConfig.Enabled) PanelGrabber.ProgressBar.SetActive(false);
                 }
-                else _preview.progressBar.SetActive(false);
+                else PanelGrabber.ProgressBar.SetActive(false);
 
-                if (selectedTab == 4)
+                /*if (selectedTab == 4)
                 {
-                    if (_posConfig.Enabled) _preview.positionPanel.transform.localPosition = Vector3.zero;
-                    else _preview.positionPanel.transform.localPosition = new Vector3(0f, -999f, 0f);
+                    if (_posConfig.Enabled) PanelGrabber.PositionPanel.transform.localPosition = Vector3.zero;
+                    else PanelGrabber.PositionPanel.transform.localPosition = new Vector3(0f, -999f, 0f);
                 }
                 //To the void to avoid stopping coroutines :Pepega:
-                else _preview.positionPanel.transform.localPosition = new Vector3(0f, -999f, 0f);
+                else PanelGrabber.PositionPanel.transform.localPosition = new Vector3(0f, -999f, 0f);*/
             }
-        }
-
-        protected override void DidDeactivate(bool removedFromHierarchy, bool screenSystemDisabling)
-        {
-            base.DidDeactivate(removedFromHierarchy, screenSystemDisabling);
-
-            //Mostly works... throws an error at random times but still works!
-            StopCoroutine(MultiplierPreviewCoroutine());
-            StopCoroutine(PositionPanelCoroutine());
         }
 
         [UIComponent("tabSelector")]
@@ -126,9 +117,9 @@ namespace UITweaks.Settings
         #region Preview Helpers
         public void MultiplierPreviewObjectHelper()
         {
-            _preview.multiPanel.SetActive(true);
-            multiplierTextGOs = _preview.multiPanel.transform.GetComponentsInChildren<CurvedTextMeshPro>();
-            circles = _preview.multiPanel.transform.GetComponentsInChildren<Image>();
+            PanelGrabber.MultiplierPanel.SetActive(true);
+            multiplierTextGOs = PanelGrabber.MultiplierPanel.transform.GetComponentsInChildren<CurvedTextMeshPro>();
+            circles = PanelGrabber.MultiplierPanel.transform.GetComponentsInChildren<Image>();
 
             circles[1].fillAmount = 0.5f;
             circles[1].color = _multiConfig.Color1;
@@ -139,27 +130,27 @@ namespace UITweaks.Settings
 
         internal IEnumerator MultiplierPreviewCoroutine()
         {
-            if (!_preview.multiPanel) yield break;
+            if (!PanelGrabber.MultiplierPanel) yield break;
             isOn8x = false;
             circles[1].fillAmount = 0.5f;
 
             circles[1].color = _multiConfig.Color1;
             circles[0].color = _multiConfig.Color1.ColorWithAlpha(0.25f);
-            multiplierTextGOs[5].text = "1";
+            multiplierTextGOs[1].text = "1";
             yield return new WaitForSecondsRealtime(1f);
 
             circles[1].color = _multiConfig.Color2;
             circles[0].color = _multiConfig.Color2.ColorWithAlpha(0.25f);
-            multiplierTextGOs[5].text = "2";
+            multiplierTextGOs[1].text = "2";
             yield return new WaitForSecondsRealtime(1f);
 
             circles[1].color = _multiConfig.Color4;
             circles[0].color = _multiConfig.Color4.ColorWithAlpha(0.25f);
-            multiplierTextGOs[5].text = "4";
+            multiplierTextGOs[1].text = "4";
             yield return new WaitForSecondsRealtime(1f);
 
             isOn8x = true;
-            multiplierTextGOs[5].text = "8";
+            multiplierTextGOs[1].text = "8";
             circles[1].fillAmount = 0f;
             if (!_multiConfig.RainbowAnim)
                 circles[0].color = _multiConfig.Color8.ColorWithAlpha(0.25f);
@@ -170,8 +161,8 @@ namespace UITweaks.Settings
 
         public void EnergyBarPreviewObjectHelper()
         {
-            _preview.energyBar.SetActive(true);
-            energyBar = _preview.energyBar.transform.Find("EnergyBarWrapper/EnergyBar").GetComponent<Image>();
+            PanelGrabber.EnergyBar.SetActive(true);
+            energyBar = PanelGrabber.EnergyBar.transform.Find("EnergyBarWrapper/EnergyBar").GetComponent<Image>();
 
             energyBar.rectTransform.anchorMax = new Vector2(_fillAmount, 1f);
             if (_fillAmount < 0.5f) energyBar.color = Color.Lerp(_barConfig.LowEnergyColor, _barConfig.MiddleEnergyColor, _fillAmount * 2);
@@ -186,8 +177,8 @@ namespace UITweaks.Settings
 
         public void ComboPanelPreviewObjectHelper()
         {
-            _preview.comboPanel.SetActive(true);
-            fcLines = _preview.comboPanel.transform.GetComponentsInChildren<ImageView>();
+            PanelGrabber.ComboPanel.SetActive(true);
+            fcLines = PanelGrabber.ComboPanel.transform.GetComponentsInChildren<ImageView>();
 
             ReflectionUtil.SetField(fcLines[0], "_gradient", true);
             ReflectionUtil.SetField(fcLines[1], "_gradient", true);
@@ -219,8 +210,8 @@ namespace UITweaks.Settings
 
         public void ProgressBarPreviewObjectHelper()
         {
-            _preview.progressBar.SetActive(true);
-            progressBarImages = _preview.progressBar.transform.GetComponentsInChildren<Image>();
+            PanelGrabber.ProgressBar.SetActive(true);
+            progressBarImages = PanelGrabber.ProgressBar.transform.GetComponentsInChildren<Image>();
 
             progressBarImages[0].rectTransform.anchorMax = new Vector2(0.5f, 1f);
             progressBarImages[2].transform.localPosition = Vector3.zero;
@@ -230,11 +221,11 @@ namespace UITweaks.Settings
             progressBarImages[2].color = _progressConfig.HandleColor;
         }
 
-        public void PositionPanelPreviewObjectHelper()
+        /*public void PositionPanelPreviewObjectHelper()
         {
-            _preview.positionPanel.SetActive(true);
-            _preview.positionPanel.transform.Find("DynamicPanel/1stPosition").gameObject.SetActive(true);
-            positionPanelTextGOs = _preview.positionPanel.transform.GetComponentsInChildren<CurvedTextMeshPro>();
+            PanelGrabber.PositionPanel.SetActive(true);
+            PanelGrabber.PositionPanel.transform.Find("DynamicPanel/1stPosition").gameObject.SetActive(true);
+            positionPanelTextGOs = PanelGrabber.PositionPanel.transform.GetComponentsInChildren<CurvedTextMeshPro>();
 
             //Ref: [0] is static position, [1] is dynamic position, [2] is 1stPosition GO
             StartCoroutine(PositionPanelCoroutine());
@@ -272,7 +263,7 @@ namespace UITweaks.Settings
             yield return new WaitForSecondsRealtime(1f);
 
             yield return PositionPanelCoroutine();
-        }
+        }*/
         #endregion
 
         #region Multiplier Panel

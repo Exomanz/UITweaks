@@ -7,7 +7,6 @@ namespace UITweaks.Services
 {
     public class MultiplierColorer : IInitializable, ITickable
     {
-        //..ctor
         PluginConfig.MultiplierConfig _config;
         ScoreMultiplierUIController _ui;
         SiraLog _log;

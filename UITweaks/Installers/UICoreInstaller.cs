@@ -6,7 +6,6 @@ namespace UITweaks.Installers
 {
     public class UICoreInstaller : Installer<PluginConfig, UICoreInstaller>
     {
-        //..ctor
         readonly PluginConfig.ComboConfig _combo;
         readonly PluginConfig.EnergyBarConfig _energy;
         readonly PluginConfig.MultiplierConfig _multi;

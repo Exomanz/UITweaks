@@ -7,7 +7,6 @@ namespace UITweaks.Services
 {
     public class EnergyBarColorer : IInitializable, ITickable
     {
-        //..ctor
         PluginConfig.EnergyBarConfig _config;
         IGameEnergyCounter _energy;
         GameEnergyUIPanel _panel;
