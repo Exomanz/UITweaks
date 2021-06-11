@@ -12,8 +12,7 @@ A Beat Saber mod that aims to bring more color to the in-game HUD!
 - Fix a rare bug that occurs when playing a song with insta-fail (energy bar not being colored).
 - Color the progress bar text.
 - Reimplement the position panel preview without breaking replays or multiplayer.
-- While this mod is already compatible with Counters+, add support C+'s own counters.
-- Add a tab to the gameplay setup panel for easier configuration.
+- While this mod is already compatible with Counters+, add support its own (native) counters.
 
 ## Requirements:
 - BSIPA v4.1.6+
