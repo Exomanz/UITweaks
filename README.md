@@ -1,6 +1,11 @@
 # UITweaks
 A Beat Saber mod that aims to bring more color to the in-game HUD!
 
+## Dependencies:
+- BSIPA v4.1.6+
+- SiraUtil v2.5.3+
+- BeatSaberMarkupLanguage v1.5.2+
+
 ## Features
 - Multiplier ring colors, including an optional rainbow animation on 8x.
 - Energy bar colors corresponding to your available energy, and an optional rainbow animation on full.
@@ -13,11 +18,6 @@ A Beat Saber mod that aims to bring more color to the in-game HUD!
 - Color the progress bar text.
 - Reimplement the position panel preview without breaking replays or multiplayer.
 - While this mod is already compatible with Counters+, add support its own (native) counters.
-
-## Requirements:
-- BSIPA v4.1.6+
-- SiraUtil v2.5.3+
-- BeatSaberMarkupLanguage v1.5.2+
 
 ## Previews:
 ### Standard Gameplay:
