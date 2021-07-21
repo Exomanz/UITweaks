@@ -62,11 +62,6 @@
     <Reference Include="Newtonsoft.Json">
       <HintPath>..\..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\Beat Saber\Libs\Newtonsoft.Json.dll</HintPath>
     </Reference>
-    <Reference Include="ScoreSaber">
-      <HintPath>$(BeatSaberDir)\Plugins\ScoreSaber.dll</HintPath>
-      <Private>False</Private>
-      <SpecificVersion>False</SpecificVersion>
-    </Reference>
     <Reference Include="SiraUtil">
       <HintPath>$(BeatSaberDir)\Plugins\SiraUtil.dll</HintPath>
       <Private>False</Private>
@@ -147,12 +142,11 @@
     <Compile Include="Services\PositionColorer.cs" />
     <Compile Include="Services\ProgressColorer.cs" />
     <Compile Include="Settings\ExtraSettingsController.cs" />
-    <Compile Include="Settings\ObjectPreviewPanelController.cs" />
-    <Compile Include="Settings\UIFlowCoordinator.cs" />
+    <Compile Include="Settings\ObjectPreviewView.cs" />
+    <Compile Include="Settings\UIFlowCoord.cs" />
     <Compile Include="Settings\UIMenuManager.cs" />
     <Compile Include="Settings\MainSettingsController.cs" />
     <Compile Include="Utilities\PanelGrabber.cs" />
-    <Compile Include="Utilities\Utils.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="manifest.json" />
@@ -160,9 +154,9 @@
   <ItemGroup>
     <None Include="Directory.Build.props" Condition="Exists('Directory.Build.props')" />
     <None Include="Directory.Build.targets" Condition="Exists('Directory.Build.targets')" />
-    <EmbeddedResource Include="Settings\Views\extraSettings.bsml" />
-    <EmbeddedResource Include="Settings\Views\mainSettingsController.bsml" />
-    <EmbeddedResource Include="Settings\Views\objectPreviewPanel.bsml" />
+    <EmbeddedResource Include="Settings\Views\extra.bsml" />
+    <EmbeddedResource Include="Settings\Views\main.bsml" />
+    <EmbeddedResource Include="Settings\Views\preview.bsml" />
     <None Include="UITweaks.csproj.user" Condition="Exists('UITweaks.csproj.user')" />
   </ItemGroup>
   <ItemGroup>

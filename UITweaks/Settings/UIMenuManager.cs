@@ -8,10 +8,10 @@ namespace UITweaks.Settings
     public class UIMenuManager : IInitializable, IDisposable
     {
         readonly MainFlowCoordinator _mainFlow;
-        readonly UIFlowCoordinator _flowCoord;
+        readonly UIFlowCoord _flowCoord;
         readonly MenuButton _menuButton;
 
-        public UIMenuManager(MainFlowCoordinator mainFlow, UIFlowCoordinator flowCoord)
+        public UIMenuManager(MainFlowCoordinator mainFlow, UIFlowCoord flowCoord)
         {
             _mainFlow = mainFlow;
             _flowCoord = flowCoord;

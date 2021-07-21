@@ -12,8 +12,8 @@ using Zenject;
 
 namespace UITweaks.Settings
 {
-    [ViewDefinition("UITweaks.Settings.Views.mainSettingsController.bsml")]
-    //[HotReload(RelativePathToLayout = @"..\Settings\Views\mainSettingsController.bsml")]
+    [ViewDefinition("UITweaks.Settings.Views.main.bsml")]
+    //[HotReload(RelativePathToLayout = @"..\Settings\Views\main.bsml")]
     public class MainSettingsController : BSMLAutomaticViewController
     {
         PluginConfig.ComboConfig _comboConfig;
@@ -36,12 +36,10 @@ namespace UITweaks.Settings
 
         //Combo Panel
         ImageView[] fcLines;
+        CurvedTextMeshPro comboText;
 
         //Progress Bar
         Image[] progressBarImages;
-
-        //Position Panel
-        //CurvedTextMeshPro[] positionPanelTextGOs;
 
         [Inject]
         public void Construct(PluginConfig.ComboConfig combo, PluginConfig.EnergyBarConfig bar, PluginConfig.MultiplierConfig multi,
@@ -97,22 +95,22 @@ namespace UITweaks.Settings
                     if (!_progressConfig.Enabled) PanelGrabber.ProgressBar.SetActive(false);
                 }
                 else PanelGrabber.ProgressBar.SetActive(false);
-
-                /*if (selectedTab == 4)
-                {
-                    if (_posConfig.Enabled) PanelGrabber.PositionPanel.transform.localPosition = Vector3.zero;
-                    else PanelGrabber.PositionPanel.transform.localPosition = new Vector3(0f, -999f, 0f);
-                }
-                //To the void to avoid stopping coroutines :Pepega:
-                else PanelGrabber.PositionPanel.transform.localPosition = new Vector3(0f, -999f, 0f);*/
             }
         }
 
+#pragma warning disable CS0169
         [UIComponent("tabSelector")]
         TabSelector tabSelector;
+#pragma warning restore CS0169
 
         [UIAction("UpdateSelectedTab")]
         internal void UpdateSelectedTab(SegmentedControl _, int tab) => selectedTab = tab;
+
+        [UIAction("UpdateFillAmount")]
+        internal void EnergyBarPreviewFillHelper(float fillAmount) => _fillAmount = fillAmount;
+
+        [UIAction("UpdateComboText")]
+        internal void ComboTextPreviewTextHelper(float num) => comboText.text = num.ToString();
 
         #region Preview Helpers
         public void MultiplierPreviewObjectHelper()
@@ -172,13 +170,12 @@ namespace UITweaks.Settings
             else isFilled = false;
         }
 
-        [UIAction("UpdateFillAmount")]
-        internal void EnergyBarPreviewFillHelper(float fillAmount) => _fillAmount = fillAmount;
-
         public void ComboPanelPreviewObjectHelper()
         {
             PanelGrabber.ComboPanel.SetActive(true);
             fcLines = PanelGrabber.ComboPanel.transform.GetComponentsInChildren<ImageView>();
+            comboText = PanelGrabber.ComboPanel.transform.Find("ComboCanvas/NumText").GetComponent<CurvedTextMeshPro>();
+            comboText.text = "0";
 
             ReflectionUtil.SetField(fcLines[0], "_gradient", true);
             ReflectionUtil.SetField(fcLines[1], "_gradient", true);
@@ -220,50 +217,6 @@ namespace UITweaks.Settings
             progressBarImages[1].color = _progressConfig.BackgroundColor.ColorWithAlpha(0.25f);
             progressBarImages[2].color = _progressConfig.HandleColor;
         }
-
-        /*public void PositionPanelPreviewObjectHelper()
-        {
-            PanelGrabber.PositionPanel.SetActive(true);
-            PanelGrabber.PositionPanel.transform.Find("DynamicPanel/1stPosition").gameObject.SetActive(true);
-            positionPanelTextGOs = PanelGrabber.PositionPanel.transform.GetComponentsInChildren<CurvedTextMeshPro>();
-
-            //Ref: [0] is static position, [1] is dynamic position, [2] is 1stPosition GO
-            StartCoroutine(PositionPanelCoroutine());
-        }
-
-        internal IEnumerator PositionPanelCoroutine()
-        {
-            positionPanelTextGOs[2].color = _posConfig.First;
-            positionPanelTextGOs[2].gameObject.SetActive(false);
-
-            positionPanelTextGOs[1].text = "5";
-            positionPanelTextGOs[0].color = _posConfig.Fifth.ColorWithAlpha(0.25f);
-            positionPanelTextGOs[1].color = _posConfig.Fifth;
-            yield return new WaitForSecondsRealtime(1f);
-
-            positionPanelTextGOs[1].text = "4";
-            positionPanelTextGOs[0].color = _posConfig.Fourth.ColorWithAlpha(0.25f);
-            positionPanelTextGOs[1].color = _posConfig.Fourth;
-            yield return new WaitForSecondsRealtime(1f);
-
-            positionPanelTextGOs[1].text = "3";
-            positionPanelTextGOs[0].color = _posConfig.Third.ColorWithAlpha(0.25f);
-            positionPanelTextGOs[1].color = _posConfig.Third;
-            yield return new WaitForSecondsRealtime(1f);
-
-            positionPanelTextGOs[1].text = "2";
-            positionPanelTextGOs[0].color = _posConfig.Second.ColorWithAlpha(0.25f);
-            positionPanelTextGOs[1].color = _posConfig.Second;
-            yield return new WaitForSecondsRealtime(1f);
-
-            positionPanelTextGOs[1].text = "1";
-            if (!_posConfig.HideFirstPlaceAnimation) positionPanelTextGOs[2].gameObject.SetActive(true);
-            positionPanelTextGOs[0].color = _posConfig.First.ColorWithAlpha(0.25f);
-            positionPanelTextGOs[1].color = _posConfig.First;
-            yield return new WaitForSecondsRealtime(1f);
-
-            yield return PositionPanelCoroutine();
-        }*/
         #endregion
 
         #region Multiplier Panel

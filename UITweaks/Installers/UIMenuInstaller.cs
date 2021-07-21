@@ -8,10 +8,10 @@ namespace UITweaks.Installers
     {
         public override void InstallBindings()
         {
-            Container.Bind<UIFlowCoordinator>().FromNewComponentOnNewGameObject(nameof(UIFlowCoordinator)).AsSingle();
+            Container.Bind<UIFlowCoord>().FromNewComponentOnNewGameObject(nameof(UIFlowCoord)).AsSingle();
 
             Container.Bind<MainSettingsController>().FromNewComponentAsViewController().AsSingle();
-            Container.Bind<ObjectPreviewPanelController>().FromNewComponentAsViewController().AsSingle();
+            Container.Bind<ObjectPreviewView>().FromNewComponentAsViewController().AsSingle();
             Container.Bind<ExtraSettingsController>().FromNewComponentAsViewController().AsSingle();
 
             Container.BindInterfacesAndSelfTo<UIMenuManager>().AsSingle();

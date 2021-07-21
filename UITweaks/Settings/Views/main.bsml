@@ -1,0 +1,95 @@
+﻿<vertical xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' 
+		  xsi:schemaLocation='https://monkeymanboy.github.io/BSML-Docs/ https://raw.githubusercontent.com/monkeymanboy/BSML-Docs/gh-pages/BSMLSchema.xsd'
+		  child-control-height='False'>
+	<tab-selector tab-tag='tabs' id='tabSelector' select-cell='UpdateSelectedTab'/>
+	
+	<!--Multiplier Tab-->
+	<tab tags='tabs' tab-name='Mutliplier'>
+		<modifier-container child-expand-width='True' horizontal-fit='PreferredSize'>
+			<checkbox text='Enabled' value='MultiEnabled' apply-on-change='True'/>
+			<color-setting text='1x Color' value='Color1' apply-on-change='True' bind-value='True' interactable='~MultiEnabled'/>
+			<color-setting text='2x Color' value='Color2' apply-on-change='True' bind-value='True' interactable='~MultiEnabled'/>
+			<color-setting text='4x Color' value='Color4' apply-on-change='True' bind-value='True' interactable='~MultiEnabled'/>
+			<checkbox text='Rainbow Animation On 8x' value='MultiRainbowAnim' apply-on-change='True'
+					  hover-hint='Must be disabled to color on 8x!' bind-value='True' interactable='~MultiEnabled'/>
+			<color-setting text='8x Color' value='Color8' apply-on-change='True' bind-value='True' active='~M_FlipRainbowAnim'/>
+		</modifier-container>
+	</tab>
+
+	<!--Energy Bar Tab-->
+	<tab tags='tabs' tab-name='Energy Bar'>
+		<modifier-container child-expand-width='True' horizontal-fit='PreferredSize'>
+			<checkbox text='Enabled' value='BarEnabled' bind-value='True' apply-on-change='True'/>
+			<color-setting text='Low Energy Color' value='LowEnergyColor' bind-value='True' apply-on-change='True' interactable='~BarEnabled'/>
+			<color-setting text='Middle Energy Color' value='MiddleEnergyColor' bind-value='True' apply-on-change='True' interactable='~BarEnabled'/>
+			<color-setting text='High Energy Color' value='HighEnergyColor' bind-value='True' apply-on-change='True' interactable='~BarEnabled'/>
+			<checkbox text='Rainbow Animation On Full' value='BarRainbowAnim' bind-value='True' apply-on-change='True' interactable='~BarEnabled'/>
+			<slider-setting text='Preview Fill Amount' min='0.01' max='1' increment='0.01' on-change='UpdateFillAmount' interactable='~BarEnabled'/>
+		</modifier-container>
+	</tab>
+	
+	<!--Combo Tab-->
+	<tab tags='tabs' tab-name='Combo Lines'>
+		<modifier-container child-expand-width='True' horizontal-fit='PreferredSize'>
+			<checkbox text='Enabled' value='ComboEnabled' apply-on-change='True' bind-value='True'/>
+			<color-setting text='Top Line Color' value='NoGradient_TopLine' apply-on-change='True' bind-value='True' interactable='~ComboEnabled'/>
+			<color-setting text='Bottom Line Color' value='NoGradient_BottomLine' apply-on-change='True' bind-value='True' interactable='~ComboEnabled'/>
+			<checkbox text='Gradient Lines' value='GradientLines' apply-on-change='True' interactable='~ComboEnabled' bind-value='True'/>
+			<horizontal>
+				<button text='Gradient Options' click-event='openGradientSettings' interactable='~GradientLines'/>
+			</horizontal>
+
+			<modal show-event='openGradientSettings' hide-event='hideAllModals' click-off-closes='True' move-to-center='True'
+				   size-delta-x='130' size-delta-y='52'>
+				<vertical pref-height='50' vertical-fit='PreferredSize'>
+					<horizontal spacing='5'>
+						<vertical pad='2' pref-width='60' pref-height='20' child-control-height='False'>
+							<horizontal bg='panel-top' pad-left='5' pad-right='5' pad-top='1'>
+								<text text='Top Line' font-size='6' align='Center'/>
+							</horizontal>
+							<color-setting text='Left Color' value='Gradient_TopLineColor0' bind-value='True' apply-on-change='True'/>
+							<color-setting text='Right Color' value='Gradient_TopLineColor1' bind-value='True' apply-on-change='True'/>
+						</vertical>
+						<vertical pad='2' pref-width='60' pref-height='20' child-control-height='False'>
+							<horizontal bg='panel-top' pad-left='5' pad-right='5' pad-top='1'>
+								<text text='Bottom Line' font-size='6' align='Center'/>
+							</horizontal>
+							<checkbox text='Separate Line Colors' value='SeparateLines' bind-value='True' apply-on-change='True'
+									  hover-hint='If this setting is disabled, the bottom line will be opposite the top line.'/>
+							<color-setting text='Left Color' value='Gradient_BottomLineColor0' bind-value='True' apply-on-change='True'
+										   active='~SeparateLines'/>
+							<color-setting text='Right Color' value='Gradient_BottomLineColor1' bind-value='True' apply-on-change='True'
+										   active='~SeparateLines'/>
+						</vertical>
+					</horizontal>
+					<button text='Close' click-event='hideAllModals'/>
+				</vertical>
+			</modal>
+		</modifier-container>
+	</tab>
+	
+	<!--Progress Bar Tab-->
+	<tab tags='tabs' tab-name='Progress Bar'>
+		<modifier-container child-expand-width='True' horizontal-fit='PreferredSize'>
+			<checkbox text='Enabled' value='ProgressEnabled' bind-value='True' apply-on-change='True'/>
+			<color-setting text='Fill Color' value='FillColor' bind-value='True' apply-on-change='True' interactable='~ProgressEnabled'/>
+			<color-setting text='Handle Color' value='HandleColor' bind-value='True' apply-on-change='True' interactable='~ProgressEnabled'/>
+			<color-setting text='Background Color' value='BackgroundColor' bind-value='True' apply-on-change='True' interactable='~ProgressEnabled'/>
+		</modifier-container>
+	</tab>
+	
+	<!--Position Tab-->
+	<tab tags='tabs' tab-name='Position (MP)'>
+		<modifier-container child-expand-width='True' horizontal-fit='PreferredSize'>
+			<checkbox text='Enabled' value='PosEnabled' bind-value='True' apply-on-change='True'/>
+			<checkbox text='Hide First Place Animation' value='HideFirstPlaceAnim' bind-value='True' 
+					  apply-on-change='True' interactable='~PosEnabled'/>
+			<color-setting text='First Place' value='FirstPlace' bind-value='True' apply-on-change='True' interactable='~PosEnabled'/>
+			<color-setting text='Second Place' value='SecondPlace' bind-value='True' apply-on-change='True' interactable='~PosEnabled'/>
+			<color-setting text='Third Place' value='ThirdPlace' bind-value='True' apply-on-change='True' interactable='~PosEnabled'/>
+			<color-setting text='Fourth Place' value='FourthPlace' bind-value='True' apply-on-change='True' interactable='~PosEnabled'/>
+			<color-setting text='Fifth Place' value='FifthPlace' bind-value='True' apply-on-change='True' interactable='~PosEnabled'/>
+		</modifier-container>
+	</tab>
+	
+</vertical>

@@ -47,6 +47,14 @@ namespace UITweaks
             [UseConverter(typeof(HexColorConverter))] public virtual Color B_GradientColor1 { get; set; } = new Color(1f, 1f, 0.5f);
         }
 
+        public class ProgressConfig
+        {
+            public virtual bool Enabled { get; set; } = true;
+            [UseConverter(typeof(HexColorConverter))] public virtual Color FillColor { get; set; } = Color.white;
+            [UseConverter(typeof(HexColorConverter))] public virtual Color HandleColor { get; set; } = Color.white;
+            [UseConverter(typeof(HexColorConverter))] public virtual Color BackgroundColor { get; set; }= new Color(1f, 1f, 1f, 0.25f);
+        }
+
         public class PositionConfig
         {
             public virtual bool Enabled { get; set; } = true;
@@ -57,14 +65,6 @@ namespace UITweaks
             [UseConverter(typeof(HexColorConverter))] public virtual Color First { get; set; } = Color.cyan;
 
             public virtual bool HideFirstPlaceAnimation { get; set; } = false;
-        }
-
-        public class ProgressConfig
-        {
-            public virtual bool Enabled { get; set; } = true;
-            [UseConverter(typeof(HexColorConverter))] public virtual Color FillColor { get; set; } = Color.white;
-            [UseConverter(typeof(HexColorConverter))] public virtual Color HandleColor { get; set; } = Color.white;
-            [UseConverter(typeof(HexColorConverter))] public virtual Color BackgroundColor { get; set; }= new Color(1f, 1f, 1f, 0.25f);
         }
     }
 }
