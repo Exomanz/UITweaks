@@ -1,36 +1,42 @@
 ﻿using IPA;
 using IPA.Config.Stores;
-using IPA.Logging;
+using IPAConfig = IPA.Config.Config;
+using IPALogger = IPA.Logging.Logger;
+using SiraUtil;
 using SiraUtil.Zenject;
 using UITweaks.Installers;
-using IPAConfig = IPA.Config.Config;
 
 namespace UITweaks
 {
     [Plugin(RuntimeOptions.DynamicInit)]
     public class Plugin
     {
-        [Init]
-        public Plugin(Logger logger, IPAConfig config, Zenjector zenj)
+        internal static MainConfig MainConfig { get; private set; }
+
+        [Init] public Plugin(IPALogger logger, IPAConfig config, Zenjector zenject)
         {
-            PluginConfig pConf = config.Generated<PluginConfig>();
+            MainConfig = config.Generated<MainConfig>();
 
-            zenj.OnApp<UIAppInstaller>().WithParameters(logger, pConf);
-            zenj.OnMenu<UIMenuInstaller>();
+            zenject.On<PCAppInit>().Pseudo(Container => Container.BindLoggerAsSiraLogger(logger));
+            zenject.OnApp<ConfigInstaller>();
+            zenject.OnMenu<MenuManagerInstaller>();
 
-            //Standard, Campaign and Party Modes
-            zenj.OnGame<UICoreInstaller>().Expose<ScoreMultiplierUIController>().Expose<GameEnergyUIPanel>()
-                .Expose<ComboUIController>().Expose<SongProgressUIController>().ShortCircuitForTutorial().ShortCircuitForMultiplayer();
+            // Single-player
+            zenject.OnGame<GameInstaller>().Expose<ScoreMultiplierUIController>()
+                .Expose<GameEnergyUIPanel>()
+                .Expose<ComboUIController>()
+                .Expose<SongProgressUIController>().ShortCircuitForTutorial().ShortCircuitForMultiplayer();
 
-            //Multiplayer Specific
-            zenj.OnGame<UICoreInstaller>(false).Expose<ScoreMultiplierUIController>().Expose<GameEnergyUIPanel>()
-                .Expose<ComboUIController>().Expose<SongProgressUIController>().Expose<MultiplayerPositionHUDController>().OnlyForMultiplayer();
+            // Multi-player
+            zenject.OnGame<GameInstaller>(false).Expose<ScoreMultiplierUIController>()
+                .Expose<GameEnergyUIPanel>()
+                .Expose<ComboUIController>()
+                .Expose<SongProgressUIController>()
+                .Expose<MultiplayerPositionHUDController>().OnlyForMultiplayer();
         }
 
-        [OnEnable]
-        public void Enable() { }
+        [OnEnable] public void Enable() { }
 
-        [OnDisable]
-        public void Disable() { }
+        [OnDisable] public void Disable() { }
     }
 }
