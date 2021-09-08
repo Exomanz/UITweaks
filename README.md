@@ -20,7 +20,7 @@ A Beat Saber mod that aims to bring more color to the in-game HUD!
 
 ## Previews:
 ### Standard Gameplay:
-![Standard Gameplay](/UITweaks/Images/standard.jpg)
+![Standard Gameplay](https://github.com/Exomanz/UITweaks/blob/1.2.2/UITweaks/Images/standard.jpg)
 
 ### Online:
-![Online Gameplay](/UITweaks/Images/online.jpg)
+![Online Gameplay](https://github.com/Exomanz/UITweaks/blob/1.2.2/UITweaks/Images/online.jpg)
