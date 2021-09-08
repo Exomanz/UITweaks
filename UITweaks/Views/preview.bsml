@@ -1,0 +1,15 @@
+﻿<vertical xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
+	xsi:schemaLocation='https://monkeymanboy.github.io/BSML-Docs/ 
+	https://raw.githubusercontent.com/monkeymanboy/BSML-Docs/gh-pages/BSMLSchema.xsd'
+	child-control-height='False'>
+	<vertical vertical-fit='PreferredSize' bg='panel-top' bg-color='#9B1FDE' pad='1' pref-width='82'>
+		<vertical bg='panel-top' bg-color='Black' pad-top='1' pref-width='80'>
+			<text text='Object Preview' align='Center' font-size='8' italics='True'/>
+		</vertical>
+	</vertical>
+	<vertical ignore-layout='True' pad-left='5' pad-right='5' pad='2' 
+			  anchor-pos-y='21' pref-width='55'>
+		<checkbox text='Enable Previews' value='enable-previews' apply-on-change='True'/>
+	</vertical>
+	<text text='Coming Soon!' font-size='10' italics='True' align='Center'/>
+</vertical>

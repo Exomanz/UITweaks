@@ -1,0 +1,68 @@
+﻿<vertical xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' 
+	xsi:schemaLocation='https://monkeymanboy.github.io/BSML-Docs/ 
+	https://raw.githubusercontent.com/monkeymanboy/BSML-Docs/gh-pages/BSMLSchema.xsd'
+	child-control-height='False'>
+	<vertical vertical-fit='PreferredSize' bg='panel-top' bg-color='Orange' pad='1' pref-width='82'> 
+		<vertical bg='panel-top' bg-color='Black' pad-top='1' pref-width='80'>
+			<text text='About' align='Center' font-size='8' italics='True'/>
+		</vertical>
+	</vertical>
+	<vertical vertical-fit='PreferredSize' bg='round-rect-panel' pref-width='95' pad='3'>
+		<horizontal>
+			<vertical vertical-fit='PreferredSize'>
+				<text text='Mod  :  &lt;color=#3FF74D&gt;UITweaks' italics='True'/>
+				<text text='Developer  :  &lt;color=#1FA2DE&gt;Exomanz#8083' italics='True'/>
+				<text text='Version  :  &lt;color=#FFBA00&gt;2.0.0' italics='True'/>
+			</vertical>
+			<vertical vertical-fit='PreferredSize'>
+				<button text='GitHub Page' face-color='#53E968' click-event='github'/>
+				<button text='Report An Issue' face-color='#FF3D3D' click-event='issues'/>
+
+				<modal show-event='github' hide-event='hide-all-modals' 
+					   click-off-closes='True' move-to-center='True' size-delta-x='95' size-delta-y='38'>
+					<vertical anchor-min-y='0.1'>
+						<vertical pad='2' pref-width='85' pref-height='40'>
+							<text text='Notice' font-color='#FF3F3F' font-size='6' italics='True' 
+								  align='Center' bold='True'/>
+							<text text='You are about to open a link in your browser.'
+								  italics='True' align='Center'/>
+							<text text='Do you wish to continue?' italics='True' align='Center'/>
+							<text text='Link :  &lt;color=#55A1FF&gt;https://github.com/Exomanz/UITweaks#readme' 
+								  font-size='3' align='Center' italics='True'/>
+						</vertical>
+						<horizontal horizontal-fit='PreferredSize' spacing='5' pad-top='3'>
+							<button text='No' click-event='hide-all-modals'/>
+							<button text='Yes' click-event='hide-all-modals' on-click='open-gh'/>
+						</horizontal>
+					</vertical>
+				</modal>
+
+				<modal show-event='issues' hide-event='hide-all-modals'
+					   click-off-closes='True' move-to-center='True' size-delta-x='95' size-delta-y='38'>
+					<vertical anchor-min-y='0.1'>
+						<vertical pad='2' pref-width='85' pref-height='40'>
+							<text text='Notice' font-color='#FF3F3F' font-size='6' italics='True'
+								  align='Center' bold='True'/>
+							<text text='You are about to open a link in your browser.'
+								  italics='True' align='Center'/>
+							<text text='Do you wish to continue?' italics='True' align='Center'/>
+							<text text='Link :  &lt;color=#55A1FF&gt;https://github.com/Exomanz/UITweaks/issues'
+								  font-size='3' align='Center' italics='True'/>
+						</vertical>
+						<horizontal horizontal-fit='PreferredSize' spacing='5' pad-top='3'>
+							<button text='No' click-event='hide-all-modals'/>
+							<button text='Yes' click-event='hide-all-modals' on-click='open-issues'/>
+						</horizontal>
+					</vertical>
+				</modal>
+				
+			</vertical>
+		</horizontal>
+		<text text='------------' align='Center' italics='True'/>
+		<text text="This mod aims to bring you more customization to the in-game HUD!
+			  Featuring an extensive configuration system which allows you to 
+			  tweak nearly every single thing to your liking, you can make it 
+			  exactly what you want it to be!" 
+			  align="Center" italics="True"/>
+	</vertical>
+</vertical>
