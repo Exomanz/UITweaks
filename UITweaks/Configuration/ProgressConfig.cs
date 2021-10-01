@@ -12,8 +12,6 @@ namespace UITweaks.Configuration
         [UseConverter(typeof(HexColorConverter))] public virtual Color BG { get; set; } = Color.white;
         [UseConverter(typeof(HexColorConverter))] public virtual Color StartColor { get; set; } = Color.red;
         [UseConverter(typeof(HexColorConverter))] public virtual Color EndColor { get; set; } = Color.green;
-
-        [Ignore] public static MainConfig.ProgressDisplayType m_DisplayType { get; set; } = MainConfig.ProgressDisplayType.Original;
-        public virtual string DisplayType { get; set; } = m_DisplayType.ToString();
+        public virtual string DisplayType { get; set; } = "Original";
     }
 }

@@ -1,5 +1,5 @@
-﻿using Hive.Versioning;
-using IPA.Config.Stores.Attributes;
+﻿using IPA.Config.Stores.Attributes;
+using System.Collections.Generic;
 using UITweaks.Configuration;
 
 namespace UITweaks
@@ -13,11 +13,5 @@ namespace UITweaks
         [NonNullable] public virtual ComboConfig ComboConfig { get; set; } = new ComboConfig();
         [NonNullable] public virtual ProgressConfig ProgressConfig { get; set; } = new ProgressConfig();
         [NonNullable] public virtual PositionConfig PositionConfig { get; set; } = new PositionConfig();
-
-        public enum ProgressDisplayType
-        {
-            Original = 0,
-            Lerp = 1,
-        };
     }
 }

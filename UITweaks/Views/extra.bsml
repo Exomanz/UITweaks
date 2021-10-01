@@ -11,8 +11,8 @@
 		<horizontal>
 			<vertical vertical-fit='PreferredSize'>
 				<text text='Mod  :  &lt;color=#3FF74D&gt;UITweaks' italics='True'/>
-				<text text='Developer  :  &lt;color=#1FA2DE&gt;Exomanz#8083' italics='True'/>
 				<text text='Version  :  &lt;color=#FFBA00&gt;2.0.0' italics='True'/>
+				<text text='Developer  :  &lt;color=#1FA2DE&gt;Exomanz#8083' italics='True'/>
 			</vertical>
 			<vertical vertical-fit='PreferredSize'>
 				<button text='GitHub Page' face-color='#53E968' click-event='github'/>

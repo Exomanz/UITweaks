@@ -5,7 +5,6 @@ using HMUI;
 using SiraUtil.Tools;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using TMPro;
 using UITweaks.Configuration;
 using UnityEngine;
@@ -24,18 +23,35 @@ namespace UITweaks.UI
         [Inject] ProgressConfig progress;
         [Inject] PositionConfig position;
         [Inject] SiraLog log;
+        public float energyFillAmount = 0.01f;
+        public float progressFillAmount = 0.01f;
         public int selectedTab = 0;
+        public event Action<int> visibilityEvent;
 
         [UIComponent("tab-selector")] TabSelector tabSelector;
         [UIComponent("type-text")] TextMeshProUGUI typeText;
-        [UIValue("preview-fill")] protected float previewFill = 0.01f;
 
-        [UIAction("update-tab")] internal void UpdateTab(SegmentedControl _, int tab) =>
-                                    selectedTab = tab;
-        [UIAction("update-fill")] internal void UpdateFill(float fill) => previewFill = fill;
+        [UIAction("update-tab")] internal void UpdateTab(SegmentedControl _, int tab)
+        {
+            selectedTab = tab;
+            this.visibilityEvent(tab);
+        }
 
-        [UIValue("display-type-dropdown")] 
-        protected List<object> typeList => Enum.GetNames(typeof(MainConfig.ProgressDisplayType)).ToList<object>();
+        [UIAction("update-energy-fill")] internal void UpdateEnergyFill(float fill) => energyFillAmount = fill;
+        [UIAction("update-progress-fill")] internal void UpdateProgressFill(float fill) => progressFillAmount = fill;
+
+        [UIValue("display-type-dropdown")]
+        protected List<object> typeList => new List<object>()
+        {
+            "Original",
+            "Lerp",
+        };
+
+        public void Trigger()
+        {
+            if (visibilityEvent == null) return;
+            this.visibilityEvent(selectedTab);
+        }
 
         #region Multiplier Config
         [UIValue("multi-enabled")] protected bool MultiEnabled
@@ -247,6 +263,7 @@ namespace UITweaks.UI
                 NotifyPropertyChanged();
                 NotifyPropertyChanged(nameof(OriginalType));
                 NotifyPropertyChanged(nameof(LerpType));
+                NotifyPropertyChanged(nameof(CanUsePreview));
             }
         }
 
@@ -271,6 +288,15 @@ namespace UITweaks.UI
                     typeText.text = "[Lerp mode will fade between two fill colors as the song progresses.]";
                     return true;
                 }
+                else return false;
+            }
+        }
+
+        [UIValue("can-use-preview")] protected bool CanUsePreview
+        {
+            get
+            {
+                if (LerpType) return true;
                 else return false;
             }
         }

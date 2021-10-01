@@ -144,6 +144,8 @@
     <Compile Include="UI\UIFlowCoordinator.cs" />
     <Compile Include="UI\UIMenuButtonManager.cs" />
     <Compile Include="Utilities\HSBColor.cs" />
+    <Compile Include="Utilities\MockPositionPanel.cs" />
+    <Compile Include="Utilities\SettingsPanelObjectGrabber.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="manifest.json" />
