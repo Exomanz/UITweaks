@@ -10,6 +10,12 @@ namespace UITweaks
     [Plugin(RuntimeOptions.DynamicInit)]
     public class Plugin
     {
+        // TODO:
+        // Parse information to the ModalView on the Extra settings page.
+        // Move to Method/Constructor Injection as opposed to Field Injection.
+        // Find other miscellaneous features to add.
+        // Improve the mod's performance as a whole.
+
         internal static MainConfig MainConfig { get; private set; }
         internal static IPALogger Logger { get; private set; }
 

@@ -18,6 +18,7 @@ A Beat Saber mod that aims to bring more color to the in-game HUD!
 - ~~Fix a rare bug that occurs when playing a song with insta-fail (energy bar not being colored).~~
   - Supposedly fixed, but I need more evidence to confirm.
 - Color the progress bar text.
+- Do a **lot** of under-the-hood maintenance and performance improvements.
 
 ## Previews:
 ### Standard Gameplay:
