@@ -8,10 +8,11 @@ namespace UITweaks
     {
         [Ignore] public virtual bool AllowPreviews { get; set; } = true;
 
-        [NonNullable] public virtual MultiplierConfig MultiConfig { get; set; } = new MultiplierConfig();
-        [NonNullable] public virtual EnergyConfig EnergyConfig { get; set; } = new EnergyConfig();
-        [NonNullable] public virtual ComboConfig ComboConfig { get; set; } = new ComboConfig();
-        [NonNullable] public virtual ProgressConfig ProgressConfig { get; set; } = new ProgressConfig();
-        [NonNullable] public virtual PositionConfig PositionConfig { get; set; } = new PositionConfig();
+        [NonNullable] public virtual MultiplierConfig MultiConfig { get; set; } = new();
+        [NonNullable] public virtual EnergyConfig EnergyConfig { get; set; } = new();
+        [NonNullable] public virtual ComboConfig ComboConfig { get; set; } = new();
+        [NonNullable] public virtual ProgressConfig ProgressConfig { get; set; } = new();
+        [NonNullable] public virtual PositionConfig PositionConfig { get; set; } = new();
+        [NonNullable] public virtual MiscConfig MiscConfig { get; set; } = new();
     }
 }

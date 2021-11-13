@@ -9,12 +9,9 @@ namespace UITweaks.Colorers
 {
     public class MultiplierColorer : MonoBehaviour
     {
-#pragma warning disable CS0169, CS0649
-        [Inject] ScoreMultiplierUIController scorePanel;
-        [Inject] MultiplierConfig config;
-        [Inject] SiraLog log;
-#pragma warning restore CS0169, CS0649
-
+        [Inject] private ScoreMultiplierUIController scorePanel;
+        [Inject] private MultiplierConfig config;
+        [Inject] private SiraLog log;
         private CurvedTextMeshPro[] texts;
         private Image bg;
         private Image fg;

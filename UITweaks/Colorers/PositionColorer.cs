@@ -8,14 +8,11 @@ namespace UITweaks.Colorers
 {
     public class PositionColorer : MonoBehaviour
     {
-#pragma warning disable CS0649, CS0169
-        [Inject] MultiplayerPositionHUDController positionPanel;
-        [Inject] PositionConfig config;
-        [Inject] SiraLog log;
-#pragma warning disable CS0649, CS0169
-
-        TextMeshProUGUI[] positionTexts;
-        TextMeshProUGUI firstPlaceObject;
+        [Inject] private MultiplayerPositionHUDController positionPanel;
+        [Inject] private PositionConfig config;
+        [Inject] private SiraLog log;
+        private TextMeshProUGUI[] positionTexts;
+        private TextMeshProUGUI firstPlaceObject;
 
         public void Start()
         {

@@ -3,7 +3,7 @@
   "id": "UITweaks",
   "name": "UITweaks",
   "author": "Exomanz",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "Allows you to color various parts of the in-game HUD, allowing for extensive configuration.",
   "gameVersion": "1.16.4",
   "dependsOn": {

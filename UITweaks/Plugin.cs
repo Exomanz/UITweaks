@@ -2,7 +2,6 @@
 using IPA.Config.Stores;
 using IPAConfig = IPA.Config.Config;
 using IPALogger = IPA.Logging.Logger;
-using SiraUtil;
 using SiraUtil.Zenject;
 using UITweaks.Installers;
 
@@ -12,27 +11,30 @@ namespace UITweaks
     public class Plugin
     {
         internal static MainConfig MainConfig { get; private set; }
+        internal static IPALogger Logger { get; private set; }
 
         [Init] public Plugin(IPALogger logger, IPAConfig config, Zenjector zenject)
         {
             MainConfig = config.Generated<MainConfig>();
+            Logger = logger;
 
-            zenject.On<PCAppInit>().Pseudo(Container => Container.BindLoggerAsSiraLogger(logger));
             zenject.OnApp<ConfigInstaller>();
-            zenject.OnMenu<MenuManagerInstaller>();
+            zenject.OnMenu<MenuManagerUIInstaller>();
 
             // Single-player
-            zenject.OnGame<GameInstaller>().Expose<ScoreMultiplierUIController>()
-                .Expose<GameEnergyUIPanel>()
-                .Expose<ComboUIController>()
-                .Expose<SongProgressUIController>().ShortCircuitForTutorial().ShortCircuitForMultiplayer();
-
-            // Multi-player
-            zenject.OnGame<GameInstaller>(false).Expose<ScoreMultiplierUIController>()
+            zenject.OnGame<PanelModifierInstaller>().Expose<ScoreMultiplierUIController>()
                 .Expose<GameEnergyUIPanel>()
                 .Expose<ComboUIController>()
                 .Expose<SongProgressUIController>()
-                .Expose<MultiplayerPositionHUDController>().OnlyForMultiplayer();
+                .Expose<ImmediateRankUIPanel>().ShortCircuitForTutorial().ShortCircuitForMultiplayer();
+
+            // Multi-player
+            zenject.OnGame<PanelModifierInstaller>(false).Expose<ScoreMultiplierUIController>()
+                .Expose<GameEnergyUIPanel>()
+                .Expose<ComboUIController>()
+                .Expose<SongProgressUIController>()
+                .Expose<MultiplayerPositionHUDController>()
+                .Expose<ImmediateRankUIPanel>().OnlyForMultiplayer();
         }
 
         [OnEnable] public void Enable() { }

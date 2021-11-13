@@ -1,4 +1,5 @@
-﻿using UITweaks.Configuration;
+﻿using SiraUtil;
+using UITweaks.Configuration;
 using Zenject;
 
 namespace UITweaks.Installers
@@ -16,6 +17,9 @@ namespace UITweaks.Installers
             Container.Bind<ComboConfig>().FromInstance(main.ComboConfig).AsCached();
             Container.Bind<ProgressConfig>().FromInstance(main.ProgressConfig).AsCached();
             Container.Bind<PositionConfig>().FromInstance(main.PositionConfig).AsCached();
+            Container.Bind<MiscConfig>().FromInstance(main.MiscConfig).AsCached();
+
+            Container.BindLoggerAsSiraLogger(Plugin.Logger);
         }
     }
 }

@@ -1,5 +1,4 @@
 ﻿using BeatSaberMarkupLanguage.Attributes;
-using BeatSaberMarkupLanguage.Components;
 using BeatSaberMarkupLanguage.ViewControllers;
 using HMUI;
 using SiraUtil.Tools;
@@ -17,18 +16,20 @@ namespace UITweaks.UI
     public class ModSettingsViewController : BSMLAutomaticViewController
     {
 #pragma warning disable CS0169, CS0649
-        [Inject] MultiplierConfig multiplier;
-        [Inject] EnergyConfig energy;
-        [Inject] ComboConfig combo;
-        [Inject] ProgressConfig progress;
-        [Inject] PositionConfig position;
-        [Inject] SiraLog log;
+        [Inject] private MultiplierConfig multiplier;
+        [Inject] private EnergyConfig energy;
+        [Inject] private ComboConfig combo;
+        [Inject] private ProgressConfig progress;
+        [Inject] private PositionConfig position;
+        [Inject] private MiscConfig misc;
+        [Inject] private SiraLog log;
+
         public float energyFillAmount = 0.01f;
         public float progressFillAmount = 0.01f;
         public int selectedTab = 0;
         public event Action<int> visibilityEvent;
 
-        [UIComponent("tab-selector")] TabSelector tabSelector;
+        // This field shows information about the selected DisplayType for the Progress colorer.
         [UIComponent("type-text")] TextMeshProUGUI typeText;
 
         [UIAction("update-tab")] internal void UpdateTab(SegmentedControl _, int tab)
@@ -377,6 +378,15 @@ namespace UITweaks.UI
         {
             get => position.Fifth;
             set => position.Fifth = value;
+        }
+        #endregion
+
+        #region Misc Config
+        [UIValue("rank-panel-italics")]
+        protected bool RankPanelItalics
+        {
+            get => misc.RestoreRankPanelItalics;
+            set => misc.RestoreRankPanelItalics = value;
         }
         #endregion
     }

@@ -5,6 +5,7 @@ using IPA.Utilities;
 using SiraUtil.Tools;
 using System.Collections;
 using System.Linq;
+using TMPro;
 using UITweaks.Utilities;
 using UnityEngine;
 using UnityEngine.UI;
@@ -17,28 +18,28 @@ namespace UITweaks.UI
     public class ObjectPreviewViewController : BSMLAutomaticViewController
     {
 #pragma warning disable CS0649
-        [Inject] MainConfig config;
-        [Inject] ModSettingsViewController modSettingsViewController;
-        [Inject] SiraLog log;
+        [Inject] private MainConfig config;
+        [Inject] private ModSettingsViewController modSettingsViewController;
+        [Inject] private SiraLog log;
+
         public GameObject grabber;
         private SettingsPanelObjectGrabber settingsPanelObjectGrabber;
         private Vector3 defaultGrabberPosition = new Vector3(3.33f, 1.2f, 2.2f);
 
         #region Stuff For Previews
-        Image[] multiplierCircles;
-        CurvedTextMeshPro multiplierText;
+        private Image[] multiplierCircles;
+        private CurvedTextMeshPro multiplierText;
         private bool isCoroutineOn8x = false;
 
-        Image energyBar;
+        private Image energyBar;
         private float fillAmount = 0.01f;
-        string comboNum = string.Empty;
 
-        ImageView[] lines;
-        CurvedTextMeshPro comboText;
+        private ImageView[] lines;
+        private CurvedTextMeshPro comboText;
 
-        Image[] progressPanelImages;
+        private Image[] progressPanelImages;
 
-        MockPositionPanel mockPositionPanel;
+        private MockPositionPanel mockPositionPanel;
         #endregion
 
         [UIValue("enable-previews")]
@@ -55,7 +56,6 @@ namespace UITweaks.UI
         protected override void DidActivate(bool firstActivation, bool addedToHierarchy, bool screenSystemEnabling)
         {
             base.DidActivate(firstActivation, addedToHierarchy, screenSystemEnabling);
-            modSettingsViewController.visibilityEvent += UpdatePanelVisibility;
 
             if (!grabber)
             {
@@ -69,8 +69,9 @@ namespace UITweaks.UI
             }
 
             grabber.transform.position = defaultGrabberPosition;
-            comboNum = new System.Random().Next(0, 250).ToString();
+
             StartCoroutine(FinalizePanelsOnceGot());
+            modSettingsViewController.visibilityEvent += UpdatePanelVisibility;
         }
 
         internal IEnumerator FinalizePanelsOnceGot()
@@ -85,7 +86,6 @@ namespace UITweaks.UI
                 var panel = settingsPanelObjectGrabber.ComboPanel;
                 lines = panel.transform.GetComponentsInChildren<ImageView>();
                 comboText = panel.transform.Find("ComboCanvas/NumText").GetComponent<CurvedTextMeshPro>();
-                comboText.text = comboNum;
                 lines[0].SetField("_gradient", true);
                 lines[1].SetField("_gradient", true);
 
@@ -95,14 +95,13 @@ namespace UITweaks.UI
                 textsToModify[3].text = "01";
 
                 StartCoroutine(FinalPositionPanelSetup());
-
-                modSettingsViewController.Trigger();
             }
             catch (System.Exception ex)
             {
                 log.Logger.Error(ex);
             }
 
+            modSettingsViewController.Trigger();
             yield break;
         }
 
@@ -155,6 +154,8 @@ namespace UITweaks.UI
                     break;
                 case 4:
                     break;
+                case 5:
+                    break;
             }
         }
 
@@ -184,6 +185,8 @@ namespace UITweaks.UI
                     host.ComboPanel.SetActive(true);
                     host.ProgressPanel.SetActive(false);
                     mockPositionPanel.transform.localPosition = new Vector3(0, -1000, 0);
+
+                    comboText.text = new System.Random().Next(0, 250).ToString();
                     break;
                 case 3:
                     host.MultiplierPanel.transform.localPosition = new Vector3(0, -1000, 0);
@@ -198,6 +201,13 @@ namespace UITweaks.UI
                     host.ComboPanel.SetActive(false);
                     host.ProgressPanel.SetActive(false);
                     mockPositionPanel.transform.localPosition = Vector3.zero;
+                    break;
+                case 5:
+                    host.MultiplierPanel.transform.localPosition = new Vector3(0, -1000, 0);
+                    host.EnergyPanel.SetActive(false);
+                    host.ComboPanel.SetActive(false);
+                    host.ProgressPanel.SetActive(false);
+                    mockPositionPanel.transform.localPosition = new Vector3(0, -1000, 0);
                     break;
             }
         }
@@ -251,11 +261,17 @@ namespace UITweaks.UI
             fillAmount = modSettingsViewController.energyFillAmount;
             energyBar.rectTransform.anchorMax = new Vector2(fillAmount, 1f);
 
-            if (fillAmount < 0.5f) energyBar.color = HSBColor.Lerp(
-                HSBColor.FromColor(config.EnergyConfig.Low), HSBColor.FromColor(config.EnergyConfig.Mid), fillAmount * 2).ToColor();
             if (fillAmount == 0.5f) energyBar.color = config.EnergyConfig.Mid;
-            if (fillAmount > 0.5 && fillAmount < 1f) energyBar.color = HSBColor.Lerp(
-                HSBColor.FromColor(config.EnergyConfig.Mid), HSBColor.FromColor(config.EnergyConfig.High), (fillAmount - 0.5f) * 2).ToColor();
+
+            if (fillAmount > 0.5f && fillAmount < 1) energyBar.color = HSBColor.Lerp(
+                HSBColor.FromColor(config.EnergyConfig.Mid), 
+                HSBColor.FromColor(config.EnergyConfig.High), 
+                (fillAmount - 0.5f) * 2).ToColor();
+
+            if (fillAmount < 0.5f) energyBar.color = HSBColor.Lerp(
+                HSBColor.FromColor(config.EnergyConfig.Low), 
+                HSBColor.FromColor(config.EnergyConfig.Mid), 
+                fillAmount * 2).ToColor();
         }
 
         private void UpdateComboPanel()
@@ -305,9 +321,9 @@ namespace UITweaks.UI
                 progressPanelImages[2].transform.localPosition = new Vector3(modifiedFill, 0, 0);
 
                 progressPanelImages[0].color = HSBColor.Lerp(
-                    HSBColor.FromColor(config.ProgressConfig.StartColor), 
-                    HSBColor.FromColor(config.ProgressConfig.EndColor), fill).ToColor();
-
+                    HSBColor.FromColor(config.ProgressConfig.StartColor),
+                    HSBColor.FromColor(config.ProgressConfig.EndColor),
+                    fill).ToColor();
             }
         }
 

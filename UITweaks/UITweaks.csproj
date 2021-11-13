@@ -18,6 +18,7 @@
     <BeatSaberDir>$(LocalRefsDir)</BeatSaberDir>
     <AppOutputBase>$(MSBuildProjectDirectory)\</AppOutputBase>
     <!--<PathMap>$(AppOutputBase)=X:\$(AssemblyName)\</PathMap>-->
+    <LangVersion>9.0</LangVersion>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
@@ -124,17 +125,19 @@
   <ItemGroup>
     <Compile Include="Colorers\ComboColorer.cs" />
     <Compile Include="Colorers\EnergyBarColorer.cs" />
+    <Compile Include="Colorers\ImmediateRankPanelModifier.cs" />
     <Compile Include="Colorers\MultiplierColorer.cs" />
     <Compile Include="Colorers\PositionColorer.cs" />
     <Compile Include="Colorers\ProgressColorer.cs" />
     <Compile Include="Configuration\ComboConfig.cs" />
     <Compile Include="Configuration\EnergyConfig.cs" />
+    <Compile Include="Configuration\MiscConfig.cs" />
     <Compile Include="Configuration\PositionConfig.cs" />
     <Compile Include="Configuration\ProgressConfig.cs" />
-    <Compile Include="Installers\MenuManagerInstaller.cs" />
+    <Compile Include="Installers\MenuManagerUIInstaller.cs" />
     <Compile Include="MainConfig.cs" />
     <Compile Include="Configuration\MultiplierConfig.cs" />
-    <Compile Include="Installers\GameInstaller.cs" />
+    <Compile Include="Installers\PanelModifierInstaller.cs" />
     <Compile Include="Installers\ConfigInstaller.cs" />
     <Compile Include="Plugin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

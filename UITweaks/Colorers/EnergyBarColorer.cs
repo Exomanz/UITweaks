@@ -1,4 +1,6 @@
-﻿using SiraUtil.Tools;
+﻿using IPA.Utilities;
+using SiraUtil.Tools;
+using System.Collections;
 using System.Collections.Generic;
 using UITweaks.Configuration;
 using UnityEngine;
@@ -9,65 +11,72 @@ namespace UITweaks.Colorers
 {
     public class EnergyBarColorer : MonoBehaviour
     {
-#pragma warning disable CS0649, CS0169
-        [Inject] IGameEnergyCounter energyCounter;
-        [Inject] GameEnergyUIPanel energyPanel;
-        [Inject] GameplayModifiers mods;
-        [Inject] EnergyConfig config;
-        [Inject] SiraLog log;
-#pragma warning restore CS0649, CS0169
-
-        Image mainImage;
-        List<Image> batterySegments = new List<Image>(3);
+        [Inject] private IGameEnergyCounter energyCounter;
+        [Inject] private GameEnergyUIPanel energyPanel;
+        [Inject] private GameplayModifiers mods;
+        [Inject] private EnergyConfig config;
+        [Inject] private SiraLog log;
+        private Image mainImage;
 
         public void Start()
         {
             log.Logger.Debug("EnergyBarColorer:Start()");
             transform.SetParent(energyPanel.transform);
+            StartCoroutine(PrepareColorForEnergyType(mods.energyType));
+        }
 
-            if (mods.energyType == GameplayModifiers.EnergyType.Bar)
-                mainImage = energyPanel.transform.Find("EnergyBarWrapper/EnergyBar").GetComponent<Image>();
+        public IEnumerator PrepareColorForEnergyType(GameplayModifiers.EnergyType type)
+        {
+            yield return new WaitUntil(() => energyPanel != null);
 
-            if (mods.energyType == GameplayModifiers.EnergyType.Battery)
+            if (type == GameplayModifiers.EnergyType.Battery)
             {
-                foreach (Image x in energyPanel.transform.GetComponentsInChildren<Image>())
+                List<Image> segments = energyPanel.GetField<List<Image>, GameEnergyUIPanel>("_batteryLifeSegments");
+                segments[0].color = config.Low;
+                segments[1].color = HSBColor.Lerp(HSBColor.FromColor(config.Low), HSBColor.FromColor(config.Mid), 0.34f).ToColor();
+                segments[2].color = HSBColor.Lerp(HSBColor.FromColor(config.Mid), HSBColor.FromColor(config.High), 0.66f).ToColor();
+                segments[3].color = config.High;
+                yield break;
+            }
+
+            else if (type == GameplayModifiers.EnergyType.Bar)
+            {
+                if (mods.instaFail)
                 {
-                    if (x.name.Contains("BatteryLifeSegment(Clone)"))
-                        batterySegments.Add(x);
+                    mainImage = energyPanel.transform.Find("BatteryLifeSegment(Clone)").GetComponent<Image>();
+                    mainImage.color = config.High;
+                }
+                else
+                {
+                    mainImage = energyPanel.transform.Find("EnergyBarWrapper/EnergyBar").GetComponent<Image>();
+                    mainImage.color = config.Mid;
                 }
             }
 
-            if (mods.instaFail)
-                mainImage = energyPanel.transform.Find("BatteryLifeSegment(Clone)").GetComponent<Image>();
+            energyCounter.gameEnergyDidChangeEvent += HandleEnergyDidChange;
+        }
+
+        private void HandleEnergyDidChange(float energy)
+        {
+            if (energy == 0.5f) mainImage.color = config.Mid;
+            if (energy > 0.5f) mainImage.color = HSBColor.Lerp(
+                HSBColor.FromColor(config.Mid), 
+                HSBColor.FromColor(config.High),
+                (energy - 0.5f) * 2).ToColor();
+            if (energy < 0.5f) mainImage.color = HSBColor.Lerp(
+                HSBColor.FromColor(config.Low), 
+                HSBColor.FromColor(config.Low), 
+                energy * 2).ToColor();
         }
 
         public void Update()
         {
-            if (mods.energyType == GameplayModifiers.EnergyType.Bar)
-            {
-                if (energyCounter.energy == 0.5f)
-                    mainImage.color = config.Mid;
-                if (energyCounter.energy < 0.5f)
-                    mainImage.color = Color.Lerp(config.Low, config.Mid, energyCounter.energy * 2);
-                if (energyCounter.energy > 0.5f)
-                    mainImage.color = Color.Lerp(config.Mid, config.High, (energyCounter.energy - 0.5f) * 2);
-                if (energyCounter.energy == 1 && config.RainbowFull)
-                    mainImage.color = HSBColor.ToColor(new HSBColor(Mathf.PingPong(Time.time * 0.5f, 1), 1, 1));
-            }
+            if (mainImage is null) return;
 
-            if (mods.energyType == GameplayModifiers.EnergyType.Battery)
+            if (config.RainbowFull)
             {
-                batterySegments[0].color = config.Low;
-                batterySegments[1].color = Color.Lerp(config.Low, config.Mid, 0.66f);
-                batterySegments[2].color = Color.Lerp(config.Mid, config.High, 0.33f);
-                batterySegments[3].color = config.High;
-            }
-
-            if (mods.instaFail)
-            {
-                if (config.RainbowFull)
+                if (mods.instaFail || (energyCounter.energy == 1f && mods.energyType == GameplayModifiers.EnergyType.Bar))
                     mainImage.color = HSBColor.ToColor(new HSBColor(Mathf.PingPong(Time.time * 0.5f, 1), 1, 1));
-                else mainImage.color = config.High;
             }
         }
     }

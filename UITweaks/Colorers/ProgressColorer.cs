@@ -9,14 +9,11 @@ namespace UITweaks.Colorers
 {
     public class ProgressColorer : MonoBehaviour
     {
-#pragma warning disable CS0649, CS0169
-        [Inject] AudioTimeSyncController audioController;
-        [Inject] SongProgressUIController progressPanel;
-        [Inject] ProgressConfig config;
-        [Inject] SiraLog log;
-#pragma warning restore CS0649, CS0169
-
-        List<Image> barComponents = new List<Image>(2);
+        [Inject] private AudioTimeSyncController audioController;
+        [Inject] private SongProgressUIController progressPanel;
+        [Inject] private ProgressConfig config;
+        [Inject] private SiraLog log;
+        private List<Image> barComponents = new List<Image>(2);
 
         public void Start()
         {
@@ -29,7 +26,6 @@ namespace UITweaks.Colorers
                 {
                     // [0] Progress, [1] Background, [2] Handle 
                     barComponents.Add(x);
-                    //log.Logger.Info(x.name);
                 }
             }
 
@@ -44,8 +40,8 @@ namespace UITweaks.Colorers
             if (config.DisplayType == "Lerp")
             {
                 barComponents[0].color = HSBColor.Lerp(
-                    HSBColor.FromColor(config.StartColor), 
-                    HSBColor.FromColor(config.EndColor), 
+                    HSBColor.FromColor(config.StartColor),
+                    HSBColor.FromColor(config.EndColor),
                     audioController.songTime / audioController.songLength).ToColor();
             }
         }

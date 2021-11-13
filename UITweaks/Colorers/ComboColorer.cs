@@ -9,13 +9,10 @@ namespace UITweaks.Colorers
 {
     public class ComboColorer : MonoBehaviour
     {
-#pragma warning disable CS0649, CS0169
-        [Inject] ComboUIController comboPanel;
-        [Inject] ComboConfig config;
-        [Inject] SiraLog log;
-#pragma warning restore CS0649, CS0169
-
-        ImageView[] fcLines;
+        [Inject] private ComboUIController comboPanel;
+        [Inject] private ComboConfig config;
+        [Inject] private SiraLog log;
+        private ImageView[] fcLines;
 
         public void Start()
         {
@@ -44,6 +41,7 @@ namespace UITweaks.Colorers
                         fcLines[1].color0 = config.TopRight;
                         fcLines[1].color1 = config.TopLeft;
                     }
+
                     else
                     {
                         fcLines[1].color0 = config.BottomLeft;

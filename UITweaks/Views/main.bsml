@@ -2,7 +2,7 @@
 	xsi:schemaLocation='https://monkeymanboy.github.io/BSML-Docs/ 
 	https://raw.githubusercontent.com/monkeymanboy/BSML-Docs/gh-pages/BSMLSchema.xsd'
 	child-control-height='False'>
-	<tab-selector tab-tag='tabs' id='tab-selector' select-cell='update-tab'/>
+	<tab-selector tab-tag='tabs' select-cell='update-tab'/>
 	
 	<!--Multiplier Tab-->
 	<tab tags='tabs' tab-name='Multiplier Ring'>
@@ -97,6 +97,13 @@
 			<color-setting text='3rd Place' value='3rd-place' apply-on-change='True' interactable='~position-enabled'/>
 			<color-setting text='4th Place' value='4th-place' apply-on-change='True' interactable='~position-enabled'/>
 			<color-setting text='5th Place' value='5th-place' apply-on-change='True' interactable='~position-enabled'/>
+		</modifier-container>
+	</tab>
+
+	<!--Misc Tab-->
+	<tab tags='tabs' tab-name='Miscellaneous'>
+		<modifier-container child-expand-width='True' horizontal-fit='PreferredSize'>
+			<checkbox text='Re-Italicize Rank/Score Panel' value='rank-panel-italics' apply-on-change='True'/>
 		</modifier-container>
 	</tab>
 </vertical>
