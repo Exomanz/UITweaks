@@ -12,11 +12,12 @@ A Beat Saber mod that aims to bring more color to the in-game HUD!
 - Combo FC line colors, including optional gradient lines.
 - Progress bar colors for the fill amount, background and slider. Text coming soon™
 - Multiplayer player position panel colors for each position, and an option to hide the first place animation.
+- Additional option to re-italicize the Score panel that Beat Games decided to un-italicize with the Halloween update.
 
 ## Roadpath
-- Fix a rare bug that occurs when playing a song with insta-fail (energy bar not being colored).
+- ~~Fix a rare bug that occurs when playing a song with insta-fail (energy bar not being colored).~~
+  - Supposedly fixed, but I need more evidence to confirm.
 - Color the progress bar text.
-- Reimplement the position panel preview without breaking replays or multiplayer.
 
 ## Previews:
 ### Standard Gameplay:
