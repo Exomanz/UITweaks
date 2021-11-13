@@ -33,7 +33,7 @@ namespace UITweaks.Colorers
 
             if (isMultiplayer) return; // This won't look right if we do it...
             allTexts[1].transform.localPosition = new Vector3(-3.2f, -.5f, -0.01f);
-            rankPanel.transform.position = new Vector3(-3.22f, 0.9f, 7);
+            rankPanel.transform.localPosition = new Vector3(-0.05f, 0.4f, 0);
         }
     }
 }
