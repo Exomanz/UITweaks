@@ -65,7 +65,7 @@ namespace UITweaks.Colorers
                 (energy - 0.5f) * 2).ToColor();
             if (energy < 0.5f) mainImage.color = HSBColor.Lerp(
                 HSBColor.FromColor(config.Low), 
-                HSBColor.FromColor(config.Low), 
+                HSBColor.FromColor(config.Mid), 
                 energy * 2).ToColor();
         }
 
