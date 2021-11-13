@@ -10,6 +10,7 @@ namespace UITweaks.Colorers
     public class ImmediateRankPanelModifier : MonoBehaviour
     {
         [Inject] private ImmediateRankUIPanel rankPanel;
+        [Inject] private GameplayCoreSceneSetupData data;
         [Inject] private SiraLog log;
         private bool isMultiplayer = false;
 
@@ -31,8 +32,11 @@ namespace UITweaks.Colorers
             foreach (TextMeshProUGUI tmp in allTexts)
                 tmp.fontStyle = FontStyles.Italic;
 
-            if (isMultiplayer) return; // This won't look right if we do it...
-            allTexts[1].transform.localPosition = new Vector3(-3.2f, -.5f, -0.01f);
+            // This won't look right if we do it...
+            if (isMultiplayer) 
+                return; 
+            if (data.playerSpecificSettings.advancedHud)
+                allTexts[1].transform.localPosition = new Vector3(-3.2f, -.5f, -0.01f);
             rankPanel.transform.localPosition = new Vector3(-0.05f, 0.4f, 0);
         }
     }
