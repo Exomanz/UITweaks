@@ -1,9 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.31613.86
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31919.166
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UITweaks", "UITweaks\UITweaks.csproj", "{13BA6598-6257-4EED-9392-7A57BE5039E2}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UITweaks", "UITweaks\UITweaks.csproj", "{4B5D5899-57C0-4FB5-891A-E83DD3071C69}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,15 +11,15 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{13BA6598-6257-4EED-9392-7A57BE5039E2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{13BA6598-6257-4EED-9392-7A57BE5039E2}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{13BA6598-6257-4EED-9392-7A57BE5039E2}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{13BA6598-6257-4EED-9392-7A57BE5039E2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4B5D5899-57C0-4FB5-891A-E83DD3071C69}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4B5D5899-57C0-4FB5-891A-E83DD3071C69}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4B5D5899-57C0-4FB5-891A-E83DD3071C69}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4B5D5899-57C0-4FB5-891A-E83DD3071C69}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {9B005A9B-A327-41FF-8140-7D906281153C}
+		SolutionGuid = {EC8C1BED-52E9-4AB2-B7EA-CCD6FADE45DB}
 	EndGlobalSection
 EndGlobal
