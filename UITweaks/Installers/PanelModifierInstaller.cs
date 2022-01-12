@@ -1,6 +1,6 @@
-﻿using UITweaks.Colorers;
+﻿using UITweaks.Models;
+using UITweaks.PanelModifiers;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using Zenject;
 
 namespace UITweaks.Installers
@@ -9,24 +9,24 @@ namespace UITweaks.Installers
     {
         public override void InstallBindings()
         {
-            bool isMultiplayer = SceneManager.GetSceneByName("MultiplayerGameplay").isLoaded;
-            MainConfig main = Plugin.MainConfig;
+            PluginConfig config = Container.Resolve<PluginConfig>();
 
-            BindPanelModifier<MultiplierColorer>(main.MultiConfig.Enabled);
-            BindPanelModifier<EnergyBarColorer>(main.EnergyConfig.Enabled);
-            BindPanelModifier<ComboColorer>(main.ComboConfig.Enabled);
-            BindPanelModifier<ProgressColorer>(main.ProgressConfig.Enabled);
+            if (config.Multiplier.Enabled) BindPanelModifier<ScoreMultiplierPanelModifier>();
+            if (config.Energy.Enabled) BindPanelModifier<EnergyBarPanelModifier>();
+            if (config.Combo.Enabled) BindPanelModifier<ComboPanelModifier>();
+            if (config.Progress.Enabled) BindPanelModifier<SongProgressPanelModifier>();
 
-            if (isMultiplayer)
-                BindPanelModifier<PositionColorer>(main.PositionConfig.Enabled);
-
-            BindPanelModifier<ImmediateRankPanelModifier>(main.MiscConfig.RestoreRankPanelItalics);
+            BindPanelModifier<LegacyPanelModifier>();
         }
 
-        public void BindPanelModifier<T>(bool enabled) where T : MonoBehaviour
+        /// <summary>
+        /// Shorthand function for binding <see cref="PanelModifier"/>'s. Is this necessary? Probably not...
+        /// <br></br><typeparamref name="T"/> is <see cref="PanelModifier"/> or any other class that inherits <see cref="MonoBehaviour"/>.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        private void BindPanelModifier<T>() where T : PanelModifier
         {
-            if (!enabled) return;
-            Container.Bind<T>().FromNewComponentOn(new GameObject("Colorer")).AsSingle().NonLazy();
+            Container.Bind<T>().FromNewComponentOn(new GameObject("PanelModifier")).AsSingle().NonLazy();
         }
     }
 }

@@ -1,394 +1,390 @@
 ﻿using BeatSaberMarkupLanguage.Attributes;
 using BeatSaberMarkupLanguage.ViewControllers;
 using HMUI;
-using SiraUtil.Tools;
+using SiraUtil.Logging;
 using System;
-using System.Collections.Generic;
-using TMPro;
-using UITweaks.Configuration;
+using UITweaks.Config;
 using UnityEngine;
 using Zenject;
 
 namespace UITweaks.UI
 {
-    [ViewDefinition("UITweaks.Views.main.bsml")]
-    [HotReload(RelativePathToLayout = @"..\Views\main.bsml")]
+    /// <summary>
+    /// This class hosts all of the Config properties.
+    /// </summary>
+    [ViewDefinition("UITweaks.Views.ModSettings.bsml")]
+    [HotReload(RelativePathToLayout = @"..\Views\ModSettings.bsml")]
     public class ModSettingsViewController : BSMLAutomaticViewController
     {
-#pragma warning disable CS0169, CS0649
-        [Inject] private MultiplierConfig multiplier;
-        [Inject] private EnergyConfig energy;
-        [Inject] private ComboConfig combo;
-        [Inject] private ProgressConfig progress;
-        [Inject] private PositionConfig position;
-        [Inject] private MiscConfig misc;
-        [Inject] private SiraLog log;
+        public int SelectedTab = 0;
+        public event Action<int> TabWasChangedEvent;
+        public float EnergyBarFillAmount = 0.01f;
+        public float ProgressBarPreviewFillAmount = 0.01f;
 
-        public float energyFillAmount = 0.01f;
-        public float progressFillAmount = 0.01f;
-        public int selectedTab = 0;
-        public event Action<int> visibilityEvent;
+        private PluginConfig Config = null!;
+        private Multiplier MultiplierConfig = null!;
+        private Energy EnergyConfig = null!;
+        private Combo ComboConfig = null!;
+        private Progress ProgressConfig = null!;
+        private Position PositionConfig = null!;
+        private Miscellaneous MiscConfig = null!;
+        private SiraLog Logger = null!;
 
-        // This field shows information about the selected DisplayType for the Progress colorer.
-        [UIComponent("type-text")] TextMeshProUGUI typeText;
+        [Inject] internal void Construct(PluginConfig conf, SiraLog l)
+        {
+            l.Logger.Debug("ModSettingsViewController:Construct()");
+
+            Logger = l;
+            Config = conf;
+            MultiplierConfig = conf.Multiplier;
+            EnergyConfig = conf.Energy;
+            ComboConfig = conf.Combo;
+            ProgressConfig = conf.Progress;
+            PositionConfig = conf.Position;
+            MiscConfig = conf.Misc;
+        }
+
+        protected override void DidActivate(bool firstActivation, bool addedToHierarchy, bool screenSystemEnabling)
+        {
+            base.DidActivate(firstActivation, addedToHierarchy, screenSystemEnabling);
+            TabWasChangedEvent(SelectedTab);
+        }
 
         [UIAction("update-tab")] internal void UpdateTab(SegmentedControl _, int tab)
         {
-            selectedTab = tab;
-            this.visibilityEvent(tab);
+            SelectedTab = tab;
+            TabWasChangedEvent(tab);
         }
 
-        [UIAction("update-energy-fill")] internal void UpdateEnergyFill(float fill) => energyFillAmount = fill;
-        [UIAction("update-progress-fill")] internal void UpdateProgressFill(float fill) => progressFillAmount = fill;
+        [UIAction("update-energy-preview")] internal void UpdateEnergyPreview(float fillAmount) => EnergyBarFillAmount = fillAmount;
 
-        [UIValue("display-type-dropdown")]
-        protected List<object> typeList => new List<object>()
-        {
-            "Original",
-            "Lerp",
-        };
+        [UIAction("update-progress-preview")] internal void UpdateProgressPreview(float time) => ProgressBarPreviewFillAmount = time;
 
-        public void Trigger()
+        internal void RaiseTabEvent(int raiseWithTab = 0) => TabWasChangedEvent(raiseWithTab == SelectedTab ? SelectedTab : raiseWithTab);
+
+        #region Notifiable Properties (IDE1006 Moment)
+        [UIValue("invert-rainbow")] private bool _RainbowToggle
         {
-            if (visibilityEvent == null) return;
-            this.visibilityEvent(selectedTab);
+            get => !RainbowAnimationOnMax;
         }
 
-        #region Multiplier Config
-        [UIValue("multi-enabled")] protected bool MultiEnabled
+        [UIValue("invert-mbl")] private bool _MirrorBottomLineToggle
         {
-            get => multiplier.Enabled;
-            set
-            {
-                multiplier.Enabled = value;
-                NotifyPropertyChanged();
-                NotifyPropertyChanged(nameof(CanEdit8x));
-            }
+            get => !MirrorOnBottom;
         }
 
-        [UIValue("rainbow-on-8x")] protected bool RainbowOn8x
-        {
-            get => multiplier.Rainbow8x;
-            set
-            {
-                multiplier.Rainbow8x = value;
-                NotifyPropertyChanged();
-                NotifyPropertyChanged(nameof(CanEdit8x));
-            }
-        }
-
-        [UIValue("one")] protected Color One
-        {
-            get => multiplier.One;
-            set => multiplier.One = value;
-        }
-
-        [UIValue("two")] protected Color Two
-        {
-            get => multiplier.Two;
-            set => multiplier.Two = value;
-        }
-
-        [UIValue("four")] protected Color Four
-        {
-            get => multiplier.Four;
-            set => multiplier.Four = value;
-        }
-
-        [UIValue("eight")] protected Color Eight
-        {
-            get => multiplier.Eight;
-            set => multiplier.Eight = value;
-        }
-
-        [UIValue("can-edit-8x")] protected bool CanEdit8x
-        {
-            get
-            {
-                if (MultiEnabled)
-                {
-                    if (!RainbowOn8x) return true;
-                    else return false;
-                }
-                else return false;
-            }
-        }
-        #endregion
-
-        #region Energy Bar Config
-        [UIValue("energy-enabled")] protected bool EnergyEnabled
-        {
-            get => energy.Enabled;
-            set
-            {
-                energy.Enabled = value;
-                NotifyPropertyChanged();
-            }
-        }
-
-        [UIValue("rainbow-on-full")] protected bool RainbowOnFull
-        {
-            get => energy.RainbowFull;
-            set => energy.RainbowFull = value;
-        }
-
-        [UIValue("low")] protected Color Low
-        {
-            get => energy.Low;
-            set => energy.Low = value;
-        }
-
-        [UIValue("mid")] protected Color Mid
-        {
-            get => energy.Mid;
-            set => energy.Mid = value;
-        }
-
-        [UIValue("high")] protected Color High
-        {
-            get => energy.High;
-            set => energy.High = value;
-        }
-        #endregion
-
-        #region Combo Lines Config
-        [UIValue("combo-enabled")] protected bool ComboEnabled
-        {
-            get => combo.Enabled;
-            set
-            {
-                combo.Enabled = value;
-                NotifyPropertyChanged();
-                NotifyPropertyChanged(nameof(GradientButtonInteractable));
-            }
-        }
-
-        [UIValue("top-line")] protected Color TopLine
-        {
-            get => combo.TopLine;
-            set => combo.TopLine = value;
-        }
-
-        [UIValue("bottom-line")] protected Color BottomLine
-        {
-            get => combo.BottomLine;
-            set => combo.BottomLine = value;
-        }
-
-        [UIValue("use-gradient")] protected bool UseGradient
-        {
-            get => combo.UseGradient;
-            set
-            {
-                combo.UseGradient = value;
-                NotifyPropertyChanged();
-                NotifyPropertyChanged(nameof(GradientButtonInteractable));
-            }
-        }
-
-        [UIValue("gradient-button-interactable")] protected bool GradientButtonInteractable
+        [UIValue("complex")] private bool _Complex
         {
             get
             {
                 if (ComboEnabled)
                 {
-                    if (UseGradient) return true;
+                    if (GradientEnabled) return true;
                     else return false;
                 }
                 else return false;
             }
         }
 
-        [UIValue("top-line-left")] protected Color TopLineLeft
+        [UIValue("invert-ufdt")] private bool _FadeDisplayToggle
         {
-            get => combo.TopLeft;
-            set => combo.TopLeft = value;
-        }
-
-        [UIValue("top-line-right")] protected Color TopLineRight
-        {
-            get => combo.TopRight;
-            set => combo.TopRight = value;
-        }
-
-        [UIValue("mirror-top-line")] protected bool MirrorTopLine
-        {
-            get => combo.MirrorOnBottom;
-            set
-            {
-                combo.MirrorOnBottom = value;
-                NotifyPropertyChanged();
-                NotifyPropertyChanged(nameof(InvertMTL));
-            }
-        }
-
-        [UIValue("mirror-top-line-invert")] protected bool InvertMTL
-        {
-            get
-            {
-                if (MirrorTopLine) return false;
-                else return true;
-            }
-        }
-
-        [UIValue("bottom-line-left")] protected Color BottomLineLeft
-        {
-            get => combo.BottomLeft;
-            set => combo.BottomLeft = value;
-        }
-
-        [UIValue("bottom-line-right")] protected Color BottomLineRight
-        {
-            get => combo.BottomRight;
-            set => combo.BottomRight = value;
+            get => !UseFadeDisplayType;
         }
         #endregion
 
-        #region Progress Bar Config
-        [UIValue("progress-enabled")] protected bool ProgressEnabled
+        #region Multiplier Config
+        [UIValue("multiplier-enabled")] private bool MultiplierEnabled
         {
-            get => progress.Enabled;
+            get => MultiplierConfig.Enabled;
             set
             {
-                progress.Enabled = value;
+                MultiplierConfig.Enabled = value;
                 NotifyPropertyChanged();
             }
         }
 
-        [UIValue("display-type")] protected string DisplayType
+        [UIValue("rainbow-on-8x")] private bool RainbowAnimationOnMax
         {
-            get => progress.DisplayType;
+            get => MultiplierConfig.RainbowOnMaxMultiplier;
             set
             {
-                progress.DisplayType = value;
-                NotifyPropertyChanged();
-                NotifyPropertyChanged(nameof(OriginalType));
-                NotifyPropertyChanged(nameof(LerpType));
-                NotifyPropertyChanged(nameof(CanUsePreview));
+                MultiplierConfig.RainbowOnMaxMultiplier = value;
+                NotifyPropertyChanged(nameof(_RainbowToggle));
             }
         }
 
-        [UIValue("original-type")] protected bool OriginalType
+        [UIValue("smooth-transition")] private bool SmoothTransition
         {
-            get
-            {
-                if (DisplayType == "Original")
-                {
-                    typeText.text = "[Original mode uses one static fill color throughout the entire song.]";
-                    return true;
-                }
-                else return false;
-            }
-        }
-        [UIValue("lerp-type")] protected bool LerpType
-        {
-            get
-            {
-                if (DisplayType == "Lerp")
-                {
-                    typeText.text = "[Lerp mode will fade between two fill colors as the song progresses.]";
-                    return true;
-                }
-                else return false;
-            }
+            get => MultiplierConfig.SmoothTransition;
+            set => MultiplierConfig.SmoothTransition = value;
         }
 
-        [UIValue("can-use-preview")] protected bool CanUsePreview
+        [UIValue("color-1x")] private Color One
         {
-            get
-            {
-                if (LerpType) return true;
-                else return false;
-            }
+            get => MultiplierConfig.One;
+            set => MultiplierConfig.One = value;
         }
 
-        [UIValue("fill-color")] protected Color FillColor
+        [UIValue("color-2x")] private Color Two
         {
-            get => progress.Fill;
-            set => progress.Fill = value;
+            get => MultiplierConfig.Two;
+            set => MultiplierConfig.Two = value;
         }
 
-        [UIValue("handle-color")] protected Color HandleColor
+        [UIValue("color-4x")] private Color Four
         {
-            get => progress.Handle;
-            set => progress.Handle = value;
+            get => MultiplierConfig.Four;
+            set => MultiplierConfig.Four = value;
         }
 
-        [UIValue("bg-color")] protected Color BGColor
+        [UIValue("color-8x")] private Color Eight
         {
-            get => progress.BG;
-            set => progress.BG = value;
-        }
-
-        [UIValue("song-start-color")] protected Color SongStartColor
-        {
-            get => progress.StartColor;
-            set => progress.StartColor = value;
-        }
-
-        [UIValue("song-end-color")] protected Color SongEndColor
-        {
-            get => progress.EndColor;
-            set => progress.EndColor = value;
+            get => MultiplierConfig.Eight;
+            set => MultiplierConfig.Eight = value;
         }
         #endregion
 
-        #region Position Panel Config
-        [UIValue("position-enabled")] protected bool PositionEnabled
+        #region Energy Config
+        [UIValue("energy-enabled")] private bool EnergyEnabled
         {
-            get => position.Enabled;
+            get => EnergyConfig.Enabled;
             set
             {
-                position.Enabled = value;
+                EnergyConfig.Enabled = value;
                 NotifyPropertyChanged();
             }
         }
 
-        [UIValue("hide-1st-place")] protected bool HideFirstPlace
+        [UIValue("rainbow-on-full")] private bool RainbowOnFullEnergy
         {
-            get => position.HideFirstPlace;
-            set => position.HideFirstPlace = value;
+            get => EnergyConfig.RainbowOnFullEnergy;
+            set => EnergyConfig.RainbowOnFullEnergy = value;
         }
 
-        [UIValue("1st-place")] protected Color First 
+        [UIValue("color-low")] private Color LowEnergy
         {
-            get => position.First;
-            set => position.First = value;
+            get => EnergyConfig.Low;
+            set => EnergyConfig.Low = value;
         }
 
-        [UIValue("2nd-place")] protected Color Second
+        [UIValue("color-mid")] private Color MidEnergy
         {
-            get => position.Second;
-            set => position.Second = value;
+            get => EnergyConfig.Mid;
+            set => EnergyConfig.Mid = value;
         }
 
-        [UIValue("3rd-place")] protected Color Third
+        [UIValue("color-high")] private Color HighEnergy
         {
-            get => position.Third;
-            set => position.Third = value;
-        }
-
-        [UIValue("4th-place")] protected Color Fourth
-        {
-            get => position.Fourth;
-            set => position.Fourth = value;
-        } 
-
-        [UIValue("5th-place")] protected Color Fifth
-        {
-            get => position.Fifth;
-            set => position.Fifth = value;
+            get => EnergyConfig.High;
+            set => EnergyConfig.High = value;
         }
         #endregion
 
-        #region Misc Config
-        [UIValue("rank-panel-italics")]
-        protected bool RankPanelItalics
+        #region Combo Config
+        [UIValue("combo-enabled")] private bool ComboEnabled
         {
-            get => misc.RestoreRankPanelItalics;
-            set => misc.RestoreRankPanelItalics = value;
+            get => ComboConfig.Enabled;
+            set
+            {
+                ComboConfig.Enabled = value;
+                NotifyPropertyChanged();
+                NotifyPropertyChanged(nameof(_Complex));
+            }
+        }
+
+        [UIValue("color-top-line")] private Color TopLine
+        {
+            get => ComboConfig.TopLine;
+            set => ComboConfig.TopLine = value;
+        }
+
+        [UIValue("color-bottom-line")] private Color BottomLine
+        {
+            get => ComboConfig.BottomLine;
+            set => ComboConfig.BottomLine = value;
+        }
+
+        [UIValue("gradient-enabled")] private bool GradientEnabled
+        {
+            get => ComboConfig.UseGradient;
+            set
+            {
+                ComboConfig.UseGradient = value;
+                NotifyPropertyChanged();
+                NotifyPropertyChanged(nameof(_Complex));
+            }
+        }
+
+        [UIValue("color-top-line-left")] private Color TopLeftGradient
+        {
+            get => ComboConfig.TopLeft;
+            set => ComboConfig.TopLeft = value;
+        }
+
+        [UIValue("color-top-line-right")] private Color TopRightGradient
+        {
+            get => ComboConfig.TopRight;
+            set => ComboConfig.TopRight = value;
+        }
+
+        [UIValue("mirror-bottom-line")] private bool MirrorOnBottom
+        {
+            get => ComboConfig.MirrorBottomLine;
+            set
+            {
+                ComboConfig.MirrorBottomLine = value;
+                NotifyPropertyChanged(nameof(_MirrorBottomLineToggle));
+            }
+        }
+
+        [UIValue("color-bottom-line-left")] private Color BottomLeftGradient
+        {
+            get => ComboConfig.BottomLeft;
+            set => ComboConfig.BottomLeft = value;
+        }
+
+        [UIValue("color-bottom-line-right")] private Color BottomRightGradient
+        {
+            get => ComboConfig.BottomRight;
+            set => ComboConfig.BottomRight = value;
+        }
+        #endregion
+
+        #region Progress Config
+        [UIValue("progress-enabled")] private bool ProgressEnabled
+        {
+            get => ProgressConfig.Enabled;
+            set
+            {
+                ProgressConfig.Enabled = value;
+                NotifyPropertyChanged();
+            }
+        }
+
+        [UIValue("color-fill")] private Color FillColor
+        {
+            get => ProgressConfig.Fill;
+            set => ProgressConfig.Fill = value;
+        }
+
+        [UIValue("color-bg")] private Color BGColor
+        {
+            get => ProgressConfig.BG;
+            set => ProgressConfig.BG = value;
+        }
+
+        [UIValue("color-handle")] private Color HandleColor
+        {
+            get => ProgressConfig.Handle;
+            set => ProgressConfig.Handle = value;
+        }
+
+        [UIValue("use-fade-display-type")]
+        private bool UseFadeDisplayType
+        {
+            get => ProgressConfig.UseFadeDisplayType;
+            set
+            {
+                ProgressConfig.UseFadeDisplayType = value;
+                NotifyPropertyChanged();
+                NotifyPropertyChanged(nameof(_FadeDisplayToggle));
+            }
+        }
+
+        [UIValue("color-song-start")] private Color SongStartColor
+        {
+            get => ProgressConfig.StartColor;
+            set => ProgressConfig.StartColor = value;
+        }
+
+        [UIValue("color-song-end")] private Color SongEndColor
+        {
+            get => ProgressConfig.EndColor;
+            set => ProgressConfig.EndColor = value;
+        }
+        #endregion
+
+        #region Position Config
+        [UIValue("position-enabled")] private bool PositionEnabled
+        {
+            get => PositionConfig.Enabled;
+            set
+            {
+                PositionConfig.Enabled = value;
+                //NotifyPropertyChanged();
+            }
+        }
+
+        [UIValue("hide-first-place-anim")] private bool HideFirstPlace
+        {
+            get => PositionConfig.HideFirstPlaceAnimation;
+            set => PositionConfig.HideFirstPlaceAnimation = value;
+        }
+
+        [UIValue("use-static-color")] private bool UseStaticColor
+        {
+            get => PositionConfig.UseStaticColorForStaticPanel;
+            set => PositionConfig.UseStaticColorForStaticPanel = value;
+        }
+
+        [UIValue("color-static-panel")] private Color StaticPanelColor
+        {
+            get => PositionConfig.StaticPanelColor;
+            set => PositionConfig.StaticPanelColor = value;
+        }
+
+        [UIValue("color-first-place")] private Color FirstPlace
+        {
+            get => PositionConfig.First;
+            set => PositionConfig.First = value;
+        }
+
+        [UIValue("color-second-place")] private Color SecondPlace
+        {
+            get => PositionConfig.Second;
+            set => PositionConfig.Second = value;
+        }
+
+        [UIValue("color-third-place")] private Color ThirdPlace
+        {
+            get => PositionConfig.Third;
+            set => PositionConfig.Third = value;
+        }
+
+        [UIValue("color-fourth-place")] private Color FourthPlace
+        {
+            get => PositionConfig.Fourth;
+            set => PositionConfig.Fourth = value;
+        }
+
+        [UIValue("color-fifth-place")] private Color FifthPlace
+        {
+            get => PositionConfig.Fifth;
+            set => PositionConfig.Fifth = value;
+        }
+        #endregion
+
+        #region Miscellaneous Config
+        [UIValue("legacy-combo-panel")]
+        private bool ComboPanelItalics
+        {
+            get => MiscConfig.ItalicizeComboPanel;
+            set => MiscConfig.ItalicizeComboPanel = value;
+        }
+
+        [UIValue("legacy-score-panel")]
+        private bool ScorePanelItalics
+        {
+            get => MiscConfig.ItalicizeScore;
+            set => MiscConfig.ItalicizeScore = value;
+        }
+
+        [UIValue("legacy-rank-panel")]
+        private bool RankPanelItalics
+        {
+            get => MiscConfig.ItalicizeImmediateRank;
+            set => MiscConfig.ItalicizeImmediateRank = value;
         }
         #endregion
     }
-#pragma warning restore CS0169, CS0649
 }

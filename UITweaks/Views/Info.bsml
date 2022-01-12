@@ -1,0 +1,57 @@
+﻿<bg xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' 
+	xsi:schemaLocation='https://monkeymanboy.github.io/BSML-Docs/ 
+	https://raw.githubusercontent.com/monkeymanboy/BSML-Docs/gh-pages/BSMLSchema.xsd'>
+	<vertical vertical-fit='PreferredSize' child-control-height='False' spacing='3' anchor-pos-y='10'>
+		<vertical vertical-fit='PreferredSize' bg='panel-top' bg-color='Orange' pad='1' pref-width='102'>
+			<vertical vertical-fit='PreferredSize' bg='panel-top' bg-color='Black' pad-top='1' pref-width='100'>
+				<text text='About' align='Center' font-size='8' italics='True'/>
+			</vertical>
+		</vertical>
+		<vertical vertical-fit='PreferredSize' bg='round-rect-panel' pref-width='110' pad='2'>
+			<horizontal>
+				<vertical vertical-fit='PreferredSize' spacing='2.5' pad-top='1'>
+					<text text='Mod  :  &lt;color=#3FF74D&gt;UITweaks' italics='True'/>
+					<text text='Version  :  &lt;color=#00BBFF&gt;3.0.0' italics='True'/>
+					<text text='Developer  :  &lt;color=#FF6666&gt;Exomanz#8083' italics='True'/>
+				</vertical>
+				<vertical vertical-fit='PreferredSize'>
+					<button text='Source' face-color='#FFAA33' click-event='show-gh-modal' pref-width='20'/>
+					<modal show-event='show-gh-modal' hide-event='hide'
+						   click-off-closes='True' move-to-center='True' size-delta-x='95' size-delta-y='40'>
+						<vertical vertical-fit='PreferredSize'>
+							<text text='Notice' font-color='#FF3F3F' font-size='7' bold='True' align='Center'/>
+							<text text='You are about to open a link in your browser.&#xA;Do you wish to continue?'
+								  align='Center'/>
+							<text text='Link  :  &lt;color=#55A1FF&gt;https://github.com/Exomanz/UITweaks/tree/main/UITweaks'
+								  font-size='3' align='Center'/>
+							<horizontal horizontal-fit='PreferredSize' spacing='4' pad-top='2'>
+								<button text='No' click-event='hide' face-color='#FF3737'/>
+								<button text='Yes' click-event='hide' on-click='open-gh-source' face-color='#37FF37'/>
+							</horizontal>
+						</vertical>
+					</modal>
+					
+					<button text='Donate' face-color='#FF77FF' click-event='show-kofi-modal' pref-width='20'/>
+					<modal show-event='show-kofi-modal' hide-event='hide'
+						   click-off-closes='True' move-to-center='True' size-delta-x='95' size-delta-y='40'>
+						<vertical vertical-fit='PreferredSize'>
+							<text text='Notice' font-color='#FF3F3F' font-size='7' bold='True' align='Center'/>
+							<text text='You are about to open a link in your browser.&#xA;Do you wish to continue?'
+								  align='Center'/>
+							<text text='Link  :  &lt;color=#55A1FF&gt;https://ko-fi.com/exo_manz/'
+								  font-size='3' align='Center'/>
+							<horizontal horizontal-fit='PreferredSize' spacing='4' pad-top='2'>
+								<button text='No' click-event='hide' face-color='#FF3737'/>
+								<button text='Yes' click-event='hide' on-click='open-kofi' face-color='#37FF37'/>
+							</horizontal>
+						</vertical>
+					</modal>
+				</vertical>
+			</horizontal>
+			<text text='----------' align='Center' italics='True'/>
+			<text text='This mod aims to bring you more customization to the in-game HUD!&#xA;
+Featuring an extensive configuration system which allows you to tweak nearly every single thing to your liking,
+you can make it exactly what you want it to be.' align='Center' italics='True'/>
+		</vertical>
+	</vertical>
+</bg>

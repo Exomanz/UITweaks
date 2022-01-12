@@ -1,0 +1,112 @@
+﻿<bg xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' 
+	xsi:schemaLocation='https://monkeymanboy.github.io/BSML-Docs/ 
+	https://raw.githubusercontent.com/monkeymanboy/BSML-Docs/gh-pages/BSMLSchema.xsd'>
+	<vertical child-control-height='False'>
+		<tab-selector select-cell='update-tab' tab-tag='_'/>
+
+		<!--Multiplier Tab-->
+		<tab tab-name='Multiplier Panel' tags='_'>
+			<modifier-container child-expand-width='true' horizontal-fit='PreferredSize'>
+				<checkbox text='Enabled' value='multiplier-enabled' apply-on-change='true'/>
+				<checkbox text='Smooth Transition' value='smooth-transition' apply-on-change='true' interactable='~multiplier-enabled'
+						  hover-hint='Allows the &lt;color=#FF3333&gt;Multiplier Ring&lt;/color&gt; to
+smoothly transition between each of the colors below as your multiplier increases.
+&#xA;&lt;color=#FF3333&gt;Previews for this feature are not yet supported.&lt;/color&gt;'/>
+				<checkbox text='Rainbow On Max Multiplier' value='rainbow-on-8x' apply-on-change='true' interactable='~multiplier-enabled'/>
+				<color-setting text='1x Color' value='color-1x' apply-on-change='true' interactable='~multiplier-enabled'/>
+				<color-setting text='2x Color' value='color-2x' apply-on-change='true' interactable='~multiplier-enabled'/>
+				<color-setting text='4x Color' value='color-4x' apply-on-change='true' interactable='~multiplier-enabled'/>
+				<color-setting text='8x Color' value='color-8x' apply-on-change='true' interactable='~multiplier-enabled' active='~invert-rainbow'/>
+			</modifier-container>
+		</tab>
+
+		<!--Energy Tab-->
+		<tab tab-name='Energy Bar' tags='_'>
+			<modifier-container child-expand-width='true' horizontal-fit='PreferredSize'>
+				<checkbox text='Enabled' value='energy-enabled' apply-on-change='true'/>
+				<checkbox text='Rainbow On Full Energy' value='rainbow-on-full' apply-on-change='true' interactable='~energy-enabled'/>
+				<color-setting text='Low Energy Color' value='color-low' apply-on-change='true' interactable='~energy-enabled'/>
+				<color-setting text='Middle Energy Color' value='color-mid' apply-on-change='true' interactable='~energy-enabled'/>
+				<color-setting text='High Energy Color' value='color-high' apply-on-change='true' interactable='~energy-enabled'/>
+				<slider-setting text='(Preview) Fill Amount' on-change='update-energy-preview' min='0.01' max='1' increment='0.01' interactable='~energy-enabled'/>
+			</modifier-container>
+		</tab>
+
+		<!--Combo Tab-->
+		<tab tab-name='Combo Panel' tags='_'>
+			<modifier-container child-expand-width='true' horizontal-fit='PreferredSize'>
+				<checkbox text='Enabled' value='combo-enabled' apply-on-change='true'/>
+				<color-setting text='Top Line Color' value='color-top-line' apply-on-change='true' interactable='~combo-enabled'/>
+				<color-setting text='Bottom Line Color' value='color-bottom-line' apply-on-change='true' interactable='~combo-enabled'/>
+				<checkbox text='Use Gradient' value='gradient-enabled' apply-on-change='true' interactable='~combo-enabled'/>
+				<button text='Gradient Settings' click-event='open-gradient-settings' interactable='~complex'/>
+
+				<modal show-event='open-gradient-settings' hide-event='hide-all-modals'
+						   move-to-center='True' click-off-closes='True' size-delta-x='130' size-delta-y='52'>
+					<vertical pref-height='50' vertical-fit='PreferredSize'>
+						<horizontal spacing='5'>
+							<vertical pad='2' pref-width='60' pref-height='20' child-control-height='False'>
+								<horizontal bg='panel-top' pad-left='5' pad-right='5' pad-top='1'>
+									<text text='Top Line' font-size='6' align='Center' italics='True'/>
+								</horizontal>
+								<color-setting text='Left Color' value='color-top-line-left' apply-on-change='True'/>
+								<color-setting text='Right Color' value='color-top-line-right' apply-on-change='True'/>
+							</vertical>
+							<vertical pad='2' pref-width='60' pref-height='20' child-control-height='False'>
+								<horizontal bg='panel-top' pad-left='5' pad-right='5' pad-top='1'>
+									<text text='Bottom Line' font-size='6' align='Center' italics='True'/>
+								</horizontal>
+								<checkbox text='Reflect Top Line' value='mirror-bottom-line' apply-on-change='True'/>
+								<color-setting text='Left Color' value='color-bottom-line-left' apply-on-change='True' active='~invert-mbl'/>
+								<color-setting text='Right Color' value='color-bottom-line-right' apply-on-change='True' active='~invert-mbl'/>
+							</vertical>
+						</horizontal>
+						<button text='Close' click-event='hide-all-modals'/>
+					</vertical>
+				</modal>
+			</modifier-container>
+		</tab>
+
+		<!--Progress Tab-->
+		<tab tab-name='Progress Bar' tags='_'>
+			<modifier-container child-expand-width='true' horizontal-fit='PreferredSize'>
+				<checkbox text='Enabled' value='progress-enabled' apply-on-change='true'/>
+				<checkbox text='Use Fade Type' value='use-fade-display-type' apply-on-change='true' interactable='~progress-enabled'
+						  hover-hint='Allows the &lt;color=#55BBFF&gt;Background&lt;/color&gt; of the progress bar to transition from
+one color to another as the song progresses.'/>
+				<color-setting text='Fill Color' value='color-fill' apply-on-change='true' interactable='~progress-enabled'/>
+				<color-setting text='Handle Color' value='color-handle' apply-on-change='true' interactable='~progress-enabled'/>
+				<color-setting text='BG Color' value='color-bg' apply-on-change='true' interactable='~progress-enabled' active='~invert-ufdt'/>
+				<color-setting text='BG Start Color' value='color-song-start' apply-on-change='true' interactable='~progress-enabled' active='~use-fade-display-type'/>
+				<color-setting text='BG End Color' value='color-song-end' apply-on-change='true' interactable='~progress-enabled' active='~use-fade-display-type'/>
+				<slider-setting text='Preview Song Progress' on-change='update-progress-preview' min='0.01' max='1' increment='0.01' interactable='~progress-enabled' active='~use-fade-display-type'/>
+			</modifier-container>
+		</tab>
+
+		<!--Position Tab-->
+		<tab tab-name='MP Position' tags='_'>
+			<vertical vertical-fit='PreferredSize' pref-width='95' bg='round-rect-panel' pad='3' spacing='-3'>
+				<text text='Notice' font-size='9' bold='true' font-color='#FF5555' align='Center'/>
+				<text text='- - - - - - - - - - -' font-size='7' align='Center'/>
+				<text text='Due to the migration to &lt;color=#22ddff&gt;SiraUtil v3&lt;/color&gt;, multiplayer support is currently broken.&#xA;
+I&apos;ll look into this eventually. As for now, these settings will remain non-adjustable, and no part of the mod will be active in multiplayer.'
+					  align='Center'/>
+			</vertical>
+		</tab>
+
+		<!--Miscellaneous Tab-->
+		<tab tab-name='Italics' tags='_'>
+			<vertical vertical-fit='PreferredSize' spacing='3'>
+				<vertical vertical-fit='PreferredSize' pref-width='95' bg='round-rect-panel' pad='3'>
+					<text text='These settings are intended to restore a sort of "&lt;color=#FF9933&gt;Legacy&lt;/color&gt;" feel to the left HUD panel
+by re-italicizing the things that Beat Games undid in recent updates.' align='Center'/>
+				</vertical>
+				<vertical vertical-fit='PreferredSize'>
+					<checkbox text='Restore Combo Panel Italics' value='legacy-combo-panel' apply-on-change='true'/>
+					<checkbox text='Restore Score Italics' value='legacy-score-panel' apply-on-change='true'/>
+					<checkbox text='Restore Immediate Rank Italics' value='legacy-rank-panel' apply-on-change='true'/>
+				</vertical>
+			</vertical>
+		</tab>
+	</vertical>
+</bg>

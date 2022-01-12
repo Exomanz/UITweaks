@@ -7,44 +7,25 @@ using UITweaks.Installers;
 
 namespace UITweaks
 {
-    [Plugin(RuntimeOptions.DynamicInit)]
+    [Plugin(RuntimeOptions.DynamicInit), NoEnableDisable]
     public class Plugin
     {
-        // TODO:
-        // Parse information to the ModalView on the Extra settings page.
-        // Move to Method/Constructor Injection as opposed to Field Injection.
-        // Find other miscellaneous features to add.
-        // Improve the mod's performance as a whole.
+        public static Plugin Instance { get; private set; }
 
-        internal static MainConfig MainConfig { get; private set; }
-        internal static IPALogger Logger { get; private set; }
-
-        [Init] public Plugin(IPALogger logger, IPAConfig config, Zenjector zenject)
+        [Init]
+        public Plugin(IPALogger logger, IPAConfig config, Zenjector zenject)
         {
-            MainConfig = config.Generated<MainConfig>();
-            Logger = logger;
+            Instance = this;
 
-            zenject.OnApp<ConfigInstaller>();
-            zenject.OnMenu<MenuManagerUIInstaller>();
+            zenject.UseLogger(logger);
+            zenject.Expose<ScoreMultiplierUIController>("Environment");
+            zenject.Expose<SongProgressUIController>("Environment");
+            zenject.Expose<ImmediateRankUIPanel>("Environment");
 
-            // Single-player
-            zenject.OnGame<PanelModifierInstaller>().Expose<ScoreMultiplierUIController>()
-                .Expose<GameEnergyUIPanel>()
-                .Expose<ComboUIController>()
-                .Expose<SongProgressUIController>()
-                .Expose<ImmediateRankUIPanel>().ShortCircuitForTutorial().ShortCircuitForMultiplayer();
-
-            // Multi-player
-            zenject.OnGame<PanelModifierInstaller>(false).Expose<ScoreMultiplierUIController>()
-                .Expose<GameEnergyUIPanel>()
-                .Expose<ComboUIController>()
-                .Expose<SongProgressUIController>()
-                .Expose<MultiplayerPositionHUDController>()
-                .Expose<ImmediateRankUIPanel>().OnlyForMultiplayer();
+            // Multiplayer support broke with Sira3... maybe someday I'll look into it.
+            zenject.Install<AppConfigInstaller>(Location.App, config.Generated<PluginConfig>());
+            zenject.Install<MenuUIInstaller>(Location.Menu);
+            zenject.Install<PanelModifierInstaller>(Location.StandardPlayer | Location.CampaignPlayer);
         }
-
-        [OnEnable] public void Enable() { }
-
-        [OnDisable] public void Disable() { }
     }
 }

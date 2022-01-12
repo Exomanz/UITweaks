@@ -1,86 +1,86 @@
-﻿using System.Collections;
+﻿using IPA.Utilities;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 namespace UITweaks.Utilities
 {
-    /// <summary>
-    /// Utility for getting in-game HUD elements for a preview display.
-    /// </summary>
     internal class SettingsPanelObjectGrabber : MonoBehaviour
     {
         public bool isCompleted { get; private set; } = false;
-        public bool panelMade { get; private set; } = false;
 
-        public GameObject MultiplierPanel = null;
-        public GameObject EnergyPanel = null;
-        public GameObject ComboPanel = null;
-        public GameObject ProgressPanel = null;
-        public Dictionary<string, MonoBehaviour> controllers = null;
+        public GameObject MultiplierPanel { get; private set; } = null!;
+        public GameObject EnergyPanel { get; private set; } = null!;
+        public GameObject ComboPanel { get;private set; } = null!;
+        public GameObject ProgressPanel { get; private set; } = null!;
+        public GameObject ImmediateRankPanel { get; private set; } = null!;
 
-        internal void Awake()
+        private List<MonoBehaviour> Controllers = null!;
+
+        public void Start()
         {
             isCompleted = false;
-            StartCoroutine(GrabThosePanels());
+            StartCoroutine(GetPanels());
         }
 
-        private IEnumerator GrabThosePanels()
+        private IEnumerator GetPanels()
         {
-            bool sceneIsCurrentlyLoaded = false;
+            bool sceneIsLoaded = false;
             try
             {
-                string sceneName = "DefaultEnvironment";
-                AsyncOperation loadScene = SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Additive);
+                AsyncOperation loadScene = SceneManager.LoadSceneAsync("DefaultEnvironment", LoadSceneMode.Additive);
                 while (!loadScene.isDone) yield return null;
 
-                sceneIsCurrentlyLoaded = true;
-                yield return new WaitForSecondsRealtime(0.1f);
+                sceneIsLoaded = true;
+                yield return new WaitForSecondsRealtime(0.1f); // Allow objects to fully load
 
-                controllers = new Dictionary<string, MonoBehaviour>()
+                // I would use Object.FindObjectsOfType<>() but it returns null since the objects aren't active.
+                Controllers = new List<MonoBehaviour>()
                 {
-                    { "Multiplier", Resources.FindObjectsOfTypeAll<ScoreMultiplierUIController>().FirstOrDefault() },
-                    { "Energy", Resources.FindObjectsOfTypeAll<GameEnergyUIPanel>().FirstOrDefault() },
-                    { "Combo", Resources.FindObjectsOfTypeAll<ComboUIController>().FirstOrDefault() },
-                    { "Progress", Resources.FindObjectsOfTypeAll<SongProgressUIController>().FirstOrDefault() },
+                    Resources.FindObjectsOfTypeAll<ScoreMultiplierUIController>().FirstOrDefault(),
+                    Resources.FindObjectsOfTypeAll<GameEnergyUIPanel>().FirstOrDefault(),
+                    Resources.FindObjectsOfTypeAll<ComboUIController>().FirstOrDefault(),
+                    Resources.FindObjectsOfTypeAll<SongProgressUIController>().FirstOrDefault(),
+                    Resources.FindObjectsOfTypeAll<ImmediateRankUIPanel>().FirstOrDefault(),
                 };
 
-                MultiplierPanel = SetupPanel(MultiplierPanel, controllers["Multiplier"]);
-                yield return new WaitUntil(() => panelMade = true);
-                EnergyPanel = SetupPanel(EnergyPanel, controllers["Energy"]);
-                yield return new WaitUntil(() => panelMade = true);
-                ComboPanel = SetupPanel(ComboPanel, controllers["Combo"]);
-                yield return new WaitUntil(() => panelMade = true);
-                ProgressPanel = SetupPanel(ProgressPanel, controllers["Progress"]);
-                yield return new WaitUntil(() => panelMade = true);
+                MultiplierPanel = FinalizePanel(Controllers[0]);
+                EnergyPanel = FinalizePanel(Controllers[1]);
+                ComboPanel = FinalizePanel(Controllers[2]);
+                ProgressPanel = FinalizePanel(Controllers[3]);
+                ImmediateRankPanel = FinalizePanel(Controllers[4]);
 
-                if (MultiplierPanel && EnergyPanel && ComboPanel && ProgressPanel) isCompleted = true;
+                if (MultiplierPanel && EnergyPanel && ComboPanel && ProgressPanel && ImmediateRankPanel) isCompleted = true;
+
+                MultiplierPanel.name = "Preview_MultiplierPanel";
+                EnergyPanel.name = "Preview_EnergyPanel";
+                ComboPanel.name = "Preview_ComboPanel";
+                ProgressPanel.name = "Preview_ProgressPanel";
+                ImmediateRankPanel.name = "Preview_ScoreRankPanel";
+
                 loadScene = null;
             }
             finally
             {
-                if (sceneIsCurrentlyLoaded)
-                {
-                    string sceneName = "DefaultEnvironment";
-                    SceneManager.UnloadSceneAsync(sceneName);
-                }
+                if (sceneIsLoaded)
+                    SceneManager.UnloadSceneAsync("DefaultEnvironment");
             }
+
             yield break;
         }
 
-        private GameObject SetupPanel(GameObject go, MonoBehaviour controller)
+        private GameObject FinalizePanel(MonoBehaviour controller)
         {
-            panelMade = false;
             try
             {
-                go = Instantiate(controller.gameObject);
-                DestroyImmediate(go.GetComponent(controller.GetType()));
-                go.SetActive(false);
+                GameObject go = Instantiate(controller.gameObject);
+                Destroy(go.GetComponent(controller.GetType()));
                 go.transform.SetParent(transform);
                 go.transform.localPosition = Vector3.zero;
                 go.transform.localRotation = Quaternion.identity;
-                panelMade = true;
                 return go;
             }
             catch (System.Exception ex)
