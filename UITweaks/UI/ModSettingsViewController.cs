@@ -60,9 +60,9 @@ namespace UITweaks.UI
 
         [UIAction("update-progress-preview")] internal void UpdateProgressPreview(float time) => ProgressBarPreviewFillAmount = time;
 
-        internal void RaiseTabEvent(int raiseWithTab = 0) => TabWasChangedEvent(raiseWithTab == SelectedTab ? SelectedTab : raiseWithTab);
+        public void RaiseTabEvent(int raiseWithTab = 0) => TabWasChangedEvent(raiseWithTab == SelectedTab ? SelectedTab : raiseWithTab);
 
-        #region Notifiable Properties (IDE1006 Moment)
+        #region Notifiable Properties
         [UIValue("invert-rainbow")] private bool _RainbowToggle
         {
             get => !RainbowAnimationOnMax;
@@ -73,14 +73,18 @@ namespace UITweaks.UI
             get => !MirrorOnBottom;
         }
 
+        [UIValue("invert-gradient")] private bool _GradientToggle
+        {
+            get => !GradientEnabled;
+        }
+
         [UIValue("complex")] private bool _Complex
         {
             get
             {
                 if (ComboEnabled)
                 {
-                    if (GradientEnabled) return true;
-                    else return false;
+                    return GradientEnabled ? true : false;
                 }
                 else return false;
             }
@@ -212,6 +216,7 @@ namespace UITweaks.UI
                 ComboConfig.UseGradient = value;
                 NotifyPropertyChanged();
                 NotifyPropertyChanged(nameof(_Complex));
+                NotifyPropertyChanged(nameof(_GradientToggle));
             }
         }
 
@@ -365,22 +370,19 @@ namespace UITweaks.UI
         #endregion
 
         #region Miscellaneous Config
-        [UIValue("legacy-combo-panel")]
-        private bool ComboPanelItalics
+        [UIValue("legacy-combo-panel")] private bool ComboPanelItalics
         {
             get => MiscConfig.ItalicizeComboPanel;
             set => MiscConfig.ItalicizeComboPanel = value;
         }
 
-        [UIValue("legacy-score-panel")]
-        private bool ScorePanelItalics
+        [UIValue("legacy-score-panel")] private bool ScorePanelItalics
         {
             get => MiscConfig.ItalicizeScore;
             set => MiscConfig.ItalicizeScore = value;
         }
 
-        [UIValue("legacy-rank-panel")]
-        private bool RankPanelItalics
+        [UIValue("legacy-rank-panel")] private bool RankPanelItalics
         {
             get => MiscConfig.ItalicizeImmediateRank;
             set => MiscConfig.ItalicizeImmediateRank = value;

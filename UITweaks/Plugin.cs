@@ -18,6 +18,8 @@ namespace UITweaks
             Instance = this;
 
             zenject.UseLogger(logger);
+            zenject.UseMetadataBinder<Plugin>();
+
             zenject.Expose<ScoreMultiplierUIController>("Environment");
             zenject.Expose<SongProgressUIController>("Environment");
             zenject.Expose<ImmediateRankUIPanel>("Environment");

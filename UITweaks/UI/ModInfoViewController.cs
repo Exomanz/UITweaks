@@ -1,9 +1,8 @@
-﻿using BeatSaberMarkupLanguage;
-using BeatSaberMarkupLanguage.Attributes;
-using BeatSaberMarkupLanguage.Components;
+﻿using BeatSaberMarkupLanguage.Attributes;
 using BeatSaberMarkupLanguage.ViewControllers;
+using IPA.Loader;
 using SiraUtil.Logging;
-using System;
+using SiraUtil.Zenject;
 using UnityEngine;
 using Zenject;
 
@@ -17,17 +16,24 @@ namespace UITweaks.UI
     public class ModInfoViewController : BSMLAutomaticViewController
     {
         private SiraLog Logger = null!;
+        private PluginMetadata PluginMetadata = null!;
 
-        [Inject] internal void Construct(SiraLog l)
+        [Inject] internal void Construct(SiraLog l, UBinder<Plugin, PluginMetadata> metadata)
         {
             l.Logger.Debug("ModInfoViewController:Construct()");
 
             Logger = l;
+            PluginMetadata = metadata.Value;
+        }
+
+        [UIValue("version-text")] private string Version
+        {
+            get => $"Version  :  <color=#00BBFF>{PluginMetadata.HVersion}</color>";
         }
 
         [UIAction("open-gh-source")] internal void OpenGitHubSource()
         {
-            Application.OpenURL("https://github.com/Exomanz/UITweaks/tree/sira3/UITweaks");
+            Application.OpenURL("https://github.com/Exomanz/UITweaks");
         }
 
         [UIAction("open-kofi")] internal void OpenDonateLink()

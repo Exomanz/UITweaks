@@ -11,7 +11,7 @@
 			<horizontal>
 				<vertical vertical-fit='PreferredSize' spacing='2.5' pad-top='1'>
 					<text text='Mod  :  &lt;color=#3FF74D&gt;UITweaks' italics='True'/>
-					<text text='Version  :  &lt;color=#00BBFF&gt;3.0.0' italics='True'/>
+					<text text='~version-text' italics='True'/>
 					<text text='Developer  :  &lt;color=#FF6666&gt;Exomanz#8083' italics='True'/>
 				</vertical>
 				<vertical vertical-fit='PreferredSize'>

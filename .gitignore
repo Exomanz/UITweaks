@@ -1,0 +1,10 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/UITweaks/obj/Release
+/UITweaks/obj
+/UITweaks/bin/Release
+/UITweaks/bin/Debug
+/UITweaks/UITweaks.csproj.user
+/.vs/UITweaks

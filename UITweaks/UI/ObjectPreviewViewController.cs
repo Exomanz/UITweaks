@@ -63,9 +63,8 @@ namespace UITweaks.UI
             set
             {
                 Config.AllowPreviews = value;
-                if (!previewToggleIsReady) return;
-                if (value == true) UpdatePanelVisibility(SettingsViewController.SelectedTab);
-                else UpdatePanelVisibility(-1);
+                if (!previewToggleIsReady) return; // Prevent BSML Parsing Error
+                UpdatePanelVisibility(value ? SettingsViewController.SelectedTab : -1);
             }
         }
 
@@ -75,7 +74,7 @@ namespace UITweaks.UI
 
             GameObject grabber = GameObject.Find("UITweaksPanelGrabber")?.gameObject;
 
-            if (firstActivation)
+            if (firstActivation && !grabber)
             {
                 grabber = new GameObject("UITweaksPanelGrabber");
                 grabber.transform.position = DefaultGrabberPos;
@@ -84,8 +83,8 @@ namespace UITweaks.UI
                 StartCoroutine(FinalizePanels());
             }
 
+            StartCoroutine(MultiplierPreviewCoroutine());
             grabber.transform.position = DefaultGrabberPos;
-
             SettingsViewController.TabWasChangedEvent += UpdatePanelVisibility;
         }
 
@@ -152,7 +151,6 @@ namespace UITweaks.UI
 
             previewToggleIsReady = true;
             SettingsViewController.RaiseTabEvent(Config.AllowPreviews ? SettingsViewController.SelectedTab : -1);
-            StartCoroutine(MultiplierPreviewCoroutine());
             yield break;
         }
 
@@ -161,10 +159,19 @@ namespace UITweaks.UI
             if (!ObjectGrabber.isCompleted) return;
             var host = ObjectGrabber;
 
+            if (!Config.AllowPreviews)
+            {
+                host.MultiplierPanel.transform.position = Void;
+                host.EnergyPanel.SetActive(false);
+                host.ComboPanel.SetActive(false);
+                host.ProgressPanel.SetActive(false);
+                host.ImmediateRankPanel.SetActive(false);
+                return;
+            }
+
             switch (tab)
             {
                 case 0:
-                    if (!Config.AllowPreviews) goto default; // i hate this fix i hate this fix i hate this fix i hate this fix i ha-
                     host.MultiplierPanel.transform.localPosition = Vector3.zero;
                     host.EnergyPanel.SetActive(false);
                     host.ComboPanel.SetActive(false);
@@ -172,7 +179,6 @@ namespace UITweaks.UI
                     host.ImmediateRankPanel.SetActive(false);
                     break;
                 case 1:
-                    if (!Config.AllowPreviews) goto default;
                     host.MultiplierPanel.transform.position = Void;
                     host.EnergyPanel.SetActive(true);
                     host.ComboPanel.SetActive(false);
@@ -180,7 +186,6 @@ namespace UITweaks.UI
                     host.ImmediateRankPanel.SetActive(false);
                     break;
                 case 2:
-                    if (!Config.AllowPreviews) goto default;
                     host.MultiplierPanel.transform.position = Void;
                     host.EnergyPanel.SetActive(false);
                     host.ComboPanel.SetActive(true);
@@ -191,7 +196,6 @@ namespace UITweaks.UI
                     host.ComboPanel.transform.localPosition = Vector3.zero;
                     break;
                 case 3:
-                    if (!Config.AllowPreviews) goto default;
                     host.MultiplierPanel.transform.position = Void;
                     host.EnergyPanel.SetActive(false);
                     host.ComboPanel.SetActive(false);
@@ -199,7 +203,6 @@ namespace UITweaks.UI
                     host.ImmediateRankPanel.SetActive(false);
                     break;
                 case 4:
-                    if (!Config.AllowPreviews) goto default;
                     host.MultiplierPanel.transform.position = Void;
                     host.EnergyPanel.SetActive(false);
                     host.ComboPanel.SetActive(false);
@@ -207,7 +210,6 @@ namespace UITweaks.UI
                     host.ImmediateRankPanel.SetActive(false);
                     break;
                 case 5:
-                    if (!Config.AllowPreviews) goto default;
                     host.MultiplierPanel.transform.position = Void;
                     host.EnergyPanel.SetActive(false);
                     host.ComboPanel.SetActive(true);
@@ -215,17 +217,12 @@ namespace UITweaks.UI
                     host.ImmediateRankPanel.SetActive(true);
 
                     host.ComboPanel.transform.localPosition = new Vector3(-0.75f, 0, 0);
-                    rank = Utilities.Utilities.GenerateDecimal(100, 1);
+                    rank = Utilities.Utilities.RandomDecimal(100, 1);
                     numText.text = new System.Random().Next(1, 250).ToString();
                     scoreText.text = new System.Random().Next(1, 999999).ToString();
                     percentText.text = rank.ToString() + "%";
                     break;
                 default:
-                    host.MultiplierPanel.transform.position = Void;
-                    host.EnergyPanel.SetActive(false);
-                    host.ComboPanel.SetActive(false);
-                    host.ProgressPanel.SetActive(false);
-                    host.ImmediateRankPanel.SetActive(false);
                     break;
             }
         }
@@ -261,10 +258,11 @@ namespace UITweaks.UI
 
         private IEnumerator MultiplierPreviewCoroutine()
         {
+            yield return new WaitUntil(() => previewToggleIsReady);
             previewCoroOn8x = false;
             multiplierCircles[1].fillAmount = 0.5f;
             
-            // Eventually will be used for Smooth Transition previews.
+            // Eventually Add "Smooth Transition" Preview
 
             {
                 multiplierCircles[0].color = Config.Multiplier.One.ColorWithAlpha(0.25f);

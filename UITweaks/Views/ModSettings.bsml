@@ -36,10 +36,10 @@ smoothly transition between each of the colors below as your multiplier increase
 		<tab tab-name='Combo Panel' tags='_'>
 			<modifier-container child-expand-width='true' horizontal-fit='PreferredSize'>
 				<checkbox text='Enabled' value='combo-enabled' apply-on-change='true'/>
-				<color-setting text='Top Line Color' value='color-top-line' apply-on-change='true' interactable='~combo-enabled'/>
-				<color-setting text='Bottom Line Color' value='color-bottom-line' apply-on-change='true' interactable='~combo-enabled'/>
 				<checkbox text='Use Gradient' value='gradient-enabled' apply-on-change='true' interactable='~combo-enabled'/>
-				<button text='Gradient Settings' click-event='open-gradient-settings' interactable='~complex'/>
+				<color-setting text='Top Line Color' value='color-top-line' apply-on-change='true' interactable='~combo-enabled' active='~invert-gradient'/>
+				<color-setting text='Bottom Line Color' value='color-bottom-line' apply-on-change='true' interactable='~combo-enabled' active='~invert-gradient'/>
+				<button text='Gradient Settings' click-event='open-gradient-settings' interactable='~complex' active='~gradient-enabled'/>
 
 				<modal show-event='open-gradient-settings' hide-event='hide-all-modals'
 						   move-to-center='True' click-off-closes='True' size-delta-x='130' size-delta-y='52'>
@@ -74,7 +74,7 @@ smoothly transition between each of the colors below as your multiplier increase
 				<checkbox text='Use Fade Type' value='use-fade-display-type' apply-on-change='true' interactable='~progress-enabled'
 						  hover-hint='Allows the &lt;color=#55BBFF&gt;Background&lt;/color&gt; of the progress bar to transition from
 one color to another as the song progresses.'/>
-				<color-setting text='Fill Color' value='color-fill' apply-on-change='true' interactable='~progress-enabled'/>
+				<color-setting text='Fill Color' value='color-fill' apply-on-change='true' interactable='~progress-enabled' active='~invert-ufdt'/>
 				<color-setting text='Handle Color' value='color-handle' apply-on-change='true' interactable='~progress-enabled'/>
 				<color-setting text='BG Color' value='color-bg' apply-on-change='true' interactable='~progress-enabled' active='~invert-ufdt'/>
 				<color-setting text='BG Start Color' value='color-song-start' apply-on-change='true' interactable='~progress-enabled' active='~use-fade-display-type'/>
