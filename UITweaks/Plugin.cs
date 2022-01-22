@@ -20,6 +20,8 @@ namespace UITweaks
             zenject.UseLogger(logger);
             zenject.UseMetadataBinder<Plugin>();
 
+            zenject.Expose<GameEnergyUIPanel>("Environment");
+            zenject.Expose<ComboUIController>("Environment");
             zenject.Expose<ScoreMultiplierUIController>("Environment");
             zenject.Expose<SongProgressUIController>("Environment");
             zenject.Expose<ImmediateRankUIPanel>("Environment");
