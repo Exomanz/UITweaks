@@ -16,9 +16,7 @@ A Beat Saber mod that aims to bring more color to the in-game HUD!
 - Additional options to re-italicize some UI elements.
 
 ## Roadpath
-- Fix multiplayer
-- Fix a rare bug where the multiplier preview won't play unless the game is reloaded. 
-  - This occurs whenever a level is played.
+- Fix Multiplayer
 - Maintenance as needed.
 
 ## Previews:
