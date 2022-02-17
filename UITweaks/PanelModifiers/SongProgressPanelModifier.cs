@@ -11,16 +11,26 @@ namespace UITweaks.PanelModifiers
         private AudioTimeSyncController SyncController = null!;
         private Config.Progress Config = null!;
         private List<ImageView> BarComponents = null!;
+        private bool canBeUsed = true;
 
-        [Inject] internal void ModifierInit(SongProgressUIController spuic, AudioTimeSyncController atsc, Config.Progress c)
+        [Inject] internal void ModifierInit(StandardGameplaySceneSetupData sgssd, SongProgressUIController spuic, AudioTimeSyncController atsc, Config.Progress c)
         {
-            Logger.Logger.Debug("ProgressModifier:ModifierInit()");
+
+            Logger.Logger.Debug("SongProgressPanelModifier:ModifierInit()");
             Controller = spuic;
             SyncController = atsc;
             Config = c;
             BarComponents = new();
 
             transform.SetParent(spuic.transform);
+
+            if (sgssd.beatmapCharacteristic.containsRotationEvents)
+            {
+                Logger.Logger.Debug("Selected map is 360/90. Disabling the SongProgressPanelModifier");
+                canBeUsed = false;
+                return;
+            }
+
             ModPanel();
         }
 
@@ -45,6 +55,8 @@ namespace UITweaks.PanelModifiers
 
         private void Update()
         {
+            if (!canBeUsed) return;
+
             // The performance impact of this is unmeasured but probably negligable. I do want to find a way to do this without using Update()
             if (Config.UseFadeDisplayType)
             {
