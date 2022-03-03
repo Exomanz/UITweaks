@@ -13,7 +13,7 @@ namespace UITweaks.PanelModifiers
         private List<ImageView> BarComponents = null!;
         private bool canBeUsed = true;
 
-        [Inject] internal void ModifierInit(StandardGameplaySceneSetupData sgssd, SongProgressUIController spuic, AudioTimeSyncController atsc, Config.Progress c)
+        [Inject] internal void ModifierInit([InjectOptional] StandardGameplaySceneSetupData sgssd, SongProgressUIController spuic, AudioTimeSyncController atsc, Config.Progress c)
         {
 
             Logger.Logger.Debug("SongProgressPanelModifier:ModifierInit()");
@@ -24,7 +24,7 @@ namespace UITweaks.PanelModifiers
 
             transform.SetParent(spuic.transform);
 
-            if (sgssd.beatmapCharacteristic.containsRotationEvents)
+            if (sgssd?.beatmapCharacteristic.containsRotationEvents == true)
             {
                 Logger.Logger.Debug("Selected map is 360/90. Disabling the SongProgressPanelModifier");
                 canBeUsed = false;
