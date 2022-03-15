@@ -7,6 +7,8 @@ namespace UITweaks
     {
         public virtual bool AllowPreviews { get; set; } = true;
 
+        public virtual bool AprilFools { get; set; } = true;
+
         [NonNullable] public virtual Multiplier Multiplier { get; set; } = new();
         [NonNullable] public virtual Combo Combo { get; set; } = new();
         [NonNullable] public virtual Energy Energy { get; set; } = new();

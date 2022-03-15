@@ -1,5 +1,6 @@
 ﻿using HMUI;
 using IPA.Utilities;
+using System.Collections;
 using TMPro;
 using UITweaks.Models;
 using UnityEngine;
@@ -9,6 +10,33 @@ namespace UITweaks.PanelModifiers
 {
     public class LegacyPanelModifier : PanelModifier
     {
+        internal class AprilFools : MonoBehaviour
+        {
+            [Inject] private readonly CoreGameHUDController gameHUDController;
+            [InjectOptional] private readonly StandardGameplaySceneSetupData data;
+
+            public void Start()
+            {
+                if (data.beatmapCharacteristic.containsRotationEvents)
+                {
+                    var container = gameHUDController.transform.Find("Container");
+                    container.transform.Rotate(0, 0, 180);
+                    return;
+                }
+                
+                var leftPanel = gameHUDController.transform.Find("LeftPanel");
+                leftPanel.position = new Vector3(3.2f, 2.2f, 7);
+                leftPanel.Rotate(0, 0, 180);
+
+                var rightPanel = gameHUDController.transform.Find("RightPanel");
+                rightPanel.position = new Vector3(-3.2f, 2.2f, 7);
+                rightPanel.Rotate(0, 0, 180);
+
+                var energyPanel = gameHUDController.transform.Find("EnergyPanel/EnergyBarWrapper");
+                energyPanel.Rotate(0, 0, 180);
+            }
+        }
+
         private ComboUIController ComboController = null!;
         private ImmediateRankUIPanel RankPanel = null!;
         private Config.Miscellaneous Config = null!;

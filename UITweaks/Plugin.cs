@@ -3,6 +3,7 @@ using IPA.Config.Stores;
 using IPAConfig = IPA.Config.Config;
 using IPALogger = IPA.Logging.Logger;
 using SiraUtil.Zenject;
+using System;
 using UITweaks.Installers;
 
 namespace UITweaks
@@ -11,15 +12,23 @@ namespace UITweaks
     public class Plugin
     {
         public static Plugin Instance { get; private set; }
+        public static bool isAprilFools { get; private set; }
 
         [Init]
         public Plugin(IPALogger logger, IPAConfig config, Zenjector zenject)
         {
             Instance = this;
 
+            DateTime time = DateTime.UtcNow;
+            isAprilFools = time.Month == 4 && time.Day == 1;
+
             zenject.UseLogger(logger);
             zenject.UseMetadataBinder<Plugin>();
-
+#if DEBUG
+            zenject.Expose<CoreGameHUDController>("Environment");
+#else
+            if (isAprilFools) zenject.Expose<CoreGameHUDController>("Environment");
+#endif
             zenject.Expose<GameEnergyUIPanel>("Environment");
             zenject.Expose<ComboUIController>("Environment");
             zenject.Expose<ScoreMultiplierUIController>("Environment");

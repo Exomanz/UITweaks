@@ -15,7 +15,6 @@ namespace UITweaks.PanelModifiers
 
         [Inject] internal void ModifierInit([InjectOptional] StandardGameplaySceneSetupData sgssd, SongProgressUIController spuic, AudioTimeSyncController atsc, Config.Progress c)
         {
-
             Logger.Logger.Debug("SongProgressPanelModifier:ModifierInit()");
             Controller = spuic;
             SyncController = atsc;
