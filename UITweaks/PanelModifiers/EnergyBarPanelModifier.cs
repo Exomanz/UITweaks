@@ -19,7 +19,7 @@ namespace UITweaks.PanelModifiers
 
         [Inject] public void ModifierInit(IGameEnergyCounter igec, GameEnergyUIPanel geuip, GameplayModifiers gm, Config.Energy c)
         {
-            Logger.Logger.Debug("EnergyBarPanelModifier:Init()");
+            Logger.Logger.Debug("EnergyBarPanelModifier:ModifierInit()");
             EnergyCounter = igec;
             EnergyPanel = geuip;
             Modifiers = gm;
