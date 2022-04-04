@@ -24,11 +24,9 @@ namespace UITweaks
 
             zenject.UseLogger(logger);
             zenject.UseMetadataBinder<Plugin>();
-#if DEBUG
-            zenject.Expose<CoreGameHUDController>("Environment");
-#else
+
             if (isAprilFools) zenject.Expose<CoreGameHUDController>("Environment");
-#endif
+
             zenject.Expose<GameEnergyUIPanel>("Environment");
             zenject.Expose<ComboUIController>("Environment");
             zenject.Expose<ScoreMultiplierUIController>("Environment");

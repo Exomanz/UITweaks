@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UITweaks.Models;
 using UnityEngine;
+using UnityEngine.UI;
 using Zenject;
 
 namespace UITweaks.PanelModifiers
@@ -39,7 +40,7 @@ namespace UITweaks.PanelModifiers
 
             if (type == GameplayModifiers.EnergyType.Battery)
             {
-                List<ImageView> batterySegments = EnergyPanel.GetField<List<ImageView>, GameEnergyUIPanel>("_batteryLifeSegments");
+                List<Image> batterySegments = EnergyPanel.GetField<List<Image>, GameEnergyUIPanel>("_batteryLifeSegments");
 
                 batterySegments[0].color = Config.Low;
                 batterySegments[1].color = HSBColor.Lerp(HSBColor.FromColor(Config.Low), HSBColor.FromColor(Config.Mid), 0.34f).ToColor();

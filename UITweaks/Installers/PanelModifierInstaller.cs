@@ -17,14 +17,10 @@ namespace UITweaks.Installers
             if (config.Progress.Enabled) BindPanelModifier<SongProgressPanelModifier>();
 
             BindPanelModifier<LegacyPanelModifier>();
-#if DEBUG
-            Container.Bind<LegacyPanelModifier.AprilFools>().FromNewComponentOn(new GameObject("LMAO")).AsSingle().NonLazy();
-#else
             if (Plugin.isAprilFools && config.AprilFools)
             {
                 Container.Bind<LegacyPanelModifier.AprilFools>().FromNewComponentOn(new GameObject("LMAO")).AsSingle().NonLazy();
             }
-#endif
         }
 
         /// <summary>
