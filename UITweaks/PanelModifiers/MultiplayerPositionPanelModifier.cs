@@ -6,7 +6,7 @@ namespace UITweaks.PanelModifiers
     public class MultiplayerPositionPanelModifier : PanelModifier
     {
         private MultiplayerPositionHUDController Controller = null!;
-        private Config.Position Config = null!;
+        private Config.PositionConfig Config = null!;
 
         [Inject] internal void ModifierInit()
         {

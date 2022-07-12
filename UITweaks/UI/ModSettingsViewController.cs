@@ -22,12 +22,12 @@ namespace UITweaks.UI
         public float ProgressBarPreviewFillAmount = 0.01f;
 
         private PluginConfig Config = null!;
-        private Multiplier MultiplierConfig = null!;
-        private Energy EnergyConfig = null!;
-        private Combo ComboConfig = null!;
-        private Progress ProgressConfig = null!;
-        private Position PositionConfig = null!;
-        private Miscellaneous MiscConfig = null!;
+        private MultiplierConfig MultiplierConfig = null!;
+        private EnergyConfig EnergyConfig = null!;
+        private ComboConfig ComboConfig = null!;
+        private ProgressConfig ProgressConfig = null!;
+        private PositionConfig PositionConfig = null!;
+        private MiscConfig MiscConfig = null!;
         private SiraLog Logger = null!;
 
         [Inject] internal void Construct(PluginConfig conf, SiraLog l)

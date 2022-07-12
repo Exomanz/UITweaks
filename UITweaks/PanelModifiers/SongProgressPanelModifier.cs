@@ -9,11 +9,11 @@ namespace UITweaks.PanelModifiers
     {
         private SongProgressUIController Controller = null!;
         private AudioTimeSyncController SyncController = null!;
-        private Config.Progress Config = null!;
+        private Config.ProgressConfig Config = null!;
         private List<ImageView> BarComponents = null!;
         private bool canBeUsed = true;
 
-        [Inject] internal void ModifierInit([InjectOptional] StandardGameplaySceneSetupData sgssd, SongProgressUIController spuic, AudioTimeSyncController atsc, Config.Progress c)
+        [Inject] internal void ModifierInit([InjectOptional] StandardGameplaySceneSetupData sgssd, SongProgressUIController spuic, AudioTimeSyncController atsc, Config.ProgressConfig c)
         {
             Logger.Logger.Debug("SongProgressPanelModifier:ModifierInit()");
             Controller = spuic;

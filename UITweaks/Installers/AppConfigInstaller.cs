@@ -1,5 +1,6 @@
-﻿using UITweaks.Config;
-using UITweaks.Models;
+﻿using UITweaks.Models;
+using UITweaks.Utilities.SettableSettings;
+using IPA.Loader;
 using Zenject;
 
 namespace UITweaks.Installers
@@ -20,6 +21,11 @@ namespace UITweaks.Installers
             BindConfig(Config.Progress);
             BindConfig(Config.Position);
             BindConfig(Config.Misc);
+
+            if (PluginManager.GetPlugin("Heck") != null)
+            {
+                Container.BindInterfacesAndSelfTo<UITweaksSettableSettings>().AsSingle().NonLazy();
+            }
         }
 
         /// <summary>
@@ -31,7 +37,7 @@ namespace UITweaks.Installers
         private void BindConfig<T>(T instance) where T : ConfigBase
         {
             Container.Bind<T>().FromInstance(instance).AsCached();
-            //UnityEngine.Debug.Log("Bound " + typeof(T));
+            Container.Bind<ConfigBase>().To<T>().FromInstance(instance).AsCached();
         }
     }
 }

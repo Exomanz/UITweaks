@@ -8,13 +8,13 @@ namespace UITweaks.PanelModifiers
     public class ScoreMultiplierPanelModifier : PanelModifier
     {
         private ScoreMultiplierUIController MultiplierController = null!;
-        private Config.Multiplier Config = null!;
+        private Config.MultiplierConfig Config = null!;
         private IScoreController ScoreController = null!;
         private int CurrentMultiplier = 0;
         private Image BG = null!;
         private Image FG = null!;
 
-        [Inject] internal void ModifierInit(ScoreMultiplierUIController smuic, Config.Multiplier config, IScoreController scoreController)
+        [Inject] internal void ModifierInit(ScoreMultiplierUIController smuic, Config.MultiplierConfig config, IScoreController scoreController)
         {
             Logger.Logger.Debug("ScoreMultiplierPanelModifier:ModifierInit()");
             MultiplierController = smuic;

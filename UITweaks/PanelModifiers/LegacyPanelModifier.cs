@@ -39,9 +39,9 @@ namespace UITweaks.PanelModifiers
 
         private ComboUIController ComboController = null!;
         private ImmediateRankUIPanel RankPanel = null!;
-        private Config.Miscellaneous Config = null!;
+        private Config.MiscConfig Config = null!;
 
-        [Inject] internal void ModifierInit(ComboUIController cuic, ImmediateRankUIPanel iruip, Config.Miscellaneous c)
+        [Inject] internal void ModifierInit(ComboUIController cuic, ImmediateRankUIPanel iruip, Config.MiscConfig c)
         {
             Logger.Logger.Debug("LegacyPanelModifier:ModifierInit()");
             ComboController = cuic;

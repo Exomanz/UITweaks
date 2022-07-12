@@ -7,10 +7,10 @@ namespace UITweaks.PanelModifiers
     public class ComboPanelModifier : PanelModifier
     {
         private ComboUIController ComboController = null!;
-        private Config.Combo Config = null!;
+        private Config.ComboConfig Config = null!;
         private ImageView[] FCLines = null!;
 
-        [Inject] public void ModifierInit(ComboUIController cuic, Config.Combo c)
+        [Inject] public void ModifierInit(ComboUIController cuic, Config.ComboConfig c)
         {
             Logger.Logger.Debug("ComboModifier:ModifierInit()");
             ComboController = cuic;

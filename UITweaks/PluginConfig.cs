@@ -9,11 +9,11 @@ namespace UITweaks
 
         public virtual bool AprilFools { get; set; } = true;
 
-        [NonNullable] public virtual Multiplier Multiplier { get; set; } = new();
-        [NonNullable] public virtual Combo Combo { get; set; } = new();
-        [NonNullable] public virtual Energy Energy { get; set; } = new();
-        [NonNullable] public virtual Progress Progress { get; set; } = new();
-        [NonNullable] public virtual Position Position { get; set; } = new();
-        [NonNullable] public virtual Miscellaneous Misc { get; set; } = new();
+        [NonNullable] public virtual MultiplierConfig Multiplier { get; set; } = new();
+        [NonNullable] public virtual ComboConfig Combo { get; set; } = new();
+        [NonNullable] public virtual EnergyConfig Energy { get; set; } = new();
+        [NonNullable] public virtual ProgressConfig Progress { get; set; } = new();
+        [NonNullable] public virtual PositionConfig Position { get; set; } = new();
+        [NonNullable] public virtual MiscConfig Misc { get; set; } = new();
     }
 }

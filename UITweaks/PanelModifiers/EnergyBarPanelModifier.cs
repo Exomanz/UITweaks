@@ -14,10 +14,10 @@ namespace UITweaks.PanelModifiers
         private IGameEnergyCounter EnergyCounter = null!;
         private GameEnergyUIPanel EnergyPanel = null!;
         private GameplayModifiers Modifiers = null!;
-        private Config.Energy Config = null!;
+        private Config.EnergyConfig Config = null!;
         private ImageView EnergyBar = null!;
 
-        [Inject] public void ModifierInit(IGameEnergyCounter igec, GameEnergyUIPanel geuip, GameplayModifiers gm, Config.Energy c)
+        [Inject] public void ModifierInit(IGameEnergyCounter igec, GameEnergyUIPanel geuip, GameplayModifiers gm, Config.EnergyConfig c)
         {
             Logger.Logger.Debug("EnergyBarPanelModifier:ModifierInit()");
             EnergyCounter = igec;
