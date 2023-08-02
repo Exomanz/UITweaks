@@ -2,9 +2,9 @@
 A Beat Saber mod that aims to bring more color to the in-game HUD!
 
 ## Dependencies:
-- BSIPA v4.2.2+
-- SiraUtil v3.0.5+
-- BeatSaberMarkupLanguage v1.6.2+
+- BSIPA v4.3.0+
+- SiraUtil v3.1.3+
+- BeatSaberMarkupLanguage v1.7.6+
 
 ## Features
 - Multiplier ring colors, as well as an option to smoothly transition between them and a rainbow animation on 8x.
@@ -17,7 +17,6 @@ A Beat Saber mod that aims to bring more color to the in-game HUD!
 
 ## Roadpath
 - Fix Multiplayer
-- Maintenance as needed.
 
 ## Previews:
 ### Standard Gameplay:
