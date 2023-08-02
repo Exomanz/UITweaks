@@ -8,33 +8,22 @@ namespace UITweaks.UI
 {
     internal class MenuButtonManager : IInitializable, IDisposable
     {
-        private MainFlowCoordinator MainFlowCoordinator = null!;
-        private ModFlowCoordinator ModFlowCoordinator = null!;
-        private MenuButton Button;
-
-        public MenuButtonManager(MainFlowCoordinator mfc, ModFlowCoordinator mofc)
-        {
-            MainFlowCoordinator = mfc;
-            ModFlowCoordinator = mofc;
-            Button = new("UI Tweaks", SummonFlowCoordinator);
-        }
+        [Inject] private readonly MainFlowCoordinator mainFlowCoordinator;
+        [Inject] private readonly ModFlowCoordinator modFlowCoordinator;
+        private MenuButton button;
 
         public void Initialize()
         {
-            MenuButtons.instance.RegisterButton(Button);
-        }
-
-        private void SummonFlowCoordinator()
-        {
-            MainFlowCoordinator.PresentFlowCoordinator(ModFlowCoordinator, null, ViewController.AnimationDirection.Vertical);
+            button = new MenuButton("UI Tweaks", "Spice up your HUD!", () => {
+                mainFlowCoordinator.PresentFlowCoordinator(modFlowCoordinator, null, ViewController.AnimationDirection.Vertical);
+            });
+            MenuButtons.instance.RegisterButton(button);
         }
 
         public void Dispose()
         {
-            if (BSMLParser.IsSingletonAvailable && MenuButtons.IsSingletonAvailable)
-            {
-                MenuButtons.instance.UnregisterButton(Button);
-            }
+            if (button != null)
+                MenuButtons.instance.UnregisterButton(button);
         }
     }
 }

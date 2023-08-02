@@ -11,7 +11,7 @@
 				<checkbox text='Smooth Transition' value='smooth-transition' apply-on-change='true' interactable='~multiplier-enabled'
 						  hover-hint='Allows the &lt;color=#FF3333&gt;Multiplier Ring&lt;/color&gt; to
 smoothly transition between each of the colors below as your multiplier increases.
-&#xA;&lt;color=#FF3333&gt;Previews for this feature are not yet supported.&lt;/color&gt;'/>
+&#xA;&lt;color=#FF3333&gt;This change will not apply until the next preview cycle.&lt;/color&gt;'/>
 				<checkbox text='Rainbow On Max Multiplier' value='rainbow-on-8x' apply-on-change='true' interactable='~multiplier-enabled'/>
 				<color-setting text='1x Color' value='color-1x' apply-on-change='true' interactable='~multiplier-enabled'/>
 				<color-setting text='2x Color' value='color-2x' apply-on-change='true' interactable='~multiplier-enabled'/>
@@ -84,7 +84,7 @@ one color to another as the song progresses.'/>
 		</tab>
 
 		<!--Position Tab-->
-		<tab tab-name='MP Position' tags='_'>
+		<tab tab-name='Multiplayer' tags='_'>
 			<vertical vertical-fit='PreferredSize' pref-width='95' bg='round-rect-panel' pad='3' spacing='-3'>
 				<text text='Notice' font-size='9' bold='true' font-color='#FF5555' align='Center'/>
 				<text text='- - - - - - - - - - -' font-size='7' align='Center'/>
@@ -105,6 +105,9 @@ by re-italicizing the things that Beat Games undid in recent updates.' align='Ce
 					<checkbox text='Restore Combo Panel Italics' value='legacy-combo-panel' apply-on-change='true'/>
 					<checkbox text='Restore Score Italics' value='legacy-score-panel' apply-on-change='true'/>
 					<checkbox text='Restore Immediate Rank Italics' value='legacy-rank-panel' apply-on-change='true'/>
+					<macro.if value='fools-toggle-check'>
+						<checkbox text='Allow April Fools' value='allow-april-fools' apply-on-change='true'/>
+					</macro.if>
 				</vertical>
 			</vertical>
 		</tab>

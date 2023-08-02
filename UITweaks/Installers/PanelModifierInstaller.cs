@@ -11,15 +11,24 @@ namespace UITweaks.Installers
         {
             PluginConfig config = Container.Resolve<PluginConfig>();
 
-            if (config.Multiplier.Enabled) BindPanelModifier<ScoreMultiplierPanelModifier>();
-            if (config.Energy.Enabled) BindPanelModifier<EnergyBarPanelModifier>();
-            if (config.Combo.Enabled) BindPanelModifier<ComboPanelModifier>();
-            if (config.Progress.Enabled) BindPanelModifier<SongProgressPanelModifier>();
+            if (config.Multiplier.Enabled) 
+                BindPanelModifier<ScoreMultiplierPanelModifier>();
+
+            if (config.Energy.Enabled) 
+                BindPanelModifier<EnergyBarPanelModifier>();
+
+            if (config.Combo.Enabled) 
+                BindPanelModifier<ComboPanelModifier>();
+
+            if (config.Progress.Enabled) 
+                BindPanelModifier<SongProgressPanelModifier>();
+
 
             BindPanelModifier<LegacyPanelModifier>();
-            if (Plugin.isAprilFools && config.AprilFools)
+
+            if (Plugin.APRIL_FOOLS && config.AllowAprilFools)
             {
-                Container.Bind<LegacyPanelModifier.AprilFools>().FromNewComponentOn(new GameObject("LMAO")).AsSingle().NonLazy();
+                Container.Bind<LegacyPanelModifier.AprilFools>().FromNewComponentOn(new GameObject("UITweaks-AprilFools")).AsSingle().NonLazy();
             }
         }
 

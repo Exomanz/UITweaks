@@ -8,10 +8,10 @@ namespace UITweaks.Installers
     {
         public override void InstallBindings()
         {
-            Container.Bind<ModFlowCoordinator>().FromNewComponentOn(new GameObject("UITweaksFlowCoordinator")).AsSingle();
             Container.Bind<ModSettingsViewController>().FromNewComponentAsViewController().AsSingle();
             Container.Bind<ModInfoViewController>().FromNewComponentAsViewController().AsSingle();
             Container.Bind<ObjectPreviewViewController>().FromNewComponentAsViewController().AsSingle();
+            Container.Bind<ModFlowCoordinator>().FromNewComponentOn(new GameObject("UITweaksFlowCoordinator")).AsSingle();
             Container.BindInterfacesAndSelfTo<MenuButtonManager>().AsSingle();
         }
     }

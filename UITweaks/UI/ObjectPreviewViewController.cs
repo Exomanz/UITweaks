@@ -5,7 +5,7 @@ using SiraUtil.Logging;
 using System;
 using System.Collections;
 using System.Linq;
-using System.Text;
+using Tweening;
 using UITweaks.Utilities;
 using UnityEngine;
 using UnityEngine.UI;
@@ -14,57 +14,56 @@ using Zenject;
 namespace UITweaks.UI
 {
     /// <summary>
-    /// This class hosts every function that controls the object preview panel.
+    /// Controller class for the Object Previewer ViewController.
     /// </summary>
     [ViewDefinition("UITweaks.Views.ObjectPreview.bsml")]
     [HotReload(RelativePathToLayout = @"..\Views\ObjectPreview.bsml")]
     public class ObjectPreviewViewController : BSMLAutomaticViewController
     {
-        private PluginConfig Config = null!;
-        private ModSettingsViewController SettingsViewController = null!;
-        private SiraLog Logger = null!;
-        private SettingsPanelObjectGrabber ObjectGrabber = null!;
-        private Vector3 DefaultGrabberPos = new(3.53f, 1.1f, 2.4f);
-        private Vector3 Void = new(0, -1000, 0);
+        [Inject] private readonly PluginConfig pluginConfig;
+        [Inject] private readonly ModSettingsViewController modSettingsViewController;
+        [Inject] private readonly SiraLog logger;
+        [Inject] private readonly TimeTweeningManager tweeningManager;
+
+        private readonly Vector3 DEFAULT_POSITION = new(3.53f, 1.1f, 2.4f);
+        private readonly Vector3 VOID_POSITION = new(0, -1000, 0);
+
+        private SettingsPanelObjectGrabber objectGrabber;
         private bool previewToggleIsReady = false;
 
         #region Preview Objects
+        // Combo Panel
         private Image[] multiplierCircles = null!;
         private CurvedTextMeshPro multiplierText = null!;
         private bool previewCoroOn8x = false;
 
+        // Energy Panel
         private Image energyBar = null!;
         private float fillAmount = 0.01f;
 
+        // Combo Panel
         private ImageView[] comboLines = null!;
         private CurvedTextMeshPro numText = null!;
         private CurvedTextMeshPro comboText = null!;
 
+        // Progress Panel
         private Image[] progressPanelImages = null!;
 
+        // Score Panel
         private CurvedTextMeshPro scoreText = null!;
         private CurvedTextMeshPro percentText = null!;
         private CurvedTextMeshPro rankText = null!;
         private decimal rank = 0.00m;
         #endregion
 
-        [Inject] internal void Construct(PluginConfig c, ModSettingsViewController msvc, SiraLog l)
-        {
-            l.Logger.Debug("ObjectPreviewViewController:Construct()");
-
-            Logger = l;
-            Config = c;
-            SettingsViewController = msvc;
-        }
-
         [UIValue("allow-previews")] private bool AllowPreviews
         {
-            get => Config.AllowPreviews;
+            get => pluginConfig.AllowPreviews;
             set
             {
-                Config.AllowPreviews = value;
+                pluginConfig.AllowPreviews = value;
                 if (!previewToggleIsReady) return; // Prevent BSML Parsing Error
-                UpdatePanelVisibility(value ? SettingsViewController.SelectedTab : -1);
+                UpdatePanelVisibility(value ? modSettingsViewController.SelectedTab : -1);
             }
         }
 
@@ -77,47 +76,51 @@ namespace UITweaks.UI
             if (firstActivation && !grabber)
             {
                 grabber = new GameObject("UITweaksPanelGrabber");
-                grabber.transform.position = DefaultGrabberPos;
+                grabber.transform.position = DEFAULT_POSITION;
                 grabber.transform.Rotate(0, 57, 0);
-                ObjectGrabber = grabber.AddComponent<SettingsPanelObjectGrabber>();
-                StartCoroutine(FinalizePanels());
+                grabber.AddComponent<SettingsPanelObjectGrabber>();
+
+                objectGrabber = grabber.GetComponent<SettingsPanelObjectGrabber>();
+                this.StartCoroutine(FinalizePanels());
             }
 
-            StartCoroutine(MultiplierPreviewCoroutine());
-            grabber.transform.position = DefaultGrabberPos;
-            SettingsViewController.TabWasChangedEvent += UpdatePanelVisibility;
+            objectGrabber.transform.position = DEFAULT_POSITION;
+            modSettingsViewController.TabWasChangedEvent += UpdatePanelVisibility;
+            this.StartCoroutine(MultiplierPreviewCoroutine());
         }
 
         protected override void DidDeactivate(bool removedFromHierarchy, bool screenSystemDisabling)
         {
             base.DidDeactivate(removedFromHierarchy, screenSystemDisabling);
-            SettingsViewController.TabWasChangedEvent -= UpdatePanelVisibility;
-            ObjectGrabber.transform.position = Void;
+            tweeningManager.KillAllTweens(this);
+            modSettingsViewController.TabWasChangedEvent -= UpdatePanelVisibility;
+            objectGrabber.transform.position = VOID_POSITION;
         }
 
         private IEnumerator FinalizePanels()
         {
-            yield return new WaitUntil(() => ObjectGrabber.isCompleted);
+            yield return new WaitUntil(() => objectGrabber.isCompleted);
 
-            var multiplierPanel = ObjectGrabber.MultiplierPanel;
-            var comboPanel = ObjectGrabber.ComboPanel;
-            var progressPanel = ObjectGrabber.ProgressPanel;
+            var multiplierPanel = objectGrabber.MultiplierPanel;
+            var comboPanel = objectGrabber.ComboPanel;
+            var progressPanel = objectGrabber.ProgressPanel;
 
+            // Grab all of the important parts of the panels for previewer.
             try
             {
-                ObjectGrabber.MultiplierPanel.SetActive(true);
+                objectGrabber.MultiplierPanel.SetActive(true);
 
                 // Multiplier Panel Setup
                 {
                     multiplierText = multiplierPanel.GetComponentsInChildren<CurvedTextMeshPro>().Last();
                     multiplierCircles = multiplierPanel.transform.GetComponentsInChildren<Image>();
 
-                    multiplierCircles[1].color = Config.Multiplier.One;
-                    multiplierCircles[0].color = Config.Multiplier.One.ColorWithAlpha(0.25f);
+                    multiplierCircles[1].color = pluginConfig.Multiplier.One;
+                    multiplierCircles[0].color = pluginConfig.Multiplier.One.ColorWithAlpha(0.25f);
                 }
 
                 // Energy Bar Setup
-                energyBar = ObjectGrabber.EnergyPanel.transform.Find("EnergyBarWrapper/EnergyBar")?.GetComponent<Image>();
+                energyBar = objectGrabber.EnergyPanel.transform.Find("EnergyBarWrapper/EnergyBar")?.GetComponent<Image>();
 
                 // Combo Panel Setup
                 {
@@ -136,7 +139,7 @@ namespace UITweaks.UI
 
                 // Immediate Rank Panel Setup
                 {
-                    var immediateRankTransform = ObjectGrabber.ImmediateRankPanel.transform;
+                    var immediateRankTransform = objectGrabber.ImmediateRankPanel.transform;
                     scoreText = immediateRankTransform.Find("ScoreText")?.GetComponent<CurvedTextMeshPro>();
                     percentText = immediateRankTransform.Find("RelativeScoreText")?.GetComponent<CurvedTextMeshPro>();
                     rankText = immediateRankTransform.Find("ImmediateRankText")?.GetComponent<CurvedTextMeshPro>();
@@ -146,22 +149,22 @@ namespace UITweaks.UI
             }
             catch (Exception ex)
             {
-                Logger.Logger.Error(ex);
+                logger.Error(ex);
             }
 
             previewToggleIsReady = true;
-            SettingsViewController.RaiseTabEvent(Config.AllowPreviews ? SettingsViewController.SelectedTab : -1);
+            modSettingsViewController.RaiseTabEvent(pluginConfig.AllowPreviews ? modSettingsViewController.SelectedTab : -1);
             yield break;
         }
 
         private void UpdatePanelVisibility(int tab)
         {
-            if (!ObjectGrabber.isCompleted) return;
-            var host = ObjectGrabber;
+            if (!objectGrabber.isCompleted) return;
+            var host = objectGrabber;
 
-            if (!Config.AllowPreviews)
+            if (!pluginConfig.AllowPreviews)
             {
-                host.MultiplierPanel.transform.position = Void;
+                host.MultiplierPanel.transform.position = VOID_POSITION;
                 host.EnergyPanel.SetActive(false);
                 host.ComboPanel.SetActive(false);
                 host.ProgressPanel.SetActive(false);
@@ -179,14 +182,14 @@ namespace UITweaks.UI
                     host.ImmediateRankPanel.SetActive(false);
                     break;
                 case 1:
-                    host.MultiplierPanel.transform.position = Void;
+                    host.MultiplierPanel.transform.position = VOID_POSITION;
                     host.EnergyPanel.SetActive(true);
                     host.ComboPanel.SetActive(false);
                     host.ProgressPanel.SetActive(false);
                     host.ImmediateRankPanel.SetActive(false);
                     break;
                 case 2:
-                    host.MultiplierPanel.transform.position = Void;
+                    host.MultiplierPanel.transform.position = VOID_POSITION;
                     host.EnergyPanel.SetActive(false);
                     host.ComboPanel.SetActive(true);
                     host.ProgressPanel.SetActive(false);
@@ -196,21 +199,21 @@ namespace UITweaks.UI
                     host.ComboPanel.transform.localPosition = Vector3.zero;
                     break;
                 case 3:
-                    host.MultiplierPanel.transform.position = Void;
+                    host.MultiplierPanel.transform.position = VOID_POSITION;
                     host.EnergyPanel.SetActive(false);
                     host.ComboPanel.SetActive(false);
                     host.ProgressPanel.SetActive(true);
                     host.ImmediateRankPanel.SetActive(false);
                     break;
                 case 4:
-                    host.MultiplierPanel.transform.position = Void;
+                    host.MultiplierPanel.transform.position = VOID_POSITION;
                     host.EnergyPanel.SetActive(false);
                     host.ComboPanel.SetActive(false);
                     host.ProgressPanel.SetActive(false);
                     host.ImmediateRankPanel.SetActive(false);
                     break;
                 case 5:
-                    host.MultiplierPanel.transform.position = Void;
+                    host.MultiplierPanel.transform.position = VOID_POSITION;
                     host.EnergyPanel.SetActive(false);
                     host.ComboPanel.SetActive(true);
                     host.ProgressPanel.SetActive(false);
@@ -229,25 +232,27 @@ namespace UITweaks.UI
 
         internal void Update()
         {
-            if (!ObjectGrabber.isCompleted) return;
+            if (!objectGrabber.isCompleted) return;
 
-            int tab = SettingsViewController.SelectedTab;
+            int tab = modSettingsViewController.SelectedTab;
             switch (tab)
             {
                 case 0:
-                    if (previewCoroOn8x && Config.Multiplier.RainbowOnMaxMultiplier)
+                    if (previewCoroOn8x && pluginConfig.Multiplier.RainbowOnMaxMultiplier)
                         multiplierCircles[0].color = new HSBColor(Mathf.PingPong(Time.time * 0.5f, 1), 1, 1).ToColor();
                     break;
                 case 1:
-                    UpdateEnergyBar(SettingsViewController.EnergyBarFillAmount);
-                    if (fillAmount == 1 && Config.Energy.RainbowOnFullEnergy)
+                    if (fillAmount == 1 && pluginConfig.Energy.RainbowOnFullEnergy)
                         energyBar.color = new HSBColor(Mathf.PingPong(Time.time * 0.5f, 1), 1, 1).ToColor();
+                    else if (!pluginConfig.Energy.RainbowOnFullEnergy)
+                        energyBar.color = pluginConfig.Energy.High; // Not sure why it won't work in the updater method, so I have to set it here.
+                    UpdateEnergyBar(modSettingsViewController.EnergyBarFillAmount);
                     break;
                 case 2:
                     UpdateComboPanel();
                     break;
                 case 3:
-                    UpdateProgressBar(SettingsViewController.ProgressBarPreviewFillAmount);
+                    UpdateProgressBar(modSettingsViewController.ProgressBarFillAmount);
                     break;
                 case 5:
                     UpdateComboPanel();
@@ -263,28 +268,85 @@ namespace UITweaks.UI
             multiplierCircles[1].fillAmount = 0.5f;
             
             // Eventually Add "Smooth Transition" Preview
-
+            if (!pluginConfig.Multiplier.SmoothTransition)
             {
-                multiplierCircles[0].color = Config.Multiplier.One.ColorWithAlpha(0.25f);
-                multiplierCircles[1].color = Config.Multiplier.One;
+                multiplierCircles[0].color = pluginConfig.Multiplier.One.ColorWithAlpha(0.25f);
+                multiplierCircles[1].color = pluginConfig.Multiplier.One;
                 multiplierText.text = "1";
                 yield return new WaitForSecondsRealtime(1);
 
-                multiplierCircles[0].color = Config.Multiplier.Two.ColorWithAlpha(0.25f);
-                multiplierCircles[1].color = Config.Multiplier.Two;
+                multiplierCircles[0].color = pluginConfig.Multiplier.Two.ColorWithAlpha(0.25f);
+                multiplierCircles[1].color = pluginConfig.Multiplier.Two;
                 multiplierText.text = "2";
                 yield return new WaitForSecondsRealtime(1);
 
-                multiplierCircles[0].color = Config.Multiplier.Four.ColorWithAlpha(0.25f);
-                multiplierCircles[1].color = Config.Multiplier.Four;
+                multiplierCircles[0].color = pluginConfig.Multiplier.Four.ColorWithAlpha(0.25f);
+                multiplierCircles[1].color = pluginConfig.Multiplier.Four;
                 multiplierText.text = "4";
                 yield return new WaitForSecondsRealtime(1);
 
                 previewCoroOn8x = true;
                 multiplierText.text = "8";
                 multiplierCircles[1].fillAmount = 0;
-                if (!Config.Multiplier.RainbowOnMaxMultiplier)
-                    multiplierCircles[0].color = Config.Multiplier.Eight.ColorWithAlpha(0.25f);
+                if (!pluginConfig.Multiplier.RainbowOnMaxMultiplier)
+                    multiplierCircles[0].color = pluginConfig.Multiplier.Eight.ColorWithAlpha(0.25f);
+                else { /* The rainbow effect is controlled outside of this method body */ }
+
+                yield return new WaitForSecondsRealtime(1);
+            }
+            else
+            {
+                multiplierText.text = "1";
+                tweeningManager.AddTween(new FloatTween(0, 1, (float time) =>
+                {
+                    Color frame = HSBColor.Lerp(
+                        HSBColor.FromColor(pluginConfig.Multiplier.One),
+                        HSBColor.FromColor(pluginConfig.Multiplier.Two), time).ToColor();
+
+                    multiplierCircles[1].fillAmount = time;
+                    multiplierCircles[1].color = frame;
+                    multiplierCircles[0].color = frame.ColorWithAlpha(0.25f);
+                }, 
+                1, EaseType.Linear), this);
+                yield return new WaitForSecondsRealtime(1);
+
+                multiplierText.text = "2";
+                tweeningManager.AddTween(new FloatTween(0, 1, (float time) =>
+                {
+                    Color frame = HSBColor.Lerp(
+                        HSBColor.FromColor(pluginConfig.Multiplier.Two),
+                        HSBColor.FromColor(pluginConfig.Multiplier.Four), time).ToColor();
+
+                    multiplierCircles[1].fillAmount = time;
+                    multiplierCircles[1].color = frame;
+                    multiplierCircles[0].color = frame.ColorWithAlpha(0.25f);
+                },
+                1, EaseType.Linear), this);
+                yield return new WaitForSecondsRealtime(1);
+
+                multiplierText.text = "4";
+                tweeningManager.AddTween(new FloatTween(0, 1, (float time) =>
+                {
+                    Color frame = HSBColor.Lerp(
+                        HSBColor.FromColor(pluginConfig.Multiplier.Four),
+                        HSBColor.FromColor(pluginConfig.Multiplier.Eight), time).ToColor();
+
+                    multiplierCircles[1].fillAmount = time;
+                    multiplierCircles[1].color = frame;
+                    multiplierCircles[0].color = frame.ColorWithAlpha(0.25f);
+                },
+                1, EaseType.Linear), this);
+                yield return new WaitForSecondsRealtime(1);
+
+                tweeningManager.KillAllTweens(this);
+
+                previewCoroOn8x = true;
+                multiplierText.text = "8";
+                multiplierCircles[1].fillAmount = 0;
+                if (!pluginConfig.Multiplier.RainbowOnMaxMultiplier)
+                    multiplierCircles[0].color = pluginConfig.Multiplier.Eight.ColorWithAlpha(0.25f);
+                else { /* The rainbow effect is controlled outside of this method body */ }
+
                 yield return new WaitForSecondsRealtime(1);
             }
 
@@ -296,38 +358,40 @@ namespace UITweaks.UI
             this.fillAmount = fillAmount;
             energyBar.rectTransform.anchorMax = new Vector2(fillAmount, 1);
 
-            if (fillAmount == 0.5f) energyBar.color = Config.Energy.Mid;
+            if (fillAmount == 0.5f) energyBar.color = pluginConfig.Energy.Mid;
 
-            if (fillAmount > 0.5f && fillAmount < 1) energyBar.color = HSBColor.Lerp(
-                HSBColor.FromColor(Config.Energy.Mid),
-                HSBColor.FromColor(Config.Energy.High),
+            else if (fillAmount > 0.5f && fillAmount < 1) energyBar.color = HSBColor.Lerp(
+                HSBColor.FromColor(pluginConfig.Energy.Mid),
+                HSBColor.FromColor(pluginConfig.Energy.High),
                 (fillAmount - 0.5f) * 2).ToColor();
 
-            if (fillAmount < 0.5f) energyBar.color = HSBColor.Lerp(
-                HSBColor.FromColor(Config.Energy.Low),
-                HSBColor.FromColor(Config.Energy.Mid),
+            else if (fillAmount < 0.5f) energyBar.color = HSBColor.Lerp(
+                HSBColor.FromColor(pluginConfig.Energy.Low),
+                HSBColor.FromColor(pluginConfig.Energy.Mid),
                 fillAmount * 2).ToColor();
         }
 
         private void UpdateComboPanel()
         {
-            if (Config.Combo.UseGradient)
+            if (pluginConfig.Combo.UseGradient)
             {
                 comboLines[0].gradient = true;
+                comboLines[0].color = Color.white;
                 comboLines[1].gradient = true;
+                comboLines[1].color = Color.white;
 
-                comboLines[0].color0 = Config.Combo.TopLeft;
-                comboLines[0].color1 = Config.Combo.TopRight;
+                comboLines[0].color0 = pluginConfig.Combo.TopLeft;
+                comboLines[0].color1 = pluginConfig.Combo.TopRight;
 
-                if (Config.Combo.MirrorBottomLine)
+                if (pluginConfig.Combo.MirrorBottomLine)
                 {
-                    comboLines[1].color0 = Config.Combo.TopRight;
-                    comboLines[1].color1 = Config.Combo.TopLeft;
+                    comboLines[1].color0 = pluginConfig.Combo.TopRight;
+                    comboLines[1].color1 = pluginConfig.Combo.TopLeft;
                 }
                 else
                 {
-                    comboLines[1].color0 = Config.Combo.BottomLeft;
-                    comboLines[1].color1 = Config.Combo.BottomRight;
+                    comboLines[1].color0 = pluginConfig.Combo.BottomLeft;
+                    comboLines[1].color1 = pluginConfig.Combo.BottomRight;
                 }
             }
             else
@@ -335,11 +399,11 @@ namespace UITweaks.UI
                 comboLines[0].gradient = false;
                 comboLines[1].gradient = false;
 
-                comboLines[0].color = Config.Combo.TopLine;
-                comboLines[1].color = Config.Combo.BottomLine;
+                comboLines[0].color = pluginConfig.Combo.TopLine;
+                comboLines[1].color = pluginConfig.Combo.BottomLine;
             }
 
-            if (Config.Misc.ItalicizeComboPanel)
+            if (pluginConfig.Misc.ItalicizeComboPanel)
             {
                 comboText.fontStyle = TMPro.FontStyles.Italic;
                 comboText.text = "COMBO";
@@ -356,18 +420,18 @@ namespace UITweaks.UI
 
         private void UpdateProgressBar(float time)
         {
-            progressPanelImages[1].color = Config.Progress.BG.ColorWithAlpha(0.25f);
-            progressPanelImages[2].color = Config.Progress.Handle;
+            progressPanelImages[1].color = pluginConfig.Progress.BG.ColorWithAlpha(0.25f);
+            progressPanelImages[2].color = pluginConfig.Progress.Handle;
 
-            if (Config.Progress.UseFadeDisplayType)
+            if (pluginConfig.Progress.UseFadeDisplayType)
             {
                 var x = (time - 0.5f) * 50;
                 progressPanelImages[0].rectTransform.anchorMax = new Vector2(time, 1);
                 progressPanelImages[2].transform.localPosition = new Vector3(x, 0, 0);
 
                 progressPanelImages[0].color = HSBColor.Lerp(
-                    HSBColor.FromColor(Config.Progress.StartColor),
-                    HSBColor.FromColor(Config.Progress.EndColor),
+                    HSBColor.FromColor(pluginConfig.Progress.StartColor),
+                    HSBColor.FromColor(pluginConfig.Progress.EndColor),
                     time).ToColor();
             }
 
@@ -375,7 +439,7 @@ namespace UITweaks.UI
             {
                 progressPanelImages[0].rectTransform.anchorMax = new Vector2(0.5f, 1);
                 progressPanelImages[2].transform.localPosition = Vector3.zero;
-                progressPanelImages[0].color = Config.Progress.Fill;
+                progressPanelImages[0].color = pluginConfig.Progress.Fill;
             }
         }
 
@@ -396,7 +460,7 @@ namespace UITweaks.UI
 
             else rankText.text = "E";
 
-            if (Config.Misc.ItalicizeScore)
+            if (pluginConfig.Misc.ItalicizeScore)
             {
                 scoreText.fontStyle = TMPro.FontStyles.Italic;
                 scoreText.transform.localPosition = new Vector3(-1, 20);
@@ -407,7 +471,7 @@ namespace UITweaks.UI
                 scoreText.transform.localPosition = new Vector3(0, 20);
             }
 
-            if (Config.Misc.ItalicizeImmediateRank)
+            if (pluginConfig.Misc.ItalicizeImmediateRank)
             {
                 percentText.fontStyle = TMPro.FontStyles.Italic;
                 rankText.fontStyle = TMPro.FontStyles.Italic;

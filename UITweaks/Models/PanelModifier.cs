@@ -1,4 +1,5 @@
 ﻿using SiraUtil.Logging;
+using System;
 using UnityEngine;
 using Zenject;
 
@@ -6,15 +7,32 @@ namespace UITweaks.Models
 {
     public abstract class PanelModifier : MonoBehaviour
     {
-        public SiraLog Logger = null!;
+        [Inject] protected SiraLog logger = null!;
+        public ConfigBase config = null;
+        public GameObject parentPanel = null;
 
-        [Inject] public void __Init(SiraLog logger)
+        [Inject] protected abstract void Init(); 
+
+        protected virtual void ModPanel()
         {
-            Logger = logger;
+            try
+            {
+                if (parentPanel == null)
+                    throw new NullReferenceException("'parentPanel' cannot be null when creating an object of type 'PanelModifier'");
+                else if (config == null)
+                    throw new NullReferenceException("'config' cannot be null when creating an object of type 'PanelModifier'");
+            }
+            catch (NullReferenceException ex)
+            {
+                logger.Error(ex);
+            }
         }
 
-        protected abstract void ModPanel();
-
-        protected abstract void OnDestroy();
+        protected virtual void OnDestroy()
+        {
+            this.parentPanel = null!;
+            this.logger = null!;
+            this.config = null!;
+        }
     }
 }

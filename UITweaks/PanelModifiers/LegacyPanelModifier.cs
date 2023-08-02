@@ -2,6 +2,7 @@
 using IPA.Utilities;
 using System.Collections;
 using TMPro;
+using UITweaks.Config;
 using UITweaks.Models;
 using UnityEngine;
 using Zenject;
@@ -12,12 +13,12 @@ namespace UITweaks.PanelModifiers
     {
         internal class AprilFools : MonoBehaviour
         {
-            [Inject] private readonly CoreGameHUDController gameHUDController;
             [InjectOptional] private readonly StandardGameplaySceneSetupData data;
+            [Inject] private readonly CoreGameHUDController gameHUDController;
 
             public void Start()
             {
-                if (data.beatmapCharacteristic.containsRotationEvents)
+                if (data?.beatmapCharacteristic.containsRotationEvents == true)
                 {
                     var container = gameHUDController.transform.Find("Container");
                     container.transform.Rotate(0, 0, 180);
@@ -37,57 +38,56 @@ namespace UITweaks.PanelModifiers
             }
         }
 
-        private ComboUIController ComboController = null!;
-        private ImmediateRankUIPanel RankPanel = null!;
-        private Config.MiscConfig Config = null!;
+        [Inject] private readonly ComboUIController comboUIController;
+        [Inject] private readonly ImmediateRankUIPanel immediateRankUIPanel;
+        [Inject] private readonly MiscConfig miscConfig;
 
-        [Inject] internal void ModifierInit(ComboUIController cuic, ImmediateRankUIPanel iruip, Config.MiscConfig c)
+        [Inject] protected override void Init()
         {
-            Logger.Logger.Debug("LegacyPanelModifier:ModifierInit()");
-            ComboController = cuic;
-            RankPanel = iruip;
-            Config = c;
+            logger.Debug("LegacyPanelModifier::Init()");
+            base.parentPanel = immediateRankUIPanel.gameObject;
+            base.config = miscConfig;
 
-            transform.SetParent(iruip.transform);
-            ModPanel();
+            this.transform.SetParent(parentPanel.transform);
+            this.ModPanel();
         }
 
         protected override void ModPanel()
         {
-            if (Config.ItalicizeComboPanel)
+            base.ModPanel();
+
+            if (miscConfig.ItalicizeComboPanel)
             {
-                var comboText = ComboController.transform.Find("ComboText").GetComponent<CurvedTextMeshPro>();
+                var comboText = comboUIController.transform.Find("ComboText").GetComponent<CurvedTextMeshPro>();
                 comboText.fontStyle = FontStyles.Italic;
                 comboText.text = "COMBO";
 
-                var num = ComboController.GetField<TextMeshProUGUI, ComboUIController>("_comboText");
+                var num = comboUIController.GetField<TextMeshProUGUI, ComboUIController>("_comboText");
                 num.fontStyle = FontStyles.Italic;
                 num.transform.localPosition = new Vector3(-2.5f, 4);
             }
 
-            if (Config.ItalicizeScore)
+            if (miscConfig.ItalicizeScore)
             {
-                var scoreText = RankPanel.transform.Find("ScoreText").GetComponent<CurvedTextMeshPro>();
+                var scoreText = immediateRankUIPanel.transform.Find("ScoreText").GetComponent<CurvedTextMeshPro>();
                 scoreText.fontStyle = FontStyles.Italic;
                 scoreText.transform.localPosition = new Vector3(-1, 20);
             }
 
-            if (Config.ItalicizeImmediateRank)
+            if (miscConfig.ItalicizeImmediateRank)
             {
-                var immediateRankText = RankPanel.GetField<TextMeshProUGUI, ImmediateRankUIPanel>("_rankText");
+                var immediateRankText = immediateRankUIPanel.GetField<TextMeshProUGUI, ImmediateRankUIPanel>("_rankText");
                 immediateRankText.fontStyle = FontStyles.Italic;
                 immediateRankText.transform.localPosition = new Vector3(-3, -0.5f);
 
-                var relativeScoreText = RankPanel.GetField<TextMeshProUGUI, ImmediateRankUIPanel>("_relativeScoreText");
+                var relativeScoreText = immediateRankUIPanel.GetField<TextMeshProUGUI, ImmediateRankUIPanel>("_relativeScoreText");
                 relativeScoreText.fontStyle = FontStyles.Italic;
             }
         }
 
         protected override void OnDestroy()
         {
-            ComboController = null!;
-            RankPanel = null!;
-            Config = null!;
+            base.OnDestroy();
         }
     }
 }

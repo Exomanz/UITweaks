@@ -15,30 +15,24 @@ namespace UITweaks.UI
     [HotReload(RelativePathToLayout = @"..\Views\Info.bsml")]
     public class ModInfoViewController : BSMLAutomaticViewController
     {
-        private SiraLog Logger = null!;
-        private PluginMetadata PluginMetadata = null!;
+        [Inject] private readonly SiraLog logger;
+        private PluginMetadata meta = null!;
 
-        [Inject] internal void Construct(SiraLog l, UBinder<Plugin, PluginMetadata> metadata)
+        [Inject] internal void Construct(UBinder<Plugin, PluginMetadata> metadata)
         {
-            l.Logger.Debug("ModInfoViewController:Construct()");
-
-            Logger = l;
-            PluginMetadata = metadata.Value;
+            logger.Debug("ModInfoViewController:Construct()");
+            meta = metadata.Value;
         }
 
         [UIValue("version-text")] private string Version
         {
-            get => $"Version  :  <color=#00BBFF>{PluginMetadata.HVersion}</color>";
+            get => $"Version  :  <color=#00BBFF>{meta.HVersion}</color>";
         }
 
-        [UIAction("open-gh-source")] internal void OpenGitHubSource()
-        {
-            Application.OpenURL("https://github.com/Exomanz/UITweaks");
-        }
+        [UIAction("open-gh-source")] 
+        internal void OpenSourceLink() => Application.OpenURL("https://github.com/Exomanz/UITweaks");
 
-        [UIAction("open-kofi")] internal void OpenDonateLink()
-        {
-            Application.OpenURL("https://ko-fi.com/exo_manz");
-        }
+        [UIAction("open-kofi")] 
+        internal void OpenDonateLink() => Application.OpenURL("https://ko-fi.com/exo_manz");
     }
 }

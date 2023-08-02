@@ -6,33 +6,25 @@ namespace UITweaks.UI
 {
     internal class ModFlowCoordinator : FlowCoordinator
     {
-        private MainFlowCoordinator MainFlowCoordinator = null!;
-        private ModSettingsViewController ModSettings = null!;
-        private ModInfoViewController ModInfo = null!;
-        private ObjectPreviewViewController PreviewController = null!;
-
-        [Inject] internal void Construct(MainFlowCoordinator mfc, ModSettingsViewController msvc, ModInfoViewController mivc, ObjectPreviewViewController opvc)
-        {
-            MainFlowCoordinator = mfc;
-            ModSettings = msvc;
-            ModInfo = mivc;
-            PreviewController = opvc;
-        }
+        [Inject] private MainFlowCoordinator mainFlowCoordinator;
+        [Inject] private ModSettingsViewController settingsView;
+        [Inject] private ModInfoViewController infoView;
+        [Inject] private ObjectPreviewViewController previewView;
 
         protected override void DidActivate(bool firstActivation, bool addedToHierarchy, bool screenSystemEnabling)
         {
-            if (firstActivation)
+            if (firstActivation && addedToHierarchy)
             {
                 SetTitle("UITweaks");
+                ProvideInitialViewControllers(settingsView, infoView, previewView);
                 showBackButton = true;
-                ProvideInitialViewControllers(ModSettings, ModInfo, PreviewController);
             }
         }
 
         protected override void BackButtonWasPressed(ViewController topViewController)
         {
             base.BackButtonWasPressed(topViewController);
-            MainFlowCoordinator.DismissFlowCoordinator(this, null, ViewController.AnimationDirection.Vertical, false);
+            mainFlowCoordinator.DismissFlowCoordinator(this, null, ViewController.AnimationDirection.Vertical, false);
         }
     }
 }

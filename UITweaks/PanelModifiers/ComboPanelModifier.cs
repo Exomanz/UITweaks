@@ -1,4 +1,5 @@
 ﻿using HMUI;
+using UITweaks.Config;
 using UITweaks.Models;
 using Zenject;
 
@@ -6,58 +7,60 @@ namespace UITweaks.PanelModifiers
 {
     public class ComboPanelModifier : PanelModifier
     {
-        private ComboUIController ComboController = null!;
-        private Config.ComboConfig Config = null!;
-        private ImageView[] FCLines = null!;
+        [Inject] private readonly ComboUIController comboUIController;
+        [Inject] private readonly ComboConfig comboConfig;
 
-        [Inject] public void ModifierInit(ComboUIController cuic, Config.ComboConfig c)
+        private ImageView[] fcLines = null!;
+
+        [Inject] protected override void Init()
         {
-            Logger.Logger.Debug("ComboModifier:ModifierInit()");
-            ComboController = cuic;
-            Config = c;
+            logger.Debug("ComboModifier::Init()");
+            base.parentPanel = comboUIController.gameObject;
+            base.config = comboConfig;
 
-            transform.SetParent(cuic.transform);
-            ModPanel();
+            this.transform.SetParent(parentPanel.transform);
+            this.ModPanel();
         }
 
         protected override void ModPanel()
-        { 
-            if (ComboController.isActiveAndEnabled)
+        {
+            base.ModPanel();
+
+            if (comboUIController.isActiveAndEnabled)
             {
-                FCLines = ComboController.GetComponentsInChildren<ImageView>();
+                fcLines = comboUIController.GetComponentsInChildren<ImageView>();
 
-                if (Config.UseGradient)
+                if (comboConfig.UseGradient)
                 {
-                    FCLines[0].gradient = true;
-                    FCLines[1].gradient = true;
+                    fcLines[0].gradient = true;
+                    fcLines[1].gradient = true;
 
-                    FCLines[0].color0 = Config.TopLeft;
-                    FCLines[0].color1 = Config.TopRight;
+                    fcLines[0].color0 = comboConfig.TopLeft;
+                    fcLines[0].color1 = comboConfig.TopRight;
 
-                    if (Config.MirrorBottomLine)
+                    if (comboConfig.MirrorBottomLine)
                     {
-                        FCLines[1].color0 = Config.TopRight;
-                        FCLines[1].color1 = Config.TopLeft;
+                        fcLines[1].color0 = comboConfig.TopRight;
+                        fcLines[1].color1 = comboConfig.TopLeft;
                     }
                     else
                     {
-                        FCLines[1].color0 = Config.BottomLeft;
-                        FCLines[1].color1 = Config.BottomRight;
+                        fcLines[1].color0 = comboConfig.BottomLeft;
+                        fcLines[1].color1 = comboConfig.BottomRight;
                     }
                 }
                 else
                 {
-                    FCLines[0].color = Config.TopLine;
-                    FCLines[1].color = Config.BottomLine;
+                    fcLines[0].color = comboConfig.TopLine;
+                    fcLines[1].color = comboConfig.BottomLine;
                 }
             }
         }
 
         protected override void OnDestroy()
         {
-            ComboController = null!;
-            Config = null!;
-            FCLines = null!;
+            base.OnDestroy();
+            fcLines = null!;
         }
     }
 }

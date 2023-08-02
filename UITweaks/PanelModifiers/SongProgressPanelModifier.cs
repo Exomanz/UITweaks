@@ -1,5 +1,6 @@
 ﻿using HMUI;
 using System.Collections.Generic;
+using UITweaks.Config;
 using UITweaks.Models;
 using Zenject;
 
@@ -7,71 +8,69 @@ namespace UITweaks.PanelModifiers
 {
     public class SongProgressPanelModifier : PanelModifier
     {
-        private SongProgressUIController Controller = null!;
-        private AudioTimeSyncController SyncController = null!;
-        private Config.ProgressConfig Config = null!;
-        private List<ImageView> BarComponents = null!;
+        [InjectOptional] private readonly StandardGameplaySceneSetupData gameplaySceneSetupData;
+        [Inject] private readonly SongProgressUIController songProgressUIController;
+        [Inject] private readonly AudioTimeSyncController audioTimeSyncController;
+        [Inject] private readonly ProgressConfig progressConfig;
+
+        private List<ImageView> barComponents = new List<ImageView>();
         private bool canBeUsed = true;
 
-        [Inject] internal void ModifierInit([InjectOptional] StandardGameplaySceneSetupData sgssd, SongProgressUIController spuic, AudioTimeSyncController atsc, Config.ProgressConfig c)
+        [Inject] protected override void Init()
         {
-            Logger.Logger.Debug("SongProgressPanelModifier:ModifierInit()");
-            Controller = spuic;
-            SyncController = atsc;
-            Config = c;
-            BarComponents = new();
+            logger.Debug("SongProgressPanelModifier::Init()");
+            base.parentPanel = songProgressUIController.gameObject;
+            base.config = progressConfig;
 
-            transform.SetParent(spuic.transform);
+            this.transform.SetParent(parentPanel?.transform);
 
-            if (sgssd?.beatmapCharacteristic.containsRotationEvents == true)
+            if (gameplaySceneSetupData?.beatmapCharacteristic.containsRotationEvents == true)
             {
-                Logger.Logger.Debug("Selected map is 360/90. Disabling the SongProgressPanelModifier");
+                logger.Debug("Selected map is 360/90. Disabling the SongProgressPanelModifier");
                 canBeUsed = false;
                 return;
             }
 
-            ModPanel();
+            this.ModPanel();
         }
 
         protected override void ModPanel()
         {
-            foreach (ImageView x in Controller.GetComponentsInChildren<ImageView>())
+            base.ModPanel();
+
+            foreach (ImageView x in songProgressUIController.GetComponentsInChildren<ImageView>())
             {
                 if (x.name != "BG")
                 {
                     // [0] Fill, [1] BG, [2] Handle
-                    BarComponents.Add(x);
+                    barComponents.Add(x);
                 }
             }
 
-            if (!Config.UseFadeDisplayType)
+            if (!progressConfig.UseFadeDisplayType)
             {
-                BarComponents[0].color = Config.Fill;
+                barComponents[0].color = progressConfig.Fill;
             }
-            BarComponents[1].color = Config.BG.ColorWithAlpha(0.25f);
-            BarComponents[2].color = Config.Handle;
+            barComponents[1].color = progressConfig.BG.ColorWithAlpha(0.25f);
+            barComponents[2].color = progressConfig.Handle;
         }
 
         private void Update()
         {
             if (!canBeUsed) return;
 
-            // The performance impact of this is unmeasured but probably negligable. I do want to find a way to do this without using Update()
-            if (Config.UseFadeDisplayType)
+            if (progressConfig.UseFadeDisplayType)
             {
-                BarComponents[0].color = HSBColor.Lerp(
-                    HSBColor.FromColor(Config.StartColor),
-                    HSBColor.FromColor(Config.EndColor),
-                    SyncController.songTime / SyncController.songLength).ToColor();
+                barComponents[0].color = HSBColor.Lerp(
+                    HSBColor.FromColor(progressConfig.StartColor),
+                    HSBColor.FromColor(progressConfig.EndColor),
+                    audioTimeSyncController.songTime / audioTimeSyncController.songLength).ToColor();
             }
         }
 
         protected override void OnDestroy()
         {
-            Controller = null!;
-            SyncController = null!;
-            Config = null!;
-            BarComponents = null!;
+            barComponents = null!;
         }
     }
 }

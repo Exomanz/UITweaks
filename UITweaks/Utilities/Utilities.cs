@@ -35,12 +35,12 @@ namespace UITweaks.Utilities
         }
 
         /// <summary>
-        /// Generates a random float between <paramref name="min"/> and <paramref name="max"/>, trimmed to a set amount of decimal places.
+        /// Generates a random decimal between <paramref name="min"/> and <paramref name="max"/>, trimmed to a set amount of decimal places.
         /// </summary>
         /// <param name="min"/>
         /// <param name="max"/>
         /// <param name="decimalSpaces"/>
-        /// <returns>A non-negative float greater than or equal to <paramref name="min"/> and less than <paramref name="max"/>, rounded to <paramref name="decimalSpaces"/> decimal spaces.</returns>
+        /// <returns>A non-negative decimal greater than or equal to <paramref name="min"/> and less than <paramref name="max"/>, rounded to <paramref name="decimalSpaces"/> decimal spaces.</returns>
         public static decimal RandomDecimal(double min, double max, int decimalSpaces)
         {
             double sample = Rand.NextDouble();

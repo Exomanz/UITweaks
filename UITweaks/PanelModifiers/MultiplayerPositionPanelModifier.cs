@@ -5,24 +5,19 @@ namespace UITweaks.PanelModifiers
 {
     public class MultiplayerPositionPanelModifier : PanelModifier
     {
-        private MultiplayerPositionHUDController Controller = null!;
-        private Config.PositionConfig Config = null!;
 
-        [Inject] internal void ModifierInit()
+        [Inject] protected override void Init()
         {
-            // Stuff
-            ModPanel();
         }
 
         protected override void ModPanel()
         {
-            
+            base.ModPanel();
         }
 
         protected override void OnDestroy()
         {
-            Controller = null!;
-            Config = null!;
+            base.OnDestroy();
         }
     }
 }

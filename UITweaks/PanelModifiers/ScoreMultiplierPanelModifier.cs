@@ -1,4 +1,5 @@
-﻿using UITweaks.Models;
+﻿using UITweaks.Config;
+using UITweaks.Models;
 using UnityEngine;
 using UnityEngine.UI;
 using Zenject;
@@ -7,91 +8,95 @@ namespace UITweaks.PanelModifiers
 {
     public class ScoreMultiplierPanelModifier : PanelModifier
     {
-        private ScoreMultiplierUIController MultiplierController = null!;
-        private Config.MultiplierConfig Config = null!;
-        private IScoreController ScoreController = null!;
-        private int CurrentMultiplier = 0;
-        private Image BG = null!;
-        private Image FG = null!;
+        [Inject] private readonly ScoreMultiplierUIController scoreMultiplierUIController;
+        [Inject] private readonly MultiplierConfig multiplierConfig;
+        [Inject] private IScoreController scoreController;
 
-        [Inject] internal void ModifierInit(ScoreMultiplierUIController smuic, Config.MultiplierConfig config, IScoreController scoreController)
+        private int currentMultiplier = 0;
+        private Image bg = null!;
+        private Image fg = null!;
+
+        [Inject] protected override void Init()
         {
-            Logger.Logger.Debug("ScoreMultiplierPanelModifier:ModifierInit()");
-            MultiplierController = smuic;
-            Config = config;
-            ScoreController = scoreController;
+            logger.Debug("ScoreMultiplierPanelModifier::Init()");
+            base.parentPanel = scoreMultiplierUIController.gameObject;
+            base.config = multiplierConfig;
+
+            this.transform.SetParent(parentPanel.transform);
             scoreController.multiplierDidChangeEvent += HandleMultiplierDidChange;
 
-            transform.SetParent(smuic.transform);
-            ModPanel();
+            this.ModPanel();
         }
 
         protected override void ModPanel()
         {
-            BG = MultiplierController.transform.Find("BGCircle").GetComponent<Image>();
-            FG = MultiplierController.transform.Find("FGCircle").GetComponent<Image>();
-            HandleMultiplierDidChange(1, 0);
+            base.ModPanel();
+
+            bg = parentPanel.transform.Find("BGCircle").GetComponent<Image>();
+            fg = parentPanel.transform.Find("FGCircle").GetComponent<Image>();
+            this.HandleMultiplierDidChange(1, 0);
         }
 
         private void HandleMultiplierDidChange(int multiplier, float progress)
         {
-            CurrentMultiplier = multiplier;
+            currentMultiplier = multiplier;
 
             if (multiplier == 1)
             {
-                BG.color = Config.One.ColorWithAlpha(0.25f);
-                FG.color = Config.One;
+                bg.color = multiplierConfig.One.ColorWithAlpha(0.25f);
+                fg.color = multiplierConfig.One;
             }
             else if (multiplier == 2)
             {
-                BG.color = Config.Two.ColorWithAlpha(0.25f);
-                FG.color = Config.Two;
+                bg.color = multiplierConfig.Two.ColorWithAlpha(0.25f);
+                fg.color = multiplierConfig.Two;
             }
             else if (multiplier == 4)
             {
-                BG.color = Config.Four.ColorWithAlpha(0.25f);
-                FG.color = Config.Four;
+                bg.color = multiplierConfig.Four.ColorWithAlpha(0.25f);
+                fg.color = multiplierConfig.Four;
             }
-            else if (multiplier == 8 && !Config.RainbowOnMaxMultiplier)
-                FG.color = Config.Eight.ColorWithAlpha(0.25f); 
+            else if (multiplier == 8 && !multiplierConfig.RainbowOnMaxMultiplier)
+                fg.color = multiplierConfig.Eight.ColorWithAlpha(0.25f); 
         }
 
         public void Update()
         {
-            if (!MultiplierController.isActiveAndEnabled) return;
+            if (!scoreMultiplierUIController.isActiveAndEnabled) return;
 
-            if (Config.SmoothTransition)
+            if (multiplierConfig.SmoothTransition)
             {
-                if (CurrentMultiplier == 1)
+                if (currentMultiplier == 1)
                 {
-                    BG.color = HSBColor.Lerp(HSBColor.FromColor(Config.One), HSBColor.FromColor(Config.Two), FG.fillAmount).ToColor().ColorWithAlpha(0.25f);
-                    FG.color = HSBColor.Lerp(HSBColor.FromColor(Config.One), HSBColor.FromColor(Config.Two), FG.fillAmount).ToColor();
+                    bg.color = HSBColor.Lerp(HSBColor.FromColor(multiplierConfig.One), HSBColor.FromColor(multiplierConfig.Two), fg.fillAmount).ToColor().ColorWithAlpha(0.25f);
+                    fg.color = HSBColor.Lerp(HSBColor.FromColor(multiplierConfig.One), HSBColor.FromColor(multiplierConfig.Two), fg.fillAmount).ToColor();
                 }
-                else if (CurrentMultiplier == 2)
+                else if (currentMultiplier == 2)
                 {
-                    BG.color = HSBColor.Lerp(HSBColor.FromColor(Config.Two), HSBColor.FromColor(Config.Four), FG.fillAmount).ToColor().ColorWithAlpha(0.25f);
-                    FG.color = HSBColor.Lerp(HSBColor.FromColor(Config.Two), HSBColor.FromColor(Config.Four), FG.fillAmount).ToColor();
+                    bg.color = HSBColor.Lerp(HSBColor.FromColor(multiplierConfig.Two), HSBColor.FromColor(multiplierConfig.Four), fg.fillAmount).ToColor().ColorWithAlpha(0.25f);
+                    fg.color = HSBColor.Lerp(HSBColor.FromColor(multiplierConfig.Two), HSBColor.FromColor(multiplierConfig.Four), fg.fillAmount).ToColor();
                 }
-                else if (CurrentMultiplier == 4)
+                else if (currentMultiplier == 4)
                 {
-                    BG.color = HSBColor.Lerp(HSBColor.FromColor(Config.Four), HSBColor.FromColor(Config.Eight), FG.fillAmount).ToColor().ColorWithAlpha(0.25f);
-                    FG.color = HSBColor.Lerp(HSBColor.FromColor(Config.Four), HSBColor.FromColor(Config.Eight), FG.fillAmount).ToColor();
+                    bg.color = HSBColor.Lerp(HSBColor.FromColor(multiplierConfig.Four), HSBColor.FromColor(multiplierConfig.Eight), fg.fillAmount).ToColor().ColorWithAlpha(0.25f);
+                    fg.color = HSBColor.Lerp(HSBColor.FromColor(multiplierConfig.Four), HSBColor.FromColor(multiplierConfig.Eight), fg.fillAmount).ToColor();
                 }
             }
 
-            if (CurrentMultiplier == 8 && Config.RainbowOnMaxMultiplier)
+            if (currentMultiplier == 8 && multiplierConfig.RainbowOnMaxMultiplier)
             {
-                BG.color = HSBColor.ToColor(new HSBColor(Mathf.PingPong(Time.time * 0.5f, 1), 1, 1));
+                bg.color = HSBColor.ToColor(new HSBColor(Mathf.PingPong(Time.time * 0.5f, 1), 1, 1));
             }
         }
 
         protected override void OnDestroy()
         {
-            ScoreController.multiplierDidChangeEvent -= HandleMultiplierDidChange;
+            base.OnDestroy();
 
-            MultiplierController = null!;
-            Config = null!;
-            ScoreController = null!;
+            scoreController.multiplierDidChangeEvent -= HandleMultiplierDidChange;
+            scoreController = null!;
+            bg = null!;
+            fg = null!;            
         }
     }
 }
