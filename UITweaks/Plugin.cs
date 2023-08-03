@@ -42,7 +42,7 @@ namespace UITweaks
             // Multiplayer support broke with Sira3... maybe someday I'll look into it.
             zenject.Install<AppConfigInstaller>(Location.App, config.Generated<PluginConfig>());
             zenject.Install<MenuUIInstaller>(Location.Menu);
-            zenject.Install<PanelModifierInstaller>(Location.Singleplayer);
+            zenject.Install<PanelModifierInstaller>(Location.StandardPlayer | Location.CampaignPlayer);
         }
     }
 }
