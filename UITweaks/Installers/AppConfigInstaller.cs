@@ -22,15 +22,17 @@ namespace UITweaks.Installers
             BindConfig(Config.Position);
             BindConfig(Config.Misc);
 
+#if HECK
             if (PluginManager.GetPlugin("Heck") != null)
             {
                 Container.BindInterfacesAndSelfTo<UITweaksSettableSettings>().AsSingle().NonLazy();
             }
+#endif
         }
 
         /// <summary>
         /// Shorthand function for quickly binding configs in Zenject.<br></br>
-        /// <typeparamref name="T"/> must derive from either <see cref="ConfigBase"/> or some other POCO.
+        /// <typeparamref name="T"/> must derive from either <see cref="ConfigBase"/>.
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="instance"></param>

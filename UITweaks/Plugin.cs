@@ -1,5 +1,6 @@
 ﻿using IPA;
 using IPA.Config.Stores;
+using IPA.Utilities;
 using SiraUtil.Zenject;
 using System;
 using System.Linq;
@@ -16,10 +17,10 @@ namespace UITweaks
         { 
             get
             {
-                if (Environment.GetCommandLineArgs().Any(x => x.ToLower() == "--uit-aprilfools"))
+                if (Environment.GetCommandLineArgs().Any(x => x.ToLower() == "--uitweaks.aprilfools"))
                     return true;
 
-                DateTime time = DateTime.Now;
+                DateTime time = Utils.CanUseDateTimeNowSafely ? DateTime.Now : DateTime.UtcNow;
                 return time.Month == 4 && time.Day == 1;
             } 
         }

@@ -20,6 +20,7 @@ namespace UITweaks.UI
     [HotReload(RelativePathToLayout = @"..\Views\ObjectPreview.bsml")]
     public class ObjectPreviewViewController : BSMLAutomaticViewController
     {
+        [Inject] private readonly SettingsPanelObjectGrabber objectGrabber;
         [Inject] private readonly PluginConfig pluginConfig;
         [Inject] private readonly ModSettingsViewController modSettingsViewController;
         [Inject] private readonly SiraLog logger;
@@ -28,7 +29,6 @@ namespace UITweaks.UI
         private readonly Vector3 DEFAULT_POSITION = new(3.53f, 1.1f, 2.4f);
         private readonly Vector3 VOID_POSITION = new(0, -1000, 0);
 
-        private SettingsPanelObjectGrabber objectGrabber;
         private bool previewToggleIsReady = false;
 
         #region Preview Objects
@@ -71,16 +71,10 @@ namespace UITweaks.UI
         {
             base.DidActivate(firstActivation, addedToHierarchy, screenSystemEnabling);
 
-            GameObject grabber = GameObject.Find("UITweaksPanelGrabber")?.gameObject;
-
-            if (firstActivation && !grabber)
+            if (firstActivation && objectGrabber.gameObject != null)
             {
-                grabber = new GameObject("UITweaksPanelGrabber");
-                grabber.transform.position = DEFAULT_POSITION;
-                grabber.transform.Rotate(0, 57, 0);
-                grabber.AddComponent<SettingsPanelObjectGrabber>();
-
-                objectGrabber = grabber.GetComponent<SettingsPanelObjectGrabber>();
+                objectGrabber.transform.Rotate(0, 57, 0);
+                this.StartCoroutine(objectGrabber.GetPanels()); 
                 this.StartCoroutine(FinalizePanels());
             }
 

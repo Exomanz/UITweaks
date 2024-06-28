@@ -1,41 +1,41 @@
 ﻿using IPA.Utilities;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
+using UnityEngine.ResourceManagement;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using Zenject;
+using UnityEngine.ResourceManagement.AsyncOperations;
+using UnityEngine.ResourceManagement.ResourceProviders;
+using SiraUtil.Logging;
 
 namespace UITweaks.Utilities
 {
     internal class SettingsPanelObjectGrabber : MonoBehaviour
     {
+        [Inject] private readonly ZenjectSceneLoader sceneLoader;
+        [Inject] private readonly SiraLog logger;
+
         public bool isCompleted { get; private set; } = false;
 
         public GameObject MultiplierPanel { get; private set; } = null!;
         public GameObject EnergyPanel { get; private set; } = null!;
-        public GameObject ComboPanel { get;private set; } = null!;
+        public GameObject ComboPanel { get; private set; } = null!;
         public GameObject ProgressPanel { get; private set; } = null!;
         public GameObject ImmediateRankPanel { get; private set; } = null!;
 
-        private List<MonoBehaviour> Controllers = null!;
+        private List<MonoBehaviour> Controllers = new List<MonoBehaviour>();
 
-        public void Start()
+        public IEnumerator GetPanels()
         {
-            isCompleted = false;
-            StartCoroutine(GetPanels());
-        }
-
-        private IEnumerator GetPanels()
-        {
-            bool sceneIsLoaded = false;
             try
             {
-                AsyncOperation loadScene = SceneManager.LoadSceneAsync("DefaultEnvironment", LoadSceneMode.Additive);
-                while (!loadScene.isDone) yield return null;
+                AsyncOperationHandle<SceneInstance> defaultSceneInstanceLoader = UnityEngine.AddressableAssets.Addressables.LoadSceneAsync("DefaultEnvironment", LoadSceneMode.Additive);
 
-                sceneIsLoaded = true;
-                yield return new WaitForSecondsRealtime(0.1f); // Allow objects to fully load
+                while (!defaultSceneInstanceLoader.IsDone)
+                    yield return new WaitForSecondsRealtime(0.1f); // Allow objects to fully load
 
                 // I would use Object.FindObjectsOfType<>() but it returns null since the objects aren't active.
                 Controllers = new List<MonoBehaviour>()
@@ -61,19 +61,16 @@ namespace UITweaks.Utilities
                 ProgressPanel.name = "Preview_ProgressPanel";
                 ImmediateRankPanel.name = "Preview_ScoreRankPanel";
 
-                loadScene = null;
+                SceneManager.UnloadSceneAsync("DefaultEnvironment");
             }
-            finally
-            {
-                if (sceneIsLoaded)
-                    SceneManager.UnloadSceneAsync("DefaultEnvironment");
-            }
+            finally { }
 
             yield break;
         }
 
         private GameObject FinalizePanel(MonoBehaviour controller)
         {
+            Console.WriteLine("finalizing panel " + controller.gameObject.name);
             try
             {
                 GameObject go = Instantiate(controller.gameObject);

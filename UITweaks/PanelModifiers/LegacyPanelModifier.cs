@@ -18,7 +18,7 @@ namespace UITweaks.PanelModifiers
 
             public void Start()
             {
-                if (data?.beatmapCharacteristic.containsRotationEvents == true)
+                if (data?.beatmapKey.beatmapCharacteristic.containsRotationEvents == true)
                 {
                     var container = gameHUDController.transform.Find("Container");
                     container.transform.Rotate(0, 0, 180);
@@ -59,8 +59,7 @@ namespace UITweaks.PanelModifiers
             if (miscConfig.ItalicizeComboPanel)
             {
                 var comboText = comboUIController.transform.Find("ComboText").GetComponent<CurvedTextMeshPro>();
-                comboText.fontStyle = FontStyles.Italic;
-                comboText.text = "COMBO";
+                comboText.fontStyle = FontStyles.Italic | FontStyles.UpperCase;
 
                 var num = comboUIController.GetField<TextMeshProUGUI, ComboUIController>("_comboText");
                 num.fontStyle = FontStyles.Italic;

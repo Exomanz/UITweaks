@@ -1,10 +1,10 @@
-﻿using Heck.SettingsSetter;
-using System;
-using System.Reflection;
-using UnityEngine;
-
-namespace UITweaks.Utilities.SettableSettings
+﻿namespace UITweaks.Utilities.SettableSettings
 {
+#if HECK
+    using Heck.SettingsSetter;
+    using System;
+    using System.Reflection;
+    using UnityEngine;
     public class UITweaksSettingsWrapper : ISettableSetting
     {
         private readonly PropertyInfo settingsProperty;
@@ -41,4 +41,5 @@ namespace UITweaks.Utilities.SettableSettings
             }
         }
     }
+#endif
 }

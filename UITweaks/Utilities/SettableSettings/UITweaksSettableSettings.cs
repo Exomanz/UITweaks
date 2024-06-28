@@ -1,12 +1,13 @@
-﻿using Heck.SettingsSetter;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using UITweaks.Models;
-
-namespace UITweaks.Utilities.SettableSettings
+﻿namespace UITweaks.Utilities.SettableSettings
 {
+#if HECK
+    using Heck.SettingsSetter;
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Reflection;
+    using UITweaks.Models;
+
     // Shoutout to Caeden117's Counters+ for providing a good example on how to register SettableSettings to Heck
     internal class UITweaksSettableSettings : IDisposable
     {
@@ -34,7 +35,7 @@ namespace UITweaks.Utilities.SettableSettings
                 var normalizedTypeName = configType.BaseType.Name;
                 var enabledProperty = configType.GetProperty("Enabled", bindingFlags);
 
-                ISettableSetting setting = Activator.CreateInstance(settableSettingsType, 
+                ISettableSetting setting = Activator.CreateInstance(settableSettingsType,
                     $"UITweaks - {normalizedTypeName}", enabledProperty.Name, enabledProperty, conf)
                     as ISettableSetting;
 
@@ -51,4 +52,5 @@ namespace UITweaks.Utilities.SettableSettings
             settableSettings.ForEach(x => x.SetTemporary(null));
         }
     }
+#endif
 }

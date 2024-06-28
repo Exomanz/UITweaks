@@ -2,8 +2,8 @@
 	xsi:schemaLocation='https://monkeymanboy.github.io/BSML-Docs/ 
 	https://raw.githubusercontent.com/monkeymanboy/BSML-Docs/gh-pages/BSMLSchema.xsd'>
 	<vertical vertical-fit='PreferredSize' child-control-height='False' spacing='3' anchor-pos-y='10'>
-		<vertical vertical-fit='PreferredSize' bg='panel-top' bg-color='Orange' pad='1' pref-width='102'>
-			<vertical vertical-fit='PreferredSize' bg='panel-top' bg-color='Black' pad-top='1' pref-width='100'>
+		<vertical vertical-fit='PreferredSize' bg='panel-top' bg-color='#ff7700ff' pad='1' pref-width='102'>
+			<vertical vertical-fit='PreferredSize' bg='panel-top' pad-top='1' bg-color='#000000ff' pref-width='100'>
 				<text text='About' align='Center' font-size='8' italics='True'/>
 			</vertical>
 		</vertical>
@@ -51,7 +51,7 @@
 			<text text='----------' align='Center' italics='True'/>
 			<text text='This mod aims to bring you more customization to the in-game HUD!&#xA;
 Featuring an extensive configuration system which allows you to tweak nearly every single thing to your liking,
-you can make it exactly what you want it to be.' align='Center' italics='True'/>
+you can make it exactly what you want it to be.' align='Center' italics='True' word-wrapping='True'/>
 		</vertical>
 	</vertical>
 </bg>

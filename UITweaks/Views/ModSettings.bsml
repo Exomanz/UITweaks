@@ -90,7 +90,7 @@ one color to another as the song progresses.'/>
 				<text text='- - - - - - - - - - -' font-size='7' align='Center'/>
 				<text text='Due to the migration to &lt;color=#22ddff&gt;SiraUtil v3&lt;/color&gt;, multiplayer support is currently broken.&#xA;
 I&apos;ll look into this eventually. As for now, these settings will remain non-adjustable, and no part of the mod will be active in multiplayer.'
-					  align='Center'/>
+					  align='Center' word-wrapping='True'/>
 			</vertical>
 		</tab>
 
@@ -99,7 +99,7 @@ I&apos;ll look into this eventually. As for now, these settings will remain non-
 			<vertical vertical-fit='PreferredSize' spacing='3'>
 				<vertical vertical-fit='PreferredSize' pref-width='95' bg='round-rect-panel' pad='3'>
 					<text text='These settings are intended to restore a sort of "&lt;color=#FF9933&gt;Legacy&lt;/color&gt;" feel to the left HUD panel
-by re-italicizing the things that Beat Games undid in recent updates.' align='Center'/>
+by re-italicizing the things that Beat Games undid in recent updates.' align='Center' word-wrapping='True'/>
 				</vertical>
 				<vertical vertical-fit='PreferredSize'>
 					<checkbox text='Restore Combo Panel Italics' value='legacy-combo-panel' apply-on-change='true'/>

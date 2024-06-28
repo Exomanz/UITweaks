@@ -24,7 +24,7 @@ namespace UITweaks.PanelModifiers
 
             this.transform.SetParent(parentPanel?.transform);
 
-            if (gameplaySceneSetupData?.beatmapCharacteristic.containsRotationEvents == true)
+            if (gameplaySceneSetupData?.beatmapKey.beatmapCharacteristic.containsRotationEvents == true)
             {
                 logger.Debug("Selected map is 360/90. Disabling the SongProgressPanelModifier");
                 canBeUsed = false;
