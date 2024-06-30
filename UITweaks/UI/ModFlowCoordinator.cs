@@ -6,10 +6,10 @@ namespace UITweaks.UI
 {
     internal class ModFlowCoordinator : FlowCoordinator
     {
-        [Inject] private MainFlowCoordinator mainFlowCoordinator;
-        [Inject] private ModSettingsViewController settingsView;
-        [Inject] private ModInfoViewController infoView;
-        [Inject] private ObjectPreviewViewController previewView;
+        [Inject] private readonly MainFlowCoordinator mainFlowCoordinator;
+        [Inject] private readonly ModSettingsViewController settingsView;
+        [Inject] private readonly ModInfoViewController infoView;
+        [Inject] private readonly ObjectPreviewViewController previewView;
 
         protected override void DidActivate(bool firstActivation, bool addedToHierarchy, bool screenSystemEnabling)
         {

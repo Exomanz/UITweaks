@@ -3,7 +3,7 @@ using UITweaks.Models;
 
 namespace UITweaks.Config
 {
-    public class MiscConfig : ConfigBase
+    public class MiscConfig : UITweaksConfigBase
     {
         // This property is serialized despite the fact that you can't disable Misc as a whole--just individual features.
         [Ignore] public override bool Enabled { get; set; } = false;

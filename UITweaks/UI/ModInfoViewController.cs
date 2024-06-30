@@ -16,7 +16,7 @@ namespace UITweaks.UI
     public class ModInfoViewController : BSMLAutomaticViewController
     {
         [Inject] private readonly SiraLog logger;
-        private PluginMetadata meta = null!;
+        private PluginMetadata meta;
 
         [Inject] internal void Construct(UBinder<Plugin, PluginMetadata> metadata)
         {
@@ -34,5 +34,8 @@ namespace UITweaks.UI
 
         [UIAction("open-kofi")] 
         internal void OpenDonateLink() => Application.OpenURL("https://ko-fi.com/exo_manz");
+
+        [UIAction("open-changelog")]
+        internal void OpenChangelogLink() => Application.OpenURL("https://github.com/Exomanz/UITweaks/commits/");
     }
 }

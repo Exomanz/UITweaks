@@ -10,18 +10,20 @@ using Zenject;
 
 namespace UITweaks.PanelModifiers
 {
-    public class EnergyBarPanelModifier : PanelModifier
+    public class EnergyBarPanelModifier : PanelModifierBase
     {
         [Inject] private readonly IGameEnergyCounter gameEnergyCounter;
-        [Inject] private readonly GameEnergyUIPanel gameEnergyUIPanel;
         [Inject] private readonly GameplayModifiers gameplayModifiers;
         [Inject] private readonly EnergyConfig energyConfig;
 
+        private GameEnergyUIPanel gameEnergyUIPanel;
         private ImageView energyBar = null!;
 
         [Inject] protected override void Init()
         {
             logger.Debug("EnergyBarPanelModifier::Init()");
+            this.gameEnergyUIPanel = base.gameHUDController.GetComponentInChildren<GameEnergyUIPanel>();
+
             base.parentPanel = gameEnergyUIPanel.gameObject;
             base.config = energyConfig;
 
@@ -32,16 +34,16 @@ namespace UITweaks.PanelModifiers
         protected override void ModPanel()
         {
             base.ModPanel();
-            StartCoroutine(PrepareColorsForEnergyType(gameplayModifiers.energyType));
+            base.StartCoroutine(PrepareColorsForEnergyType(gameplayModifiers.energyType));
         }
 
         private IEnumerator PrepareColorsForEnergyType(GameplayModifiers.EnergyType type)
         {
-            yield return new WaitUntil(() => gameEnergyUIPanel != null);
+            yield return new WaitUntil(() => gameEnergyUIPanel.gameObject != null);
 
             if (type == GameplayModifiers.EnergyType.Battery)
             {
-                List<Image> batterySegments = gameEnergyUIPanel.GetField<List<Image>, GameEnergyUIPanel>("_batteryLifeSegments");
+                List<Image> batterySegments = gameEnergyUIPanel._batteryLifeSegments;
 
                 batterySegments[0].color = energyConfig.Low;
                 batterySegments[1].color = HSBColor.Lerp(HSBColor.FromColor(energyConfig.Low), HSBColor.FromColor(energyConfig.Mid), 0.34f).ToColor();
@@ -71,14 +73,18 @@ namespace UITweaks.PanelModifiers
         private void HandleEnergyDidChange(float energy)
         {
             if (energy == 0.5f) energyBar.color = energyConfig.Mid;
-            else if (energy > 0.5f) energyBar.color = HSBColor.Lerp(
-                HSBColor.FromColor(energyConfig.Mid),
-                HSBColor.FromColor(energyConfig.High),
-                (energy - 0.5f) * 2).ToColor();
-            else if (energy < 0.5f) energyBar.color = HSBColor.Lerp(
-                HSBColor.FromColor(energyConfig.Low),
-                HSBColor.FromColor(energyConfig.Mid),
-                energy * 2).ToColor();
+
+            else if (energy > 0.5f) 
+                energyBar.color = HSBColor.Lerp(
+                    HSBColor.FromColor(energyConfig.Mid),
+                    HSBColor.FromColor(energyConfig.High),
+                    (energy - 0.5f) * 2).ToColor();
+
+            else if (energy < 0.5f) 
+                energyBar.color = HSBColor.Lerp(
+                    HSBColor.FromColor(energyConfig.Low),
+                    HSBColor.FromColor(energyConfig.Mid),
+                    energy * 2).ToColor();
         }
 
         public void Update()

@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace UITweaks.Config
 {
-    public class EnergyConfig : ConfigBase
+    public class EnergyConfig : UITweaksConfigBase
     {
         public override bool Enabled { get; set; } = true;
 

@@ -6,30 +6,25 @@ using Zenject;
 
 namespace UITweaks.PanelModifiers
 {
-    public class SongProgressPanelModifier : PanelModifier
+    public class SongProgressPanelModifier : PanelModifierBase
     {
         [InjectOptional] private readonly StandardGameplaySceneSetupData gameplaySceneSetupData;
-        [Inject] private readonly SongProgressUIController songProgressUIController;
         [Inject] private readonly AudioTimeSyncController audioTimeSyncController;
         [Inject] private readonly ProgressConfig progressConfig;
 
+        private SongProgressUIController songProgressUIController;
         private List<ImageView> barComponents = new List<ImageView>();
         private bool canBeUsed = true;
 
         [Inject] protected override void Init()
         {
             logger.Debug("SongProgressPanelModifier::Init()");
+            this.songProgressUIController = base.gameHUDController.GetComponentInChildren<SongProgressUIController>();
+
             base.parentPanel = songProgressUIController.gameObject;
             base.config = progressConfig;
 
             this.transform.SetParent(parentPanel?.transform);
-
-            if (gameplaySceneSetupData?.beatmapKey.beatmapCharacteristic.containsRotationEvents == true)
-            {
-                logger.Debug("Selected map is 360/90. Disabling the SongProgressPanelModifier");
-                canBeUsed = false;
-                return;
-            }
 
             this.ModPanel();
         }
@@ -37,6 +32,13 @@ namespace UITweaks.PanelModifiers
         protected override void ModPanel()
         {
             base.ModPanel();
+
+            if (gameplaySceneSetupData?.beatmapKey.beatmapCharacteristic.containsRotationEvents == true)
+            {
+                logger.Debug("Selected map is 360/90. Disabling the SongProgressPanelModifier");
+                canBeUsed = false;
+                return;
+            }
 
             foreach (ImageView x in songProgressUIController.GetComponentsInChildren<ImageView>())
             {
@@ -64,12 +66,14 @@ namespace UITweaks.PanelModifiers
                 barComponents[0].color = HSBColor.Lerp(
                     HSBColor.FromColor(progressConfig.StartColor),
                     HSBColor.FromColor(progressConfig.EndColor),
-                    audioTimeSyncController.songTime / audioTimeSyncController.songLength).ToColor();
+                    audioTimeSyncController.songTime / audioTimeSyncController.songLength)
+                    .ToColor();
             }
         }
 
         protected override void OnDestroy()
         {
+            base.OnDestroy();
             barComponents = null!;
         }
     }

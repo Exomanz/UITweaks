@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace UITweaks.Config
 {
-    public class PositionConfig : ConfigBase
+    public class PositionConfig : UITweaksConfigBase
     {
         public override bool Enabled { get; set; } = true;
 

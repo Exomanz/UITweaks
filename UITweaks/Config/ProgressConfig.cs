@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace UITweaks.Config
 {
-    public class ProgressConfig : ConfigBase
+    public class ProgressConfig : UITweaksConfigBase
     {
         public override bool Enabled { get; set; } = true;
 

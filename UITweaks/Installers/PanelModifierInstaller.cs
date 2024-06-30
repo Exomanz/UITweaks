@@ -7,10 +7,10 @@ namespace UITweaks.Installers
 {
     public class PanelModifierInstaller : Installer
     {
+        [Inject] private readonly PluginConfig config;
+
         public override void InstallBindings()
         {
-            PluginConfig config = Container.Resolve<PluginConfig>();
-
             if (config.Multiplier.Enabled) 
                 BindPanelModifier<ScoreMultiplierPanelModifier>();
 
@@ -23,23 +23,20 @@ namespace UITweaks.Installers
             if (config.Progress.Enabled) 
                 BindPanelModifier<SongProgressPanelModifier>();
 
-
             BindPanelModifier<LegacyPanelModifier>();
 
             if (Plugin.APRIL_FOOLS && config.AllowAprilFools)
-            {
-                Container.Bind<LegacyPanelModifier.AprilFools>().FromNewComponentOn(new GameObject("UITweaks-AprilFools")).AsSingle().NonLazy();
-            }
+                Container.Bind<LegacyPanelModifier.AprilFools>().FromNewComponentOn(new GameObject("UITweaks-AprilFoolsController")).AsSingle().NonLazy();
         }
 
         /// <summary>
-        /// Shorthand function for binding <see cref="PanelModifier"/>'s. Is this necessary? Probably not...
-        /// <br></br><typeparamref name="T"/> is <see cref="PanelModifier"/> or any other class that inherits <see cref="MonoBehaviour"/>.
+        /// Shorthand function for binding <see cref="PanelModifierBase"/> classes.
+        /// <br></br><typeparamref name="T"/> is <see cref="PanelModifierBase"/>.
         /// </summary>
         /// <typeparam name="T"></typeparam>
-        private void BindPanelModifier<T>() where T : PanelModifier
+        private void BindPanelModifier<T>() where T : PanelModifierBase
         {
-            Container.Bind<T>().FromNewComponentOn(new GameObject("PanelModifier")).AsSingle().NonLazy();
+            Container.Bind<T>().FromNewComponentOn(new GameObject(typeof(T).Name)).AsSingle().NonLazy();
         }
     }
 }

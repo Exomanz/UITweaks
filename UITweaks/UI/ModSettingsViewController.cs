@@ -1,7 +1,6 @@
 ﻿using BeatSaberMarkupLanguage.Attributes;
 using BeatSaberMarkupLanguage.ViewControllers;
 using HMUI;
-using SiraUtil.Logging;
 using System;
 using UITweaks.Config;
 using UnityEngine;
@@ -16,7 +15,6 @@ namespace UITweaks.UI
     [HotReload(RelativePathToLayout = @"..\Views\ModSettings.bsml")]
     public class ModSettingsViewController : BSMLAutomaticViewController
     {
-        [Inject] private readonly SiraLog logger;
         [Inject] private readonly PluginConfig pluginConfig;
         [Inject] private readonly MultiplierConfig multiplierConfig;
         [Inject] private readonly EnergyConfig energyConfig;
@@ -25,11 +23,11 @@ namespace UITweaks.UI
         [Inject] private readonly PositionConfig positionConfig;
         [Inject] private readonly MiscConfig miscConfig;
 
+        [UIValue("fools-toggle-check")] private bool _aprilFoolsToggle => Plugin.APRIL_FOOLS;
         public event Action<int> TabWasChangedEvent = delegate { };
         private int selectedTab = 0;
         private float energyBarFillAmount = 0.01f;
         private float progressBarFillAmount = 0.01f;
-        [UIValue("fools-toggle-check")] private readonly bool APRILFOOLSTOGGLE = Plugin.APRIL_FOOLS;
 
         public int SelectedTab
         {

@@ -31,16 +31,8 @@ namespace UITweaks
             zenject.UseLogger(logger);
             zenject.UseMetadataBinder<Plugin>();
 
-            // Basically expose the entire HUD to Zenject.
-            // I could just leave it at the CoreGameHUDController and look everything up then, but that's a lot more work than this.
             zenject.Expose<CoreGameHUDController>("Environment");
-            zenject.Expose<GameEnergyUIPanel>("Environment");
-            zenject.Expose<ComboUIController>("Environment");
-            zenject.Expose<ScoreMultiplierUIController>("Environment");
-            zenject.Expose<SongProgressUIController>("Environment");
-            zenject.Expose<ImmediateRankUIPanel>("Environment");
 
-            // Multiplayer support broke with Sira3... maybe someday I'll look into it.
             zenject.Install<AppConfigInstaller>(Location.App, config.Generated<PluginConfig>());
             zenject.Install<MenuUIInstaller>(Location.Menu);
             zenject.Install<PanelModifierInstaller>(Location.StandardPlayer | Location.CampaignPlayer);

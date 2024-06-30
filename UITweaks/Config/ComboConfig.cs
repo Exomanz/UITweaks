@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace UITweaks.Config
 {
-    public class ComboConfig : ConfigBase
+    public class ComboConfig : UITweaksConfigBase
     {
         public override bool Enabled { get; set; } = true;
 

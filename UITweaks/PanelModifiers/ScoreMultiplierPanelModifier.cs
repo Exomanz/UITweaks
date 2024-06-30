@@ -6,12 +6,12 @@ using Zenject;
 
 namespace UITweaks.PanelModifiers
 {
-    public class ScoreMultiplierPanelModifier : PanelModifier
+    public class ScoreMultiplierPanelModifier : PanelModifierBase
     {
-        [Inject] private readonly ScoreMultiplierUIController scoreMultiplierUIController;
         [Inject] private readonly MultiplierConfig multiplierConfig;
         [Inject] private IScoreController scoreController;
 
+        private ScoreMultiplierUIController scoreMultiplierUIController;
         private int currentMultiplier = 0;
         private Image bg = null!;
         private Image fg = null!;
@@ -19,18 +19,20 @@ namespace UITweaks.PanelModifiers
         [Inject] protected override void Init()
         {
             logger.Debug("ScoreMultiplierPanelModifier::Init()");
+            this.scoreMultiplierUIController = base.gameHUDController.GetComponentInChildren<ScoreMultiplierUIController>();
+
             base.parentPanel = scoreMultiplierUIController.gameObject;
             base.config = multiplierConfig;
 
             this.transform.SetParent(parentPanel.transform);
-            scoreController.multiplierDidChangeEvent += HandleMultiplierDidChange;
-
             this.ModPanel();
         }
 
         protected override void ModPanel()
         {
             base.ModPanel();
+
+            scoreController.multiplierDidChangeEvent += HandleMultiplierDidChange;
 
             bg = parentPanel.transform.Find("BGCircle").GetComponent<Image>();
             fg = parentPanel.transform.Find("FGCircle").GetComponent<Image>();
@@ -68,18 +70,45 @@ namespace UITweaks.PanelModifiers
             {
                 if (currentMultiplier == 1)
                 {
-                    bg.color = HSBColor.Lerp(HSBColor.FromColor(multiplierConfig.One), HSBColor.FromColor(multiplierConfig.Two), fg.fillAmount).ToColor().ColorWithAlpha(0.25f);
-                    fg.color = HSBColor.Lerp(HSBColor.FromColor(multiplierConfig.One), HSBColor.FromColor(multiplierConfig.Two), fg.fillAmount).ToColor();
+                    bg.color = HSBColor.Lerp(
+                        HSBColor.FromColor(multiplierConfig.One), 
+                        HSBColor.FromColor(multiplierConfig.Two), 
+                        fg.fillAmount)
+                        .ToColor().ColorWithAlpha(0.25f);
+
+                    fg.color = HSBColor.Lerp(
+                        HSBColor.FromColor(multiplierConfig.One), 
+                        HSBColor.FromColor(multiplierConfig.Two), 
+                        fg.fillAmount)
+                        .ToColor();
                 }
                 else if (currentMultiplier == 2)
                 {
-                    bg.color = HSBColor.Lerp(HSBColor.FromColor(multiplierConfig.Two), HSBColor.FromColor(multiplierConfig.Four), fg.fillAmount).ToColor().ColorWithAlpha(0.25f);
-                    fg.color = HSBColor.Lerp(HSBColor.FromColor(multiplierConfig.Two), HSBColor.FromColor(multiplierConfig.Four), fg.fillAmount).ToColor();
+                    bg.color = HSBColor.Lerp(
+                        HSBColor.FromColor(multiplierConfig.Two), 
+                        HSBColor.FromColor(multiplierConfig.Four), 
+                        fg.fillAmount)
+                        .ToColor().ColorWithAlpha(0.25f);
+
+                    fg.color = HSBColor.Lerp(
+                        HSBColor.FromColor(multiplierConfig.Two), 
+                        HSBColor.FromColor(multiplierConfig.Four), 
+                        fg.fillAmount)
+                        .ToColor();
                 }
                 else if (currentMultiplier == 4)
                 {
-                    bg.color = HSBColor.Lerp(HSBColor.FromColor(multiplierConfig.Four), HSBColor.FromColor(multiplierConfig.Eight), fg.fillAmount).ToColor().ColorWithAlpha(0.25f);
-                    fg.color = HSBColor.Lerp(HSBColor.FromColor(multiplierConfig.Four), HSBColor.FromColor(multiplierConfig.Eight), fg.fillAmount).ToColor();
+                    bg.color = HSBColor.Lerp(
+                        HSBColor.FromColor(multiplierConfig.Four), 
+                        HSBColor.FromColor(multiplierConfig.Eight), 
+                        fg.fillAmount)
+                        .ToColor().ColorWithAlpha(0.25f);
+
+                    fg.color = HSBColor.Lerp(
+                        HSBColor.FromColor(multiplierConfig.Four), 
+                        HSBColor.FromColor(multiplierConfig.Eight), 
+                        fg.fillAmount)
+                        .ToColor();
                 }
             }
 

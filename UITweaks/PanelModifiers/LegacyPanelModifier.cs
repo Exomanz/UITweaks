@@ -9,7 +9,7 @@ using Zenject;
 
 namespace UITweaks.PanelModifiers
 {
-    public class LegacyPanelModifier : PanelModifier
+    public class LegacyPanelModifier : PanelModifierBase
     {
         internal class AprilFools : MonoBehaviour
         {
@@ -38,13 +38,17 @@ namespace UITweaks.PanelModifiers
             }
         }
 
-        [Inject] private readonly ComboUIController comboUIController;
-        [Inject] private readonly ImmediateRankUIPanel immediateRankUIPanel;
         [Inject] private readonly MiscConfig miscConfig;
+
+        private ComboUIController comboUIController;
+        private ImmediateRankUIPanel immediateRankUIPanel;
 
         [Inject] protected override void Init()
         {
             logger.Debug("LegacyPanelModifier::Init()");
+            this.comboUIController = base.gameHUDController.GetComponentInChildren<ComboUIController>();
+            this.immediateRankUIPanel = base.gameHUDController.GetComponentInChildren<ImmediateRankUIPanel>();
+
             base.parentPanel = immediateRankUIPanel.gameObject;
             base.config = miscConfig;
 
@@ -61,7 +65,7 @@ namespace UITweaks.PanelModifiers
                 var comboText = comboUIController.transform.Find("ComboText").GetComponent<CurvedTextMeshPro>();
                 comboText.fontStyle = FontStyles.Italic | FontStyles.UpperCase;
 
-                var num = comboUIController.GetField<TextMeshProUGUI, ComboUIController>("_comboText");
+                var num = comboUIController._comboText;
                 num.fontStyle = FontStyles.Italic;
                 num.transform.localPosition = new Vector3(-2.5f, 4);
             }
@@ -75,11 +79,11 @@ namespace UITweaks.PanelModifiers
 
             if (miscConfig.ItalicizeImmediateRank)
             {
-                var immediateRankText = immediateRankUIPanel.GetField<TextMeshProUGUI, ImmediateRankUIPanel>("_rankText");
+                var immediateRankText = immediateRankUIPanel._rankText;
                 immediateRankText.fontStyle = FontStyles.Italic;
                 immediateRankText.transform.localPosition = new Vector3(-3, -0.5f);
 
-                var relativeScoreText = immediateRankUIPanel.GetField<TextMeshProUGUI, ImmediateRankUIPanel>("_relativeScoreText");
+                var relativeScoreText = immediateRankUIPanel._relativeScoreText;
                 relativeScoreText.fontStyle = FontStyles.Italic;
             }
         }

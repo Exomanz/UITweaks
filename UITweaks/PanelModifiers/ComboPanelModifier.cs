@@ -5,16 +5,17 @@ using Zenject;
 
 namespace UITweaks.PanelModifiers
 {
-    public class ComboPanelModifier : PanelModifier
+    public class ComboPanelModifier : PanelModifierBase
     {
-        [Inject] private readonly ComboUIController comboUIController;
         [Inject] private readonly ComboConfig comboConfig;
 
-        private ImageView[] fcLines = null!;
+        private ComboUIController comboUIController;
 
         [Inject] protected override void Init()
         {
-            logger.Debug("ComboModifier::Init()");
+            base.logger.Debug("ComboModifier::Init()");
+            this.comboUIController = base.gameHUDController.GetComponentInChildren<ComboUIController>();
+
             base.parentPanel = comboUIController.gameObject;
             base.config = comboConfig;
 
@@ -24,6 +25,7 @@ namespace UITweaks.PanelModifiers
 
         protected override void ModPanel()
         {
+            ImageView[] fcLines;
             base.ModPanel();
 
             if (comboUIController.isActiveAndEnabled)
@@ -57,10 +59,6 @@ namespace UITweaks.PanelModifiers
             }
         }
 
-        protected override void OnDestroy()
-        {
-            base.OnDestroy();
-            fcLines = null!;
-        }
+        protected override void OnDestroy() => base.OnDestroy();
     }
 }

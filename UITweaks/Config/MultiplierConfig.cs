@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace UITweaks.Config
 {
-    public class MultiplierConfig : ConfigBase
+    public class MultiplierConfig : UITweaksConfigBase
     {
         public override bool Enabled { get; set; } = true;
 

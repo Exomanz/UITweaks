@@ -33,26 +33,26 @@ namespace UITweaks.UI
 
         #region Preview Objects
         // Combo Panel
-        private Image[] multiplierCircles = null!;
-        private CurvedTextMeshPro multiplierText = null!;
+        private Image[] multiplierCircles;
+        private CurvedTextMeshPro multiplierText;
         private bool previewCoroOn8x = false;
 
         // Energy Panel
-        private Image energyBar = null!;
+        private Image energyBar;
         private float fillAmount = 0.01f;
 
         // Combo Panel
-        private ImageView[] comboLines = null!;
-        private CurvedTextMeshPro numText = null!;
-        private CurvedTextMeshPro comboText = null!;
+        private ImageView[] comboLines;
+        private CurvedTextMeshPro numText;
+        private CurvedTextMeshPro comboText;
 
         // Progress Panel
-        private Image[] progressPanelImages = null!;
+        private Image[] progressPanelImages;
 
         // Score Panel
-        private CurvedTextMeshPro scoreText = null!;
-        private CurvedTextMeshPro percentText = null!;
-        private CurvedTextMeshPro rankText = null!;
+        private CurvedTextMeshPro scoreText;
+        private CurvedTextMeshPro percentText;
+        private CurvedTextMeshPro rankText;
         private decimal rank = 0.00m;
         #endregion
 
@@ -93,7 +93,7 @@ namespace UITweaks.UI
 
         private IEnumerator FinalizePanels()
         {
-            yield return new WaitUntil(() => objectGrabber.isCompleted);
+            yield return new WaitUntil(() => objectGrabber.IsCompleted);
 
             var multiplierPanel = objectGrabber.MultiplierPanel;
             var comboPanel = objectGrabber.ComboPanel;
@@ -114,29 +114,31 @@ namespace UITweaks.UI
                 }
 
                 // Energy Bar Setup
-                energyBar = objectGrabber.EnergyPanel.transform.Find("EnergyBarWrapper/EnergyBar")?.GetComponent<Image>();
+                energyBar = objectGrabber.EnergyPanel.transform.Find("EnergyBarWrapper/EnergyBar").GetComponent<Image>();
 
                 // Combo Panel Setup
                 {
                     comboLines = comboPanel.transform.GetComponentsInChildren<ImageView>();
-                    numText = comboPanel.transform.Find("ComboCanvas/NumText")?.GetComponent<CurvedTextMeshPro>();
-                    comboText = comboPanel.transform.Find("ComboText")?.GetComponent<CurvedTextMeshPro>();
+                    numText = comboPanel.transform.Find("ComboCanvas/NumText").GetComponent<CurvedTextMeshPro>();
+                    comboText = comboPanel.transform.Find("ComboText").GetComponent<CurvedTextMeshPro>();
                 }
 
                 // Progress Panel Setup
                 {
                     progressPanelImages = progressPanel.transform.GetComponentsInChildren<Image>();
-                    var texts = progressPanel.transform.GetComponentsInChildren<CurvedTextMeshPro>();
+                    CurvedTextMeshPro[] texts = progressPanel.transform.GetComponentsInChildren<CurvedTextMeshPro>();
+                    texts[0].text = "0";
+                    texts[1].text = "00";
                     texts[2].text = "0";
                     texts[3].text = "01";
                 }
 
                 // Immediate Rank Panel Setup
                 {
-                    var immediateRankTransform = objectGrabber.ImmediateRankPanel.transform;
-                    scoreText = immediateRankTransform.Find("ScoreText")?.GetComponent<CurvedTextMeshPro>();
-                    percentText = immediateRankTransform.Find("RelativeScoreText")?.GetComponent<CurvedTextMeshPro>();
-                    rankText = immediateRankTransform.Find("ImmediateRankText")?.GetComponent<CurvedTextMeshPro>();
+                    Transform immediateRankTransform = objectGrabber.ImmediateRankPanel.transform;
+                    scoreText = immediateRankTransform.Find("ScoreText").GetComponent<CurvedTextMeshPro>();
+                    percentText = immediateRankTransform.Find("RelativeScoreText").GetComponent<CurvedTextMeshPro>();
+                    rankText = immediateRankTransform.Find("ImmediateRankText").GetComponent<CurvedTextMeshPro>();
 
                     immediateRankTransform.localPosition = new Vector3(0.75f, 0, 0);
                 }
@@ -153,8 +155,9 @@ namespace UITweaks.UI
 
         private void UpdatePanelVisibility(int tab)
         {
-            if (!objectGrabber.isCompleted) return;
-            var host = objectGrabber;
+            if (!objectGrabber.IsCompleted) return;
+            SettingsPanelObjectGrabber host = objectGrabber;
+            System.Random rand = new System.Random();
 
             if (!pluginConfig.AllowPreviews)
             {
@@ -189,7 +192,7 @@ namespace UITweaks.UI
                     host.ProgressPanel.SetActive(false);
                     host.ImmediateRankPanel.SetActive(false);
 
-                    numText.text = new System.Random().Next(0, 250).ToString();
+                    //numText.text = rand.Next(0, 250).ToString();
                     host.ComboPanel.transform.localPosition = Vector3.zero;
                     break;
                 case 3:
@@ -202,23 +205,17 @@ namespace UITweaks.UI
                 case 4:
                     host.MultiplierPanel.transform.position = VOID_POSITION;
                     host.EnergyPanel.SetActive(false);
-                    host.ComboPanel.SetActive(false);
-                    host.ProgressPanel.SetActive(false);
-                    host.ImmediateRankPanel.SetActive(false);
-                    break;
-                case 5:
-                    host.MultiplierPanel.transform.position = VOID_POSITION;
-                    host.EnergyPanel.SetActive(false);
                     host.ComboPanel.SetActive(true);
                     host.ProgressPanel.SetActive(false);
                     host.ImmediateRankPanel.SetActive(true);
 
+                    //rank = Utilities.Utilities.RandomDecimal(100, 1);
+                    //percentText.text = rank.ToString() + "%";
+                    //numText.text = rand.Next(0, 250).ToString();
+
                     host.ComboPanel.transform.localPosition = new Vector3(-0.75f, 0, 0);
-                    rank = Utilities.Utilities.RandomDecimal(100, 1);
-                    numText.text = new System.Random().Next(1, 250).ToString();
-                    scoreText.text = new System.Random().Next(1, 999999).ToString();
-                    percentText.text = rank.ToString() + "%";
                     break;
+
                 default:
                     break;
             }
@@ -226,7 +223,7 @@ namespace UITweaks.UI
 
         internal void Update()
         {
-            if (!objectGrabber.isCompleted) return;
+            if (!objectGrabber.IsCompleted) return;
 
             int tab = modSettingsViewController.SelectedTab;
             switch (tab)
@@ -248,7 +245,7 @@ namespace UITweaks.UI
                 case 3:
                     UpdateProgressBar(modSettingsViewController.ProgressBarFillAmount);
                     break;
-                case 5:
+                case 4:
                     UpdateComboPanel();
                     UpdateImmediateRankPanel();
                     break;
@@ -295,7 +292,8 @@ namespace UITweaks.UI
                 {
                     Color frame = HSBColor.Lerp(
                         HSBColor.FromColor(pluginConfig.Multiplier.One),
-                        HSBColor.FromColor(pluginConfig.Multiplier.Two), time).ToColor();
+                        HSBColor.FromColor(pluginConfig.Multiplier.Two), time)
+                        .ToColor();
 
                     multiplierCircles[1].fillAmount = time;
                     multiplierCircles[1].color = frame;
@@ -309,7 +307,8 @@ namespace UITweaks.UI
                 {
                     Color frame = HSBColor.Lerp(
                         HSBColor.FromColor(pluginConfig.Multiplier.Two),
-                        HSBColor.FromColor(pluginConfig.Multiplier.Four), time).ToColor();
+                        HSBColor.FromColor(pluginConfig.Multiplier.Four), time)
+                        .ToColor();
 
                     multiplierCircles[1].fillAmount = time;
                     multiplierCircles[1].color = frame;
@@ -323,7 +322,8 @@ namespace UITweaks.UI
                 {
                     Color frame = HSBColor.Lerp(
                         HSBColor.FromColor(pluginConfig.Multiplier.Four),
-                        HSBColor.FromColor(pluginConfig.Multiplier.Eight), time).ToColor();
+                        HSBColor.FromColor(pluginConfig.Multiplier.Eight), time)
+                        .ToColor();
 
                     multiplierCircles[1].fillAmount = time;
                     multiplierCircles[1].color = frame;
@@ -399,7 +399,7 @@ namespace UITweaks.UI
 
             if (pluginConfig.Misc.ItalicizeComboPanel)
             {
-                comboText.fontStyle = TMPro.FontStyles.Italic;
+                comboText.fontStyle = TMPro.FontStyles.Italic | TMPro.FontStyles.UpperCase;
                 comboText.text = "COMBO";
                 numText.fontStyle = TMPro.FontStyles.Italic;
                 numText.transform.localPosition = new Vector3(-2.5f, 4);
@@ -451,7 +451,6 @@ namespace UITweaks.UI
                 rankText.text = "C";
             else if (rank > 20.00m)
                 rankText.text = "D";
-
             else rankText.text = "E";
 
             if (pluginConfig.Misc.ItalicizeScore)

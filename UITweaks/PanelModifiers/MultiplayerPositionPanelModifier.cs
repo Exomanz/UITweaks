@@ -3,7 +3,7 @@ using Zenject;
 
 namespace UITweaks.PanelModifiers
 {
-    public class MultiplayerPositionPanelModifier : PanelModifier
+    public class MultiplayerPositionPanelModifier : PanelModifierBase
     {
 
         [Inject] protected override void Init()
