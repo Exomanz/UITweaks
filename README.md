@@ -10,7 +10,7 @@ A Beat Saber mod that aims to bring more color to the in-game HUD!
 - Multiplier ring colors, as well as an option to smoothly transition between them, and an optional rainbow animation on full 8x multiplier.
 - Energy bar colors corresponding to your current energy, and an optional rainbow animation on full.
 - Combo FC line colors, including optional gradient lines.
-- Progress bar colors for the current song time, background, and slider knob. There also exists an option to smoothly transition between two colors as the song progresses.
+- Colors for the progress bar, background, and slider knob. There also exists an option to smoothly transition between two colors as the song progresses.
 - (IN-DEV) Multiplayer player position panel colors for each position, an option to hide the first place animation, and an option for the static panel to use a static color.
 - And so much more!
 
