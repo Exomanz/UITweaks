@@ -10,6 +10,11 @@ namespace UITweaks.Config
         [Ignore] public override bool Enabled { get; set; } = true;
 
         /// <summary>
+        /// Controls the speed of the rainbow effect globally.
+        /// </summary>
+        public virtual float GlobalRainbowSpeed { get; set; } = 0.5f;
+
+        /// <summary>
         /// If set to <see langword="true"/>, the "Combo" text and number will be re-italicized.
         /// </summary>
         public virtual bool ItalicizeComboPanel { get; set; } = false;

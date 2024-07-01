@@ -1,5 +1,6 @@
 ﻿using SiraUtil.Logging;
 using System;
+using UITweaks.Config;
 using UnityEngine;
 using Zenject;
 
@@ -7,6 +8,7 @@ namespace UITweaks.Models
 {
     public abstract class PanelModifierBase : MonoBehaviour
     {
+        [Inject] private readonly MiscConfig miscConfig;
         [Inject] protected readonly SiraLog logger = null!;
         [Inject] protected readonly CoreGameHUDController gameHUDController;
 
@@ -35,15 +37,15 @@ namespace UITweaks.Models
         public void LateUpdate()
         {
             RainbowColor = new HSBColor(
-                Mathf.PingPong(Time.time * 0.5f, 1),
+                Mathf.PingPong(Time.time * miscConfig.GlobalRainbowSpeed, 1),
                 1,
                 1).ToColor();
         }
 
         protected virtual void OnDestroy()
         {
-            this.parentPanel = null!;
-            this.config = null!;
+            this.parentPanel = null;
+            this.config = null;
         }
     }
 }
