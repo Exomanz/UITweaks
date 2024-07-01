@@ -23,10 +23,10 @@ namespace UITweaks.Installers
             if (config.Progress.Enabled) 
                 BindPanelModifier<SongProgressPanelModifier>();
 
-            BindPanelModifier<LegacyPanelModifier>();
+            BindPanelModifier<ExtraPanelModifiers>();
 
             if (Plugin.APRIL_FOOLS && config.AllowAprilFools)
-                Container.Bind<LegacyPanelModifier.AprilFools>().FromNewComponentOn(new GameObject("UITweaks-AprilFoolsController")).AsSingle().NonLazy();
+                Container.Bind<ExtraPanelModifiers.AprilFools>().FromNewComponentOn(new GameObject("UITweaks-AprilFoolsController")).AsSingle().NonLazy();
         }
 
         /// <summary>
