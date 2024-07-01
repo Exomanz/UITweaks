@@ -9,12 +9,12 @@ namespace UITweaks.PanelModifiers
     public class ScoreMultiplierPanelModifier : PanelModifierBase
     {
         [Inject] private readonly MultiplierConfig multiplierConfig;
-        [Inject] private IScoreController scoreController;
+        [Inject] private readonly IScoreController scoreController;
 
         private ScoreMultiplierUIController scoreMultiplierUIController;
         private int currentMultiplier = 0;
-        private Image bg = null!;
-        private Image fg = null!;
+        private Image bg;
+        private Image fg;
 
         [Inject] protected override void Init()
         {
@@ -114,11 +114,7 @@ namespace UITweaks.PanelModifiers
 
             if (currentMultiplier == 8 && multiplierConfig.RainbowOnMaxMultiplier)
             {
-                bg.color = new HSBColor(
-                    Mathf.PingPong(Time.time * 0.5f, 1), 
-                    1, 
-                    1)
-                    .ToColor();
+                bg.color = base.RainbowColor;
             }
         }
 

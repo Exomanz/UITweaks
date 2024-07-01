@@ -93,11 +93,7 @@ namespace UITweaks.PanelModifiers
             if (energyConfig.RainbowOnFullEnergy)
             {
                 if (gameplayModifiers.instaFail || (gameEnergyCounter.energy == 1 && gameplayModifiers.energyType == GameplayModifiers.EnergyType.Bar))
-                    energyBar.color = new HSBColor(
-                        Mathf.PingPong(Time.time * 0.5f, 1), 
-                        1,
-                        1)
-                        .ToColor();
+                    energyBar.color = base.RainbowColor;
             }
         }
 

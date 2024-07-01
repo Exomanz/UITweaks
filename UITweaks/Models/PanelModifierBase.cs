@@ -10,6 +10,7 @@ namespace UITweaks.Models
         [Inject] protected readonly SiraLog logger = null!;
         [Inject] protected readonly CoreGameHUDController gameHUDController;
 
+        public Color RainbowColor { get; private set; } = Color.white;
         public UITweaksConfigBase config = null;
         public GameObject parentPanel = null;
 
@@ -29,6 +30,14 @@ namespace UITweaks.Models
             {
                 logger.Error(ex);
             }
+        }
+
+        public void LateUpdate()
+        {
+            RainbowColor = new HSBColor(
+                Mathf.PingPong(Time.time * 0.5f, 1),
+                1,
+                1).ToColor();
         }
 
         protected virtual void OnDestroy()
