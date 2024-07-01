@@ -18,8 +18,8 @@ namespace UITweaks.PanelModifiers
 
         [Inject] protected override void Init()
         {
-            logger.Debug("ScoreMultiplierPanelModifier::Init()");
-            this.scoreMultiplierUIController = base.gameHUDController.GetComponentInChildren<ScoreMultiplierUIController>();
+            base.logger.Debug("ScoreMultiplierPanelModifier::Init()");
+            scoreMultiplierUIController = base.gameHUDController.GetComponentInChildren<ScoreMultiplierUIController>();
 
             base.parentPanel = scoreMultiplierUIController.gameObject;
             base.config = multiplierConfig;
@@ -114,18 +114,18 @@ namespace UITweaks.PanelModifiers
 
             if (currentMultiplier == 8 && multiplierConfig.RainbowOnMaxMultiplier)
             {
-                bg.color = HSBColor.ToColor(new HSBColor(Mathf.PingPong(Time.time * 0.5f, 1), 1, 1));
+                bg.color = new HSBColor(
+                    Mathf.PingPong(Time.time * 0.5f, 1), 
+                    1, 
+                    1)
+                    .ToColor();
             }
         }
 
         protected override void OnDestroy()
         {
             base.OnDestroy();
-
             scoreController.multiplierDidChangeEvent -= HandleMultiplierDidChange;
-            scoreController = null!;
-            bg = null!;
-            fg = null!;            
         }
     }
 }

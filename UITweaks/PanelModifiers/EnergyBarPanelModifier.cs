@@ -1,5 +1,4 @@
 ﻿using HMUI;
-using IPA.Utilities;
 using System.Collections;
 using System.Collections.Generic;
 using UITweaks.Config;
@@ -21,8 +20,8 @@ namespace UITweaks.PanelModifiers
 
         [Inject] protected override void Init()
         {
-            logger.Debug("EnergyBarPanelModifier::Init()");
-            this.gameEnergyUIPanel = base.gameHUDController.GetComponentInChildren<GameEnergyUIPanel>();
+            base.logger.Debug("EnergyBarPanelModifier::Init()");
+            gameEnergyUIPanel = base.gameHUDController.GetComponentInChildren<GameEnergyUIPanel>();
 
             base.parentPanel = gameEnergyUIPanel.gameObject;
             base.config = energyConfig;
@@ -89,12 +88,16 @@ namespace UITweaks.PanelModifiers
 
         public void Update()
         {
-            if (!energyBar) return;
+            if (!gameEnergyUIPanel.isActiveAndEnabled) return;
 
             if (energyConfig.RainbowOnFullEnergy)
             {
                 if (gameplayModifiers.instaFail || (gameEnergyCounter.energy == 1 && gameplayModifiers.energyType == GameplayModifiers.EnergyType.Bar))
-                    energyBar.color = HSBColor.ToColor(new HSBColor(Mathf.PingPong(Time.time * 0.5f, 1), 1, 1));
+                    energyBar.color = new HSBColor(
+                        Mathf.PingPong(Time.time * 0.5f, 1), 
+                        1,
+                        1)
+                        .ToColor();
             }
         }
 

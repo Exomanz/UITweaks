@@ -13,8 +13,8 @@ namespace UITweaks.PanelModifiers
 
         [Inject] protected override void Init()
         {
-            base.logger.Debug("ComboModifier::Init()");
-            this.comboUIController = base.gameHUDController.GetComponentInChildren<ComboUIController>();
+            logger.Debug("ComboModifier::Init()");
+            comboUIController = base.gameHUDController.GetComponentInChildren<ComboUIController>();
 
             base.parentPanel = comboUIController.gameObject;
             base.config = comboConfig;
@@ -25,8 +25,8 @@ namespace UITweaks.PanelModifiers
 
         protected override void ModPanel()
         {
-            ImageView[] fcLines;
             base.ModPanel();
+            ImageView[] fcLines;
 
             if (comboUIController.isActiveAndEnabled)
             {

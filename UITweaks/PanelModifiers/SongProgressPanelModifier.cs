@@ -18,14 +18,13 @@ namespace UITweaks.PanelModifiers
 
         [Inject] protected override void Init()
         {
-            logger.Debug("SongProgressPanelModifier::Init()");
-            this.songProgressUIController = base.gameHUDController.GetComponentInChildren<SongProgressUIController>();
+            base.logger.Debug("SongProgressPanelModifier::Init()");
+            songProgressUIController = base.gameHUDController.GetComponentInChildren<SongProgressUIController>();
 
             base.parentPanel = songProgressUIController.gameObject;
             base.config = progressConfig;
 
             this.transform.SetParent(parentPanel?.transform);
-
             this.ModPanel();
         }
 
@@ -57,7 +56,7 @@ namespace UITweaks.PanelModifiers
             barComponents[2].color = progressConfig.Handle;
         }
 
-        private void Update()
+        public void Update()
         {
             if (!canBeUsed) return;
 
@@ -71,10 +70,6 @@ namespace UITweaks.PanelModifiers
             }
         }
 
-        protected override void OnDestroy()
-        {
-            base.OnDestroy();
-            barComponents = null!;
-        }
+        protected override void OnDestroy() => base.OnDestroy();
     }
 }
