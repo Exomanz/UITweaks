@@ -4,14 +4,13 @@
     using Heck.SettingsSetter;
     using System;
     using System.Collections.Generic;
-    using System.Linq;
     using System.Reflection;
     using UITweaks.Models;
 
     // Shoutout to Caeden117's Counters+ for providing a good example on how to register SettableSettings to Heck
     internal class UITweaksSettableSettings : IDisposable
     {
-        public static bool hasRunBefore { get; private set; } = false;
+        public static bool HasRunBefore { get; private set; } = false;
 
         private const string groupIdentifier = "_uiTweaks";
 
@@ -19,15 +18,14 @@
 
         private static List<ISettableSetting> settableSettings = new List<ISettableSetting>();
 
-        public UITweaksSettableSettings(List<ConfigBase> configs)
+        public UITweaksSettableSettings(List<UITweaksConfigBase> configs)
         {
-            if (hasRunBefore) return;
-            hasRunBefore = true;
+            if (HasRunBefore) return;
+            HasRunBefore = true;
 
             Type settableSettingsType = typeof(UITweaksSettingsWrapper);
 
-            // Remove MiscConfig since it's Enabled property is ignored.
-            configs.Remove(configs.Last());
+            configs.Remove(configs.Find((c) => c.GetType().Name == "MiscConfig"));
 
             foreach (var conf in configs)
             {
