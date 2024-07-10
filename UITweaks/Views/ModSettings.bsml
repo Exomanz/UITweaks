@@ -16,7 +16,7 @@ smoothly transition between each of the colors below as your multiplier increase
 				<color-setting text='1x Color' value='color-1x' apply-on-change='true' interactable='~multiplier-enabled'/>
 				<color-setting text='2x Color' value='color-2x' apply-on-change='true' interactable='~multiplier-enabled'/>
 				<color-setting text='4x Color' value='color-4x' apply-on-change='true' interactable='~multiplier-enabled'/>
-				<color-setting text='8x Color' value='color-8x' apply-on-change='true' interactable='~multiplier-enabled' active='~invert-rainbow'/>
+				<color-setting text='8x Color' value='color-8x' apply-on-change='true' interactable='~multiplier-enabled' active='~invert-rainbow-8x'/>
 			</modifier-container>
 		</tab>
 
@@ -88,9 +88,9 @@ one color to another as the song progresses.'/>
 			<modifier-container child-expand-width='true' horizontal-fit='PreferredSize'>
 				<vertical vertical-fit='PreferredSize' spacing='3'>
 					<vertical vertical-fit='PreferredSize'>
-						<checkbox text='Restore Combo Panel Italics' value='legacy-combo-panel' apply-on-change='true'/>
-						<checkbox text='Restore Score Italics' value='legacy-score-panel' apply-on-change='true'/>
-						<checkbox text='Restore Immediate Rank Italics' value='legacy-rank-panel' apply-on-change='true'/>
+						<slider-setting id='rainbowspeed-slider' text='Rainbow Speed' min='0.1' max='1' increment='0.1'/>
+						<checkbox text='Italicize Combo Panel' value='combo-panel-italics' apply-on-change='true'/>
+						<checkbox text='Italicize Score Panel' value='score-panel-italics' apply-on-change='true'/>
 						<macro.if value='fools-toggle-check'>
 							<checkbox text='Allow April Fools' value='allow-april-fools' apply-on-change='true'/>
 						</macro.if>

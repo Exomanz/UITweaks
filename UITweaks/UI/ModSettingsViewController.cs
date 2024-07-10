@@ -79,8 +79,9 @@ namespace UITweaks.UI
 
         public void RaiseTabEvent(int raiseWithTab = 0) => TabWasChangedEvent.Invoke(raiseWithTab == SelectedTab ? SelectedTab : raiseWithTab);
 
+#pragma warning disable IDE0051
         #region Notifiable Properties
-        [UIValue("invert-rainbow")] private bool _RainbowToggle => !RainbowAnimationOnMax;
+        [UIValue("invert-rainbow-8x")] private bool _RainbowToggle => !RainbowAnimationOnMax;
 
         [UIValue("invert-mbl")] private bool _MirrorBottomLineToggle => !MirrorOnBottom;
 
@@ -393,5 +394,6 @@ namespace UITweaks.UI
             set => pluginConfig.AllowAprilFools = value;
         }
         #endregion
+#pragma warning restore
     }
 }

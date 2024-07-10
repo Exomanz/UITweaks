@@ -15,27 +15,27 @@ namespace UITweaks.Config
         public virtual float GlobalRainbowSpeed { get; set; } = 0.5f;
 
         /// <summary>
-        /// If set to <see langword="true"/>, the "Combo" text and number will be re-italicized.
+        /// If set to <see langword="true"/>, the "Combo" text and number will be italicized.
         /// </summary>
         public virtual bool ItalicizeComboPanel { get; set; } = false;
 
         /// <summary>
-        /// If set to <see langword="true"/>, the score will be re-italicized.
+        /// If set to <see langword="true"/>, the score will be italicized.
         /// </summary>
         public virtual bool ItalicizeScore { get; set; } = false;
 
         /// <summary>
-        /// If set to <see langword="true"/>, the immediate rank panel will be re-italicized.
+        /// If set to <see langword="true"/>, the immediate rank panel will be italicized.
         /// </summary>
         public virtual bool ItalicizeImmediateRank { get; set; } = false;
 
         /// <summary>
-        /// If set to true, <see langword="true"/>, the rank text (SS, A, etc) will be colored.
+        /// If set to true, <see langword="true"/>, the rank text (SS, A, etc.) will be colored.
         /// </summary>
         public virtual bool AllowRankColoring { get; set; } = true;
 
         /// <summary>
-        /// If set to <see langword="true"/>, controls the rainbow effect of the rank text when maintaining an "SS" rank.
+        /// If set to <see langword="true"/>, enables the rainbow effect of the rank text while maintaining an "SS" rank.
         /// </summary>
         public virtual bool RainbowOnSSRank { get; set; } = false;
 

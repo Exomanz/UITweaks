@@ -1,6 +1,7 @@
 ﻿using SiraUtil.Logging;
 using System;
-using UITweaks.Config;
+using System.Runtime.CompilerServices;
+using UITweaks.Utilities;
 using UnityEngine;
 using Zenject;
 
@@ -9,12 +10,12 @@ namespace UITweaks.Models
     public abstract class PanelModifierBase : MonoBehaviour
     {
         [Inject] private readonly RainbowEffectManager rainbowEffectManager;
-        [Inject] protected readonly SiraLog logger = null!;
+        [Inject] protected readonly SiraLog logger;
         [Inject] protected readonly CoreGameHUDController gameHUDController;
 
         public Color RainbowColor { get; private set; }
-        public UITweaksConfigBase config = null;
-        public GameObject parentPanel = null;
+        public UITweaksConfigBase config;
+        public GameObject parentPanel;
 
         [Inject] protected virtual void Init([CallerMemberName] string caller = "PanelModifierBase")
         {
