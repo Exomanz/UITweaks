@@ -192,7 +192,7 @@ namespace UITweaks.UI
                     host.ProgressPanel.SetActive(false);
                     host.ImmediateRankPanel.SetActive(false);
 
-                    //numText.text = rand.Next(0, 250).ToString();
+                    numText.text = rand.Next(0, 250).ToString();
                     host.ComboPanel.transform.localPosition = Vector3.zero;
                     break;
                 case 3:
@@ -209,9 +209,10 @@ namespace UITweaks.UI
                     host.ProgressPanel.SetActive(false);
                     host.ImmediateRankPanel.SetActive(true);
 
-                    //rank = Utilities.Utilities.RandomDecimal(100, 1);
-                    //percentText.text = rank.ToString() + "%";
-                    //numText.text = rand.Next(0, 250).ToString();
+                    rank = Utilities.Utilities.RandomDecimal(100, 1);
+                    percentText.text = rank.ToString() + "%";
+                    numText.text = rand.Next(0, 250).ToString();
+                    scoreText.text = rand.Next(0, 999999).ToString();
 
                     host.ComboPanel.transform.localPosition = new Vector3(-0.75f, 0, 0);
                     break;

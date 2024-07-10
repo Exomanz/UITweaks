@@ -44,6 +44,7 @@ namespace UITweaks.Utilities
                 ComboPanel = FinalizePanel(panelControllers[2]);
                 ProgressPanel = FinalizePanel(panelControllers[3]);
                 ImmediateRankPanel = FinalizePanel(panelControllers[4]);
+                GameObject.Destroy(ImmediateRankPanel.transform.Find("ScoreText").GetComponent<ScoreUIController>());
 
                 MultiplierPanel.name = "Preview_MultiplierPanel";
                 EnergyPanel.name = "Preview_EnergyPanel";
@@ -65,7 +66,6 @@ namespace UITweaks.Utilities
 
         private GameObject FinalizePanel(MonoBehaviour controller)
         {
-            logger.Debug("Finalizing Preview Panel : " + controller.name);
             try
             {
                 GameObject go = Instantiate(controller.gameObject);
