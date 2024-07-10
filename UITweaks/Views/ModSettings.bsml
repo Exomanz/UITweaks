@@ -91,13 +91,37 @@ one color to another as the song progresses.'/>
 						<slider-setting id='rainbowspeed-slider' text='Rainbow Speed' min='0.1' max='1' increment='0.1'/>
 						<checkbox text='Italicize Combo Panel' value='combo-panel-italics' apply-on-change='true'/>
 						<checkbox text='Italicize Score Panel' value='score-panel-italics' apply-on-change='true'/>
+						<checkbox text='Italicize Immediate Rank' value='rank-panel-italics' apply-on-change='true'/>
 						<macro.if value='fools-toggle-check'>
 							<checkbox text='Allow April Fools' value='allow-april-fools' apply-on-change='true'/>
 						</macro.if>
+						<text text='Set Rank Letter'/>
 						<button text='Modify Rank Colors' click-event='open-rank-settings'/>
-						<modal show-event='open-rank-settings' hide-event='hide' click-off-closes='true' move-to-center='true' size-delta-x='50' size-delta-y='60'>
-
+						<modal show-event='open-rank-settings' hide-event='hide-all-modals' click-off-closes='true' move-to-center='true' size-delta-x='60' size-delta-y='80'>
+							<vertical horizontal-fit='PreferredSize' pref-width='45' vertical-fit='PreferredSize' pref-height='70'>
+								<checkbox text='Allow Rank Coloring' value='allow-rank-colors' apply-on-change='true'/>
+								<checkbox text='Rainbow on SS' value='rainbow-on-ss-rank' apply-on-change='true' interactable='~allow-rank-colors'/>
+								<color-setting text='SS' value='rank-ss-color' apply-on-change='true' interactable='~allow-rank-colors' active='~invert-rainbow-ss'/>
+								<color-setting text='S' value='rank-s-color' apply-on-change='true' interactable='~allow-rank-colors'/>
+								<color-setting text='A' value='rank-a-color' apply-on-change='true' interactable='~allow-rank-colors'/>
+								<color-setting text='B' value='rank-b-color' apply-on-change='true' interactable='~allow-rank-colors'/>
+								<color-setting text='C' value='rank-c-color' apply-on-change='true' interactable='~allow-rank-colors'/>
+								<color-setting text='D' value='rank-d-color' apply-on-change='true' interactable='~allow-rank-colors'/>
+								<color-setting text='E' value='rank-e-color' apply-on-change='true' interactable='~allow-rank-colors'/>
+								<horizontal align='bottom'>
+									<button text='Close' click-event='hide-all-modals'/>
+								</horizontal>
+							</vertical>
 						</modal>
+						<horizontal>
+							<button text='SS' on-click='switch-rank-text.ss'/>
+							<button text='S' on-click='switch-rank-text.s'/>
+							<button text='A' on-click='switch-rank-text.a'/>
+							<button text='B' on-click='switch-rank-text.b'/>
+							<button text='C' on-click='switch-rank-text.c'/>
+							<button text='D' on-click='switch-rank-text.d'/>
+							<button text='E' on-click='switch-rank-text.e'/>
+						</horizontal>
 					</vertical>
 				</vertical>
 			</modifier-container>

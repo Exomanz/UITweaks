@@ -1,4 +1,5 @@
 ﻿using BeatSaberMarkupLanguage.Attributes;
+using BeatSaberMarkupLanguage.Components.Settings;
 using BeatSaberMarkupLanguage.ViewControllers;
 using HMUI;
 using System;
@@ -24,6 +25,9 @@ namespace UITweaks.UI
         [Inject] private readonly MiscConfig miscConfig;
 
         [UIValue("fools-toggle-check")] private bool _aprilFoolsToggle => Plugin.APRIL_FOOLS;
+        [UIComponent("rainbowspeed-slider")] public SliderSetting rainbowSpeedSetting;
+
+        public event Action<string> RankShouldBeUpdatedEvent = delegate { };
         public event Action<int> TabWasChangedEvent = delegate { };
         private int selectedTab = 0;
         private float energyBarFillAmount = 0.01f;
@@ -62,7 +66,17 @@ namespace UITweaks.UI
         protected override void DidActivate(bool firstActivation, bool addedToHierarchy, bool screenSystemEnabling)
         {
             base.DidActivate(firstActivation, addedToHierarchy, screenSystemEnabling);
+            if (firstActivation && rainbowSpeedSetting != null)
+            {
+                rainbowSpeedSetting.slider.valueDidChangeEvent += HandleRainbowSliderValueChanged;
+            }
             TabWasChangedEvent.Invoke(SelectedTab);
+        }
+
+        protected override void DidDeactivate(bool removedFromHierarchy, bool screenSystemDisabling)
+        {
+            base.DidDeactivate(removedFromHierarchy, screenSystemDisabling);
+            rainbowSpeedSetting.slider.valueDidChangeEvent -= HandleRainbowSliderValueChanged;
         }
 
         [UIAction("update-tab")] internal void UpdateTab(SegmentedControl _, int tab)
@@ -77,6 +91,38 @@ namespace UITweaks.UI
         [UIAction("update-progress-preview")] 
         internal void UpdateProgressPreview(float time) => ProgressBarFillAmount = time;
 
+        [UIAction("switch-rank-text.ss")]
+        internal void SwitchRankText_SS() => HandleRankTextChangeRequest("SS");
+
+        [UIAction("switch-rank-text.s")]
+        internal void SwitchRankText_S() => HandleRankTextChangeRequest("S");
+
+        [UIAction("switch-rank-text.a")]
+        internal void SwitchRankText_A() => HandleRankTextChangeRequest("A");
+
+        [UIAction("switch-rank-text.b")]
+        internal void SwitchRankText_B() => HandleRankTextChangeRequest("B");
+
+        [UIAction("switch-rank-text.c")]
+        internal void SwitchRankText_C() => HandleRankTextChangeRequest("C");
+
+        [UIAction("switch-rank-text.d")]
+        internal void SwitchRankText_D() => HandleRankTextChangeRequest("D");
+
+        [UIAction("switch-rank-text.e")]
+        internal void SwitchRankText_E() => HandleRankTextChangeRequest("E");
+
+        private void HandleRankTextChangeRequest(string rankString)
+        {
+            this.RankShouldBeUpdatedEvent.Invoke(rankString);
+        }
+
+        private void HandleRainbowSliderValueChanged(RangeValuesTextSlider _, float value)
+        {
+            if (RainbowSpeed != value)
+                RainbowSpeed = value;
+        }
+
         public void RaiseTabEvent(int raiseWithTab = 0) => TabWasChangedEvent.Invoke(raiseWithTab == SelectedTab ? SelectedTab : raiseWithTab);
 
 #pragma warning disable IDE0051
@@ -90,6 +136,8 @@ namespace UITweaks.UI
         [UIValue("complex")] private bool _Complex { get => ComboEnabled && GradientEnabled; }
 
         [UIValue("invert-ufdt")] private bool _FadeDisplayToggle => !UseFadeDisplayType;
+
+        [UIValue("invert-rainbow-ss")] private bool _InvertRainbowSS => !RainbowOnSSRank;
         #endregion
 
         #region Multiplier Config
@@ -370,19 +418,25 @@ namespace UITweaks.UI
         #endregion
 
         #region Miscellaneous Config
-        [UIValue("legacy-combo-panel")] private bool ComboPanelItalics
+        [UIValue("rainbow-speed")] private float RainbowSpeed
+        {
+            get => miscConfig.GlobalRainbowSpeed;
+            set => miscConfig.GlobalRainbowSpeed = value;
+        }
+
+        [UIValue("combo-panel-italics")] private bool ComboPanelItalics
         {
             get => miscConfig.ItalicizeComboPanel;
             set => miscConfig.ItalicizeComboPanel = value;
         }
 
-        [UIValue("legacy-score-panel")] private bool ScorePanelItalics
+        [UIValue("score-panel-italics")] private bool ScorePanelItalics
         {
             get => miscConfig.ItalicizeScore;
             set => miscConfig.ItalicizeScore = value;
         }
 
-        [UIValue("legacy-rank-panel")] private bool RankPanelItalics
+        [UIValue("rank-panel-italics")] private bool RankPanelItalics
         {
             get => miscConfig.ItalicizeImmediateRank;
             set => miscConfig.ItalicizeImmediateRank = value;
@@ -392,6 +446,69 @@ namespace UITweaks.UI
         {
             get => pluginConfig.AllowAprilFools;
             set => pluginConfig.AllowAprilFools = value;
+        }
+
+        [UIValue("allow-rank-colors")] private bool AllowRankColors
+        {
+            get => miscConfig.AllowRankColoring;
+            set 
+            { 
+                miscConfig.AllowRankColoring = value;
+                NotifyPropertyChanged();
+            }
+        }
+
+        [UIValue("rainbow-on-ss-rank")] private bool RainbowOnSSRank
+        {
+            get => miscConfig.RainbowOnSSRank; 
+            set
+            { 
+                miscConfig.RainbowOnSSRank = value;
+                NotifyPropertyChanged(nameof(_InvertRainbowSS));
+                NotifyPropertyChanged();
+            }
+        }
+
+        [UIValue("rank-ss-color")] private Color RankSSColor
+        {
+            get => miscConfig.RankSSColor;
+            set => miscConfig.RankSSColor = value;
+        }
+
+        [UIValue("rank-s-color")] private Color RankSColor
+        {
+            get => miscConfig.RankSColor;
+            set => miscConfig.RankSColor = value;
+        }
+
+        [UIValue("rank-a-color")] private Color RankAColor
+        {
+            get => miscConfig.RankAColor;
+            set => miscConfig.RankAColor = value;
+        }
+
+        [UIValue("rank-b-color")] private Color RankBColor
+        {
+            get => miscConfig.RankBColor;
+            set => miscConfig.RankBColor = value;
+        }
+
+        [UIValue("rank-c-color")] private Color RankCColor
+        {
+            get => miscConfig.RankCColor;
+            set => miscConfig.RankCColor = value;
+        }
+
+        [UIValue("rank-d-color")] private Color RankDColor
+        {
+            get => miscConfig.RankDColor;
+            set => miscConfig.RankDColor = value;
+        }
+
+        [UIValue("rank-e-color")] private Color RankEColor
+        {
+            get => miscConfig.RankEColor;
+            set => miscConfig.RankEColor = value;
         }
         #endregion
 #pragma warning restore

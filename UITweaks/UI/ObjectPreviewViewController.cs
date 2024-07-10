@@ -4,8 +4,11 @@ using HMUI;
 using SiraUtil.Logging;
 using System;
 using System.Collections;
+using System.ComponentModel;
+using System.Drawing.Design;
 using System.Linq;
 using Tweening;
+using UITweaks.Config;
 using UITweaks.Utilities;
 using UnityEngine;
 using UnityEngine.UI;
@@ -21,12 +24,19 @@ namespace UITweaks.UI
     public class ObjectPreviewViewController : BSMLAutomaticViewController
     {
         [Inject] private readonly SettingsPanelObjectGrabber objectGrabber;
-        [Inject] private readonly PluginConfig pluginConfig;
         [Inject] private readonly ModSettingsViewController modSettingsViewController;
         [Inject] private readonly SiraLog logger;
         [Inject] private readonly TimeTweeningManager tweeningManager;
+        [Inject] private readonly RainbowEffectManager rainbowEffectManager;
 
-        private readonly Vector3 DEFAULT_POSITION = new(3.53f, 1.1f, 2.4f);
+        [Inject] private readonly ComboConfig comboConfig;
+        [Inject] private readonly EnergyConfig energyConfig;
+        [Inject] private readonly MiscConfig miscConfig;
+        [Inject] private readonly MultiplierConfig multiplierConfig;
+        //[Inject] private readonly PositionConfig positionConfig;
+        [Inject] private readonly ProgressConfig progressConfig;
+
+        private readonly Vector3 DEFAULT_POSITION = new(3.53f, 1.3f, 2.4f);
         private readonly Vector3 VOID_POSITION = new(0, -1000, 0);
 
         private bool previewToggleIsReady = false;
@@ -56,17 +66,6 @@ namespace UITweaks.UI
         private decimal rank = 0.00m;
         #endregion
 
-        [UIValue("allow-previews")] private bool AllowPreviews
-        {
-            get => pluginConfig.AllowPreviews;
-            set
-            {
-                pluginConfig.AllowPreviews = value;
-                if (!previewToggleIsReady) return; // Prevent BSML Parsing Error
-                UpdatePanelVisibility(value ? modSettingsViewController.SelectedTab : -1);
-            }
-        }
-
         protected override void DidActivate(bool firstActivation, bool addedToHierarchy, bool screenSystemEnabling)
         {
             base.DidActivate(firstActivation, addedToHierarchy, screenSystemEnabling);
@@ -80,6 +79,7 @@ namespace UITweaks.UI
 
             objectGrabber.transform.position = DEFAULT_POSITION;
             modSettingsViewController.TabWasChangedEvent += UpdatePanelVisibility;
+            modSettingsViewController.RankShouldBeUpdatedEvent += HandleRankLetterRequest;
             this.StartCoroutine(MultiplierPreviewCoroutine());
         }
 
@@ -109,8 +109,8 @@ namespace UITweaks.UI
                     multiplierText = multiplierPanel.GetComponentsInChildren<CurvedTextMeshPro>().Last();
                     multiplierCircles = multiplierPanel.transform.GetComponentsInChildren<Image>();
 
-                    multiplierCircles[1].color = pluginConfig.Multiplier.One;
-                    multiplierCircles[0].color = pluginConfig.Multiplier.One.ColorWithAlpha(0.25f);
+                    multiplierCircles[1].color = multiplierConfig.One;
+                    multiplierCircles[0].color = multiplierConfig.One.ColorWithAlpha(0.25f);
                 }
 
                 // Energy Bar Setup
@@ -149,7 +149,7 @@ namespace UITweaks.UI
             }
 
             previewToggleIsReady = true;
-            modSettingsViewController.RaiseTabEvent(pluginConfig.AllowPreviews ? modSettingsViewController.SelectedTab : -1);
+            modSettingsViewController.RaiseTabEvent(modSettingsViewController.SelectedTab);
             yield break;
         }
 
@@ -158,16 +158,6 @@ namespace UITweaks.UI
             if (!objectGrabber.IsCompleted) return;
             SettingsPanelObjectGrabber host = objectGrabber;
             System.Random rand = new System.Random();
-
-            if (!pluginConfig.AllowPreviews)
-            {
-                host.MultiplierPanel.transform.position = VOID_POSITION;
-                host.EnergyPanel.SetActive(false);
-                host.ComboPanel.SetActive(false);
-                host.ProgressPanel.SetActive(false);
-                host.ImmediateRankPanel.SetActive(false);
-                return;
-            }
 
             switch (tab)
             {
@@ -222,7 +212,7 @@ namespace UITweaks.UI
             }
         }
 
-        internal void Update()
+        public void Update()
         {
             if (!objectGrabber.IsCompleted) return;
 
@@ -230,14 +220,15 @@ namespace UITweaks.UI
             switch (tab)
             {
                 case 0:
-                    if (previewCoroOn8x && pluginConfig.Multiplier.RainbowOnMaxMultiplier)
+                    if (previewCoroOn8x && multiplierConfig.RainbowOnMaxMultiplier)
                         multiplierCircles[0].color = rainbowEffectManager.Rainbow;
                     break;
                 case 1:
-                    if (fillAmount == 1 && pluginConfig.Energy.RainbowOnFullEnergy)
+                    if (fillAmount == 1 && energyConfig.RainbowOnFullEnergy)
                         energyBar.color = rainbowEffectManager.Rainbow;
-                    else if (!pluginConfig.Energy.RainbowOnFullEnergy)
-                        energyBar.color = pluginConfig.Energy.High; // Not sure why it won't work in the updater method, so I have to set it here.
+                    else if (!energyConfig.RainbowOnFullEnergy)
+                        energyBar.color = energyConfig.High; 
+
                     UpdateEnergyBar(modSettingsViewController.EnergyBarFillAmount);
                     break;
                 case 2:
@@ -261,31 +252,31 @@ namespace UITweaks.UI
         {
             yield return new WaitUntil(() => previewToggleIsReady);
             previewCoroOn8x = false;
-            multiplierCircles[1].fillAmount = 0.5f;
             
-            // Eventually Add "Smooth Transition" Preview
-            if (!pluginConfig.Multiplier.SmoothTransition)
+            if (!multiplierConfig.SmoothTransition)
             {
-                multiplierCircles[0].color = pluginConfig.Multiplier.One.ColorWithAlpha(0.25f);
-                multiplierCircles[1].color = pluginConfig.Multiplier.One;
+                multiplierCircles[1].fillAmount = 0.5f;
+
+                multiplierCircles[0].color = multiplierConfig.One.ColorWithAlpha(0.25f);
+                multiplierCircles[1].color = multiplierConfig.One;
                 multiplierText.text = "1";
                 yield return new WaitForSecondsRealtime(1);
 
-                multiplierCircles[0].color = pluginConfig.Multiplier.Two.ColorWithAlpha(0.25f);
-                multiplierCircles[1].color = pluginConfig.Multiplier.Two;
+                multiplierCircles[0].color = multiplierConfig.Two.ColorWithAlpha(0.25f);
+                multiplierCircles[1].color = multiplierConfig.Two;
                 multiplierText.text = "2";
                 yield return new WaitForSecondsRealtime(1);
 
-                multiplierCircles[0].color = pluginConfig.Multiplier.Four.ColorWithAlpha(0.25f);
-                multiplierCircles[1].color = pluginConfig.Multiplier.Four;
+                multiplierCircles[0].color = multiplierConfig.Four.ColorWithAlpha(0.25f);
+                multiplierCircles[1].color = multiplierConfig.Four;
                 multiplierText.text = "4";
                 yield return new WaitForSecondsRealtime(1);
 
                 previewCoroOn8x = true;
                 multiplierText.text = "8";
                 multiplierCircles[1].fillAmount = 0;
-                if (!pluginConfig.Multiplier.RainbowOnMaxMultiplier)
-                    multiplierCircles[0].color = pluginConfig.Multiplier.Eight.ColorWithAlpha(0.25f);
+                if (!multiplierConfig.RainbowOnMaxMultiplier)
+                    multiplierCircles[0].color = multiplierConfig.Eight.ColorWithAlpha(0.25f);
                 else { /* The rainbow effect is controlled outside of this method body */ }
 
                 yield return new WaitForSecondsRealtime(1);
@@ -296,8 +287,8 @@ namespace UITweaks.UI
                 tweeningManager.AddTween(new FloatTween(0, 1, (float time) =>
                 {
                     Color frame = HSBColor.Lerp(
-                        HSBColor.FromColor(pluginConfig.Multiplier.One),
-                        HSBColor.FromColor(pluginConfig.Multiplier.Two), time)
+                        HSBColor.FromColor(multiplierConfig.One),
+                        HSBColor.FromColor(multiplierConfig.Two), time)
                         .ToColor();
 
                     multiplierCircles[1].fillAmount = time;
@@ -311,8 +302,8 @@ namespace UITweaks.UI
                 tweeningManager.AddTween(new FloatTween(0, 1, (float time) =>
                 {
                     Color frame = HSBColor.Lerp(
-                        HSBColor.FromColor(pluginConfig.Multiplier.Two),
-                        HSBColor.FromColor(pluginConfig.Multiplier.Four), time)
+                        HSBColor.FromColor(multiplierConfig.Two),
+                        HSBColor.FromColor(multiplierConfig.Four), time)
                         .ToColor();
 
                     multiplierCircles[1].fillAmount = time;
@@ -326,8 +317,8 @@ namespace UITweaks.UI
                 tweeningManager.AddTween(new FloatTween(0, 1, (float time) =>
                 {
                     Color frame = HSBColor.Lerp(
-                        HSBColor.FromColor(pluginConfig.Multiplier.Four),
-                        HSBColor.FromColor(pluginConfig.Multiplier.Eight), time)
+                        HSBColor.FromColor(multiplierConfig.Four),
+                        HSBColor.FromColor(multiplierConfig.Eight), time)
                         .ToColor();
 
                     multiplierCircles[1].fillAmount = time;
@@ -342,8 +333,8 @@ namespace UITweaks.UI
                 previewCoroOn8x = true;
                 multiplierText.text = "8";
                 multiplierCircles[1].fillAmount = 0;
-                if (!pluginConfig.Multiplier.RainbowOnMaxMultiplier)
-                    multiplierCircles[0].color = pluginConfig.Multiplier.Eight.ColorWithAlpha(0.25f);
+                if (!multiplierConfig.RainbowOnMaxMultiplier)
+                    multiplierCircles[0].color = multiplierConfig.Eight.ColorWithAlpha(0.25f);
                 else { /* The rainbow effect is controlled outside of this method body */ }
 
                 yield return new WaitForSecondsRealtime(1);
@@ -357,40 +348,40 @@ namespace UITweaks.UI
             this.fillAmount = fillAmount;
             energyBar.rectTransform.anchorMax = new Vector2(fillAmount, 1);
 
-            if (fillAmount == 0.5f) energyBar.color = pluginConfig.Energy.Mid;
+            if (fillAmount == 0.5f) energyBar.color = energyConfig.Mid;
 
             else if (fillAmount > 0.5f && fillAmount < 1) energyBar.color = HSBColor.Lerp(
-                HSBColor.FromColor(pluginConfig.Energy.Mid),
-                HSBColor.FromColor(pluginConfig.Energy.High),
+                HSBColor.FromColor(energyConfig.Mid),
+                HSBColor.FromColor(energyConfig.High),
                 (fillAmount - 0.5f) * 2).ToColor();
 
             else if (fillAmount < 0.5f) energyBar.color = HSBColor.Lerp(
-                HSBColor.FromColor(pluginConfig.Energy.Low),
-                HSBColor.FromColor(pluginConfig.Energy.Mid),
+                HSBColor.FromColor(energyConfig.Low),
+                HSBColor.FromColor(energyConfig.Mid),
                 fillAmount * 2).ToColor();
         }
 
         private void UpdateComboPanel()
         {
-            if (pluginConfig.Combo.UseGradient)
+            if (comboConfig.UseGradient)
             {
                 comboLines[0].gradient = true;
                 comboLines[0].color = Color.white;
                 comboLines[1].gradient = true;
                 comboLines[1].color = Color.white;
 
-                comboLines[0].color0 = pluginConfig.Combo.TopLeft;
-                comboLines[0].color1 = pluginConfig.Combo.TopRight;
+                comboLines[0].color0 = comboConfig.TopLeft;
+                comboLines[0].color1 = comboConfig.TopRight;
 
-                if (pluginConfig.Combo.MirrorBottomLine)
+                if (comboConfig.MirrorBottomLine)
                 {
-                    comboLines[1].color0 = pluginConfig.Combo.TopRight;
-                    comboLines[1].color1 = pluginConfig.Combo.TopLeft;
+                    comboLines[1].color0 = comboConfig.TopRight;
+                    comboLines[1].color1 = comboConfig.TopLeft;
                 }
                 else
                 {
-                    comboLines[1].color0 = pluginConfig.Combo.BottomLeft;
-                    comboLines[1].color1 = pluginConfig.Combo.BottomRight;
+                    comboLines[1].color0 = comboConfig.BottomLeft;
+                    comboLines[1].color1 = comboConfig.BottomRight;
                 }
             }
             else
@@ -398,11 +389,11 @@ namespace UITweaks.UI
                 comboLines[0].gradient = false;
                 comboLines[1].gradient = false;
 
-                comboLines[0].color = pluginConfig.Combo.TopLine;
-                comboLines[1].color = pluginConfig.Combo.BottomLine;
+                comboLines[0].color = comboConfig.TopLine;
+                comboLines[1].color = comboConfig.BottomLine;
             }
 
-            if (pluginConfig.Misc.ItalicizeComboPanel)
+            if (miscConfig.ItalicizeComboPanel)
             {
                 comboText.fontStyle = TMPro.FontStyles.Italic | TMPro.FontStyles.UpperCase;
                 comboText.text = "COMBO";
@@ -419,18 +410,18 @@ namespace UITweaks.UI
 
         private void UpdateProgressBar(float time)
         {
-            progressPanelImages[1].color = pluginConfig.Progress.BG.ColorWithAlpha(0.25f);
-            progressPanelImages[2].color = pluginConfig.Progress.Handle;
+            progressPanelImages[1].color = progressConfig.BG.ColorWithAlpha(0.25f);
+            progressPanelImages[2].color = progressConfig.Handle;
 
-            if (pluginConfig.Progress.UseFadeDisplayType)
+            if (progressConfig.UseFadeDisplayType)
             {
                 var x = (time - 0.5f) * 50;
                 progressPanelImages[0].rectTransform.anchorMax = new Vector2(time, 1);
                 progressPanelImages[2].transform.localPosition = new Vector3(x, 0, 0);
 
                 progressPanelImages[0].color = HSBColor.Lerp(
-                    HSBColor.FromColor(pluginConfig.Progress.StartColor),
-                    HSBColor.FromColor(pluginConfig.Progress.EndColor),
+                    HSBColor.FromColor(progressConfig.StartColor),
+                    HSBColor.FromColor(progressConfig.EndColor),
                     time).ToColor();
             }
 
@@ -438,27 +429,15 @@ namespace UITweaks.UI
             {
                 progressPanelImages[0].rectTransform.anchorMax = new Vector2(0.5f, 1);
                 progressPanelImages[2].transform.localPosition = Vector3.zero;
-                progressPanelImages[0].color = pluginConfig.Progress.Fill;
+                progressPanelImages[0].color = progressConfig.Fill;
             }
         }
 
         private void UpdateImmediateRankPanel()
         {
-            if (rank > 90.00m)
-                rankText.text = "SS";
-            else if (rank > 80.00m)
-                rankText.text = "S";
-            else if (rank > 65.00m)
-                rankText.text = "A";
-            else if (rank > 50.00m)
-                rankText.text = "B";
-            else if (rank  > 35.00m)
-                rankText.text = "C";
-            else if (rank > 20.00m)
-                rankText.text = "D";
-            else rankText.text = "E";
+            rankText.text = ConvertRankToText(rank);
 
-            if (pluginConfig.Misc.ItalicizeScore)
+            if (miscConfig.ItalicizeScore)
             {
                 scoreText.fontStyle = TMPro.FontStyles.Italic;
                 scoreText.transform.localPosition = new Vector3(-1, 20);
@@ -469,7 +448,7 @@ namespace UITweaks.UI
                 scoreText.transform.localPosition = new Vector3(0, 20);
             }
 
-            if (pluginConfig.Misc.ItalicizeImmediateRank)
+            if (miscConfig.ItalicizeImmediateRank)
             {
                 percentText.fontStyle = TMPro.FontStyles.Italic;
                 rankText.fontStyle = TMPro.FontStyles.Italic;
@@ -481,6 +460,60 @@ namespace UITweaks.UI
                 rankText.fontStyle = TMPro.FontStyles.Normal;
                 rankText.transform.localPosition = new Vector3(0, 0.5f);
             }
+
+            if (miscConfig.AllowRankColoring)
+            {
+                rankText.color = ConvertRankToColor(rank);
+            }
+        }
+
+        public void HandleRankLetterRequest(string rankString)
+        {
+            rank = rankString switch
+            {
+                "SS" => Utilities.Utilities.RandomDecimal(90, 100, 2),
+                "S" => Utilities.Utilities.RandomDecimal(80, 89.99, 2),
+                "A" => Utilities.Utilities.RandomDecimal(65, 79.99, 2),
+                "B" => Utilities.Utilities.RandomDecimal(50, 64.99, 2),
+                "C" => Utilities.Utilities.RandomDecimal(35, 49.99, 2),
+                "D" => Utilities.Utilities.RandomDecimal(20, 34.99, 2),
+                _ => Utilities.Utilities.RandomDecimal(0, 19.99, 2)
+            };
+
+            percentText.text = rank.ToString() + "%";
+            rankText.text = rankString;
+        }
+
+        private string ConvertRankToText(decimal rank)
+        {
+            string result = rank switch
+            {
+                > 90.00m => "SS",
+                > 80.00m => "S",
+                > 65.00m => "A",
+                > 50.00m => "B",
+                > 35.00m => "C",
+                > 20.00m => "D",
+                _ => "E"
+            };
+
+            return result;
+        }
+
+        private Color ConvertRankToColor(decimal rank)
+        {
+            Color result = rank switch
+            {
+                > 90.00m => miscConfig.RankSSColor,
+                > 80.00m => miscConfig.RankSColor,
+                > 65.00m => miscConfig.RankAColor,
+                > 50.00m => miscConfig.RankBColor,
+                > 35.00m => miscConfig.RankCColor,
+                > 20.00m => miscConfig.RankDColor,
+                _ => miscConfig.RankEColor
+            };
+
+            return result;
         }
     }
 }

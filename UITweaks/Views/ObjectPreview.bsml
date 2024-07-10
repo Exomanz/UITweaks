@@ -1,14 +1,11 @@
 ﻿<bg xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' 
 	xsi:schemaLocation='https://monkeymanboy.github.io/BSML-Docs/ 
 	https://raw.githubusercontent.com/monkeymanboy/BSML-Docs/gh-pages/BSMLSchema.xsd'>
-	<vertical vertical-fit='PreferredSize' child-control-height='False' spacing='3' anchor-pos-y='30'>
+	<vertical vertical-fit='PreferredSize' child-control-height='False' spacing='3' anchor-pos-y='36'>
 		<vertical vertical-fit='PreferredSize' bg='panel-top' bg-color='#00ffffff' pad='1' pref-width='102'>
 			<vertical vertical-fit='PreferredSize' bg='panel-top' bg-color='#000000ff' pad-top='1' pref-width='100'>
-				<text text='Preview' align='Center' font-size='8' italics='True'/>
+				<text text='Panel Previewer' align='Center' font-size='8' italics='True'/>
 			</vertical>
-		</vertical>
-		<vertical vertical-fit='PreferredSize' bg='round-rect-panel' pad='1' pad-left='5' pad-right='5' pref-width='51'>
-			<checkbox text='Enable Previews' value='allow-previews' apply-on-change='True'/>
 		</vertical>
 	</vertical>
 </bg>
