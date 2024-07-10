@@ -8,11 +8,11 @@ namespace UITweaks.Models
 {
     public abstract class PanelModifierBase : MonoBehaviour
     {
-        [Inject] private readonly MiscConfig miscConfig;
+        [Inject] private readonly RainbowEffectManager rainbowEffectManager;
         [Inject] protected readonly SiraLog logger = null!;
         [Inject] protected readonly CoreGameHUDController gameHUDController;
 
-        public Color RainbowColor { get; private set; } = Color.white;
+        public Color RainbowColor { get; private set; }
         public UITweaksConfigBase config = null;
         public GameObject parentPanel = null;
 
@@ -36,10 +36,7 @@ namespace UITweaks.Models
 
         public void LateUpdate()
         {
-            RainbowColor = new HSBColor(
-                Mathf.PingPong(Time.time * miscConfig.GlobalRainbowSpeed, 1),
-                1,
-                1).ToColor();
+            RainbowColor = rainbowEffectManager.Rainbow;
         }
 
         protected virtual void OnDestroy()

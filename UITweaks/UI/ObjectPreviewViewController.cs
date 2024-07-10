@@ -230,11 +230,11 @@ namespace UITweaks.UI
             {
                 case 0:
                     if (previewCoroOn8x && pluginConfig.Multiplier.RainbowOnMaxMultiplier)
-                        multiplierCircles[0].color = new HSBColor(Mathf.PingPong(Time.time * 0.5f, 1), 1, 1).ToColor();
+                        multiplierCircles[0].color = rainbowEffectManager.Rainbow;
                     break;
                 case 1:
                     if (fillAmount == 1 && pluginConfig.Energy.RainbowOnFullEnergy)
-                        energyBar.color = new HSBColor(Mathf.PingPong(Time.time * 0.5f, 1), 1, 1).ToColor();
+                        energyBar.color = rainbowEffectManager.Rainbow;
                     else if (!pluginConfig.Energy.RainbowOnFullEnergy)
                         energyBar.color = pluginConfig.Energy.High; // Not sure why it won't work in the updater method, so I have to set it here.
                     UpdateEnergyBar(modSettingsViewController.EnergyBarFillAmount);
@@ -248,6 +248,10 @@ namespace UITweaks.UI
                 case 4:
                     UpdateComboPanel();
                     UpdateImmediateRankPanel();
+                    if (rank >= 90.00m && miscConfig.RainbowOnSSRank)
+                    {
+                        rankText.color = rainbowEffectManager.Rainbow;
+                    }
                     break;
             }
         }
