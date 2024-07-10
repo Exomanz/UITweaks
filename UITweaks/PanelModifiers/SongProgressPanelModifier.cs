@@ -16,9 +16,9 @@ namespace UITweaks.PanelModifiers
         private List<ImageView> barComponents = new List<ImageView>();
         private bool canBeUsed = true;
 
-        [Inject] protected override void Init()
+        [Inject] protected override void Init(string _)
         {
-            base.logger.Debug("SongProgressPanelModifier::Init()");
+            base.Init();
             songProgressUIController = base.gameHUDController.GetComponentInChildren<SongProgressUIController>();
 
             base.parentPanel = songProgressUIController.gameObject;

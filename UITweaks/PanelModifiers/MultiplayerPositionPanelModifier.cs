@@ -6,8 +6,9 @@ namespace UITweaks.PanelModifiers
     public class MultiplayerPositionPanelModifier : PanelModifierBase
     {
 
-        [Inject] protected override void Init()
+        [Inject] protected override void Init(string _)
         {
+            base.Init();
         }
 
         protected override void ModPanel()

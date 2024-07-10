@@ -44,9 +44,9 @@ namespace UITweaks.PanelModifiers
         private ImmediateRankUIPanel immediateRankUIPanel;
         private TextMeshProUGUI rankText;
 
-        [Inject] protected override void Init()
+        [Inject] protected override void Init(string _)
         {
-            logger.Debug("ExtraPanelModifiers::Init()");
+            base.Init();
             comboUIController = base.gameHUDController.GetComponentInChildren<ComboUIController>();
             immediateRankUIPanel = base.gameHUDController.GetComponentInChildren<ImmediateRankUIPanel>();
 
@@ -86,8 +86,7 @@ namespace UITweaks.PanelModifiers
                 rankText.fontStyle = FontStyles.Italic;
                 rankText.transform.localPosition = new Vector3(-3, -0.5f);
 
-                var relativeScoreText = immediateRankUIPanel._relativeScoreText;
-                relativeScoreText.fontStyle = FontStyles.Italic;
+                immediateRankUIPanel._relativeScoreText.fontStyle = FontStyles.Italic;
             }
         }
 

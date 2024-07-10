@@ -1,6 +1,5 @@
 ﻿using UITweaks.Config;
 using UITweaks.Models;
-using UnityEngine;
 using UnityEngine.UI;
 using Zenject;
 
@@ -16,9 +15,9 @@ namespace UITweaks.PanelModifiers
         private Image bg;
         private Image fg;
 
-        [Inject] protected override void Init()
+        [Inject] protected override void Init(string _)
         {
-            base.logger.Debug("ScoreMultiplierPanelModifier::Init()");
+            base.Init();
             scoreMultiplierUIController = base.gameHUDController.GetComponentInChildren<ScoreMultiplierUIController>();
 
             base.parentPanel = scoreMultiplierUIController.gameObject;
