@@ -33,8 +33,8 @@ namespace UITweaks
 
             zenject.Expose<CoreGameHUDController>("Environment");
 
-            zenject.Install<AppConfigInstaller>(Location.App, config.Generated<PluginConfig>());
-            zenject.Install<MenuUIInstaller>(Location.Menu);
+            zenject.Install<TweaksAppInstaller>(Location.App, config.Generated<PluginConfig>());
+            zenject.Install<TweaksMenuInstaller>(Location.Menu);
             zenject.Install<PanelModifierInstaller>(Location.StandardPlayer | Location.CampaignPlayer);
         }
     }
