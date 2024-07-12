@@ -7,7 +7,7 @@ using Zenject;
 
 namespace UITweaks.PanelModifiers
 {
-    public class ExtraPanelModifiers : PanelModifierBase
+    public class ExtraPanelDecorator : PanelDecoratorBase
     {
         internal class AprilFools : MonoBehaviour
         {
@@ -46,23 +46,25 @@ namespace UITweaks.PanelModifiers
 
         [Inject] protected override void Init()
         {
-            base.Init();
             comboUIController = base.gameHUDController.GetComponentInChildren<ComboUIController>();
             immediateRankUIPanel = base.gameHUDController.GetComponentInChildren<ImmediateRankUIPanel>();
+            parentPanel = immediateRankUIPanel.gameObject;
+            config = miscConfig;
+            transform.SetParent(parentPanel.transform);
 
-            base.parentPanel = immediateRankUIPanel.gameObject;
-            base.config = miscConfig;
-
-            this.transform.SetParent(parentPanel.transform);
-            this.ModPanel();
+            ModPanel(this);
         }
 
-        protected override void ModPanel()
+        protected override void ModPanel(in PanelDecoratorBase decorator)
         {
-            base.ModPanel();
+            base.ModPanel(this);
+
             rankText = immediateRankUIPanel._rankText;
             if (miscConfig.AllowRankColoring)
+            {
                 scoreController.scoreDidChangeEvent += UpdateRankColorsOnScoreChanged;
+                UpdateRankColorsOnScoreChanged(0, 0);
+            }
 
             if (miscConfig.ItalicizeComboPanel)
             {
@@ -92,13 +94,12 @@ namespace UITweaks.PanelModifiers
 
         public void Update()
         {
-            if (!immediateRankUIPanel.isActiveAndEnabled) return;
+            if (!immediateRankUIPanel.isActiveAndEnabled || !miscConfig.AllowRankColoring) return;
 
             if (miscConfig.RainbowOnSSRank && rankCounter.immediateRank == RankModel.Rank.SS)
             {
                 rankText.color = base.RainbowColor;
             }
-            else UpdateRankColorsOnScoreChanged(0, 0);
         }
 
         private void UpdateRankColorsOnScoreChanged(int score, int modifiedScore)
