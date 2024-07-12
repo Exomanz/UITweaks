@@ -1,8 +1,8 @@
 ﻿using UITweaks.Models;
+using UITweaks.Utilities;
 using UITweaks.Utilities.SettableSettings;
 using IPA.Loader;
 using Zenject;
-using UITweaks.Utilities;
 
 namespace UITweaks.Installers
 {
@@ -12,7 +12,7 @@ namespace UITweaks.Installers
 
         [Inject] public TweaksAppInstaller(PluginConfig pluginConfig)
         {
-            this.config = pluginConfig;
+            config = pluginConfig;
         }
 
         public override void InstallBindings()
@@ -37,10 +37,9 @@ namespace UITweaks.Installers
 
         /// <summary>
         /// Shorthand function for quickly binding configs in Zenject.<br></br>
-        /// <typeparamref name="T"/> is <see cref="UITweaksConfigBase"/>.
         /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="instance"></param>
+        /// <typeparam name="T">Any class which derives from <see cref="UITweaksConfigBase"/></typeparam>
+        /// <param name="instance">An instance of a <see cref="UITweaksConfigBase"/>. These are usually defined inside of <see cref="PluginConfig"/></param>
         private void BindConfig<T>(T instance) where T : UITweaksConfigBase
         {
             Container.Bind<T>().FromInstance(instance).AsCached();

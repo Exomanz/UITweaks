@@ -31,12 +31,11 @@ namespace UITweaks.Installers
 
         /// <summary>
         /// Shorthand function for binding <see cref="PanelDecoratorBase"/> classes.
-        /// <br></br><typeparamref name="T"/> is <see cref="PanelDecoratorBase"/>.
         /// </summary>
-        /// <typeparam name="T"></typeparam>
-        private void BindPanelModifier<T>() where T : PanelDecoratorBase
+        /// <typeparam name="T">Any class which derives from <see cref="PanelDecoratorBase"/>
+        private void BindPanelDecorator<T>() where T : PanelDecoratorBase
         {
-            Container.Bind<T>().FromNewComponentOn(new GameObject(typeof(T).Name)).AsSingle();
+            Container.Bind<T>().FromNewComponentOn(new GameObject(typeof(T).Name)).AsSingle().NonLazy();
         }
     }
 }

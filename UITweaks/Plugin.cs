@@ -17,7 +17,7 @@ namespace UITweaks
         { 
             get
             {
-                if (Environment.GetCommandLineArgs().Any(x => x.ToLower() == "--uitweaks.aprilfools"))
+                if (Environment.GetCommandLineArgs().Any(x => x.ToLower() == "--uitweaks-aprilfools"))
                     return true;
 
                 DateTime time = Utils.CanUseDateTimeNowSafely ? DateTime.Now : DateTime.UtcNow;
@@ -25,8 +25,7 @@ namespace UITweaks
             } 
         }
 
-        [Init]
-        public Plugin(IPALogger logger, IPAConfig config, Zenjector zenject)
+        [Init] public Plugin(IPALogger logger, IPAConfig config, Zenjector zenject)
         {
             zenject.UseLogger(logger);
             zenject.UseMetadataBinder<Plugin>();
@@ -35,7 +34,7 @@ namespace UITweaks
 
             zenject.Install<TweaksAppInstaller>(Location.App, config.Generated<PluginConfig>());
             zenject.Install<TweaksMenuInstaller>(Location.Menu);
-            zenject.Install<PanelModifierInstaller>(Location.StandardPlayer | Location.CampaignPlayer);
+            zenject.Install<TweaksPanelDecoratorInstaller>(Location.StandardPlayer | Location.CampaignPlayer);
         }
     }
 }
