@@ -33,16 +33,14 @@ namespace UITweaks.PanelModifiers
         {
             if (!base.ModPanel(this)) return false;
 
-            StartCoroutine(PrepareColorsForEnergyType(gameplayModifiers.energyType));
+            PrepareColorsForEnergyType(gameplayModifiers.energyType);
 
             return true;
         }
 
-        private IEnumerator PrepareColorsForEnergyType(GameplayModifiers.EnergyType type)
+        private void PrepareColorsForEnergyType(GameplayModifiers.EnergyType type)
         {
-            if (!CanBeUsedSafely) yield break;
-
-            yield return new WaitUntil(() => gameEnergyUIPanel.gameObject != null);
+            if (!CanBeUsedSafely) return;
 
             if (type == GameplayModifiers.EnergyType.Battery)
             {
@@ -53,7 +51,7 @@ namespace UITweaks.PanelModifiers
                 batterySegments[2].color = HSBColor.Lerp(HSBColor.FromColor(energyConfig.Mid), HSBColor.FromColor(energyConfig.High), 0.66f).ToColor();
                 batterySegments[3].color = energyConfig.High;
 
-                yield break;
+                return;
             }
 
             else if (type == GameplayModifiers.EnergyType.Bar)
