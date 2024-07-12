@@ -28,7 +28,7 @@ smoothly transition between each of the colors below as your multiplier increase
 				<color-setting text='Low Energy Color' value='color-low' apply-on-change='true' interactable='~energy-enabled'/>
 				<color-setting text='Middle Energy Color' value='color-mid' apply-on-change='true' interactable='~energy-enabled'/>
 				<color-setting text='High Energy Color' value='color-high' apply-on-change='true' interactable='~energy-enabled'/>
-				<slider-setting text='(Preview) Fill Amount' on-change='update-energy-preview' min='0.01' max='1' increment='0.01' interactable='~energy-enabled'/>
+				<slider-setting text='Preview Fill Amount' on-change='update-energy-preview' min='0.01' max='1' increment='0.01' interactable='~energy-enabled'/>
 			</modifier-container>
 		</tab>
 
@@ -95,11 +95,10 @@ one color to another as the song progresses.'/>
 						<macro.if value='fools-toggle-check'>
 							<checkbox text='Allow April Fools' value='allow-april-fools' apply-on-change='true'/>
 						</macro.if>
-						<text text='Set Rank Letter'/>
-						<button text='Modify Rank Colors' click-event='open-rank-settings'/>
+						<checkbox text='Allow Rank Coloring' value='allow-rank-colors' apply-on-change='true'/>
+						<button text='Modify Rank Colors' click-event='open-rank-settings' interactable='~allow-rank-colors'/>
 						<modal show-event='open-rank-settings' hide-event='hide-all-modals' click-off-closes='true' move-to-center='true' size-delta-x='60' size-delta-y='80'>
 							<vertical horizontal-fit='PreferredSize' pref-width='45' vertical-fit='PreferredSize' pref-height='70'>
-								<checkbox text='Allow Rank Coloring' value='allow-rank-colors' apply-on-change='true'/>
 								<checkbox text='Rainbow on SS' value='rainbow-on-ss-rank' apply-on-change='true' interactable='~allow-rank-colors'/>
 								<color-setting text='SS' value='rank-ss-color' apply-on-change='true' interactable='~allow-rank-colors' active='~invert-rainbow-ss'/>
 								<color-setting text='S' value='rank-s-color' apply-on-change='true' interactable='~allow-rank-colors'/>
@@ -113,6 +112,7 @@ one color to another as the song progresses.'/>
 								</horizontal>
 							</vertical>
 						</modal>
+						<text text='Set Rank Letter' align='Center' italics='True' underlined='True'/>
 						<horizontal>
 							<button text='SS' on-click='switch-rank-text.ss'/>
 							<button text='S' on-click='switch-rank-text.s'/>

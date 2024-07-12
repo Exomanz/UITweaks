@@ -53,7 +53,7 @@ namespace UITweaks.UI
 
         // Combo Panel
         private ImageView[] comboLines;
-        private CurvedTextMeshPro numText;
+        private CurvedTextMeshPro comboNumberText;
         private CurvedTextMeshPro comboText;
 
         // Progress Panel
@@ -95,10 +95,6 @@ namespace UITweaks.UI
         {
             yield return new WaitUntil(() => objectGrabber.IsCompleted);
 
-            var multiplierPanel = objectGrabber.MultiplierPanel;
-            var comboPanel = objectGrabber.ComboPanel;
-            var progressPanel = objectGrabber.ProgressPanel;
-
             // Grab all of the important parts of the panels for previewer.
             try
             {
@@ -106,8 +102,8 @@ namespace UITweaks.UI
 
                 // Multiplier Panel Setup
                 {
-                    multiplierText = multiplierPanel.GetComponentsInChildren<CurvedTextMeshPro>().Last();
-                    multiplierCircles = multiplierPanel.transform.GetComponentsInChildren<Image>();
+                    multiplierText = objectGrabber.MultiplierPanel.GetComponentsInChildren<CurvedTextMeshPro>().Last();
+                    multiplierCircles = objectGrabber.MultiplierPanel.transform.GetComponentsInChildren<Image>();
 
                     multiplierCircles[1].color = multiplierConfig.One;
                     multiplierCircles[0].color = multiplierConfig.One.ColorWithAlpha(0.25f);
@@ -118,15 +114,15 @@ namespace UITweaks.UI
 
                 // Combo Panel Setup
                 {
-                    comboLines = comboPanel.transform.GetComponentsInChildren<ImageView>();
-                    numText = comboPanel.transform.Find("ComboCanvas/NumText").GetComponent<CurvedTextMeshPro>();
-                    comboText = comboPanel.transform.Find("ComboText").GetComponent<CurvedTextMeshPro>();
+                    comboLines = objectGrabber.ComboPanel.transform.GetComponentsInChildren<ImageView>();
+                    comboNumberText = objectGrabber.ComboPanel.transform.Find("ComboCanvas/NumText").GetComponent<CurvedTextMeshPro>();
+                    comboText = objectGrabber.ComboPanel.transform.Find("ComboText").GetComponent<CurvedTextMeshPro>();
                 }
 
                 // Progress Panel Setup
                 {
-                    progressPanelImages = progressPanel.transform.GetComponentsInChildren<Image>();
-                    CurvedTextMeshPro[] texts = progressPanel.transform.GetComponentsInChildren<CurvedTextMeshPro>();
+                    progressPanelImages = objectGrabber.ProgressPanel.transform.GetComponentsInChildren<Image>();
+                    CurvedTextMeshPro[] texts = objectGrabber.ProgressPanel.transform.GetComponentsInChildren<CurvedTextMeshPro>();
                     texts[0].text = "0";
                     texts[1].text = "00";
                     texts[2].text = "0";
@@ -156,55 +152,54 @@ namespace UITweaks.UI
         private void UpdatePanelVisibility(int tab)
         {
             if (!objectGrabber.IsCompleted) return;
-            SettingsPanelObjectGrabber host = objectGrabber;
             System.Random rand = new System.Random();
 
             switch (tab)
             {
                 case 0:
-                    host.MultiplierPanel.transform.localPosition = Vector3.zero;
-                    host.EnergyPanel.SetActive(false);
-                    host.ComboPanel.SetActive(false);
-                    host.ProgressPanel.SetActive(false);
-                    host.ImmediateRankPanel.SetActive(false);
+                    objectGrabber.MultiplierPanel.transform.localPosition = Vector3.zero;
+                    objectGrabber.EnergyPanel.SetActive(false);
+                    objectGrabber.ComboPanel.SetActive(false);
+                    objectGrabber.ProgressPanel.SetActive(false);
+                    objectGrabber.ImmediateRankPanel.SetActive(false);
                     break;
                 case 1:
-                    host.MultiplierPanel.transform.position = VOID_POSITION;
-                    host.EnergyPanel.SetActive(true);
-                    host.ComboPanel.SetActive(false);
-                    host.ProgressPanel.SetActive(false);
-                    host.ImmediateRankPanel.SetActive(false);
+                    objectGrabber.MultiplierPanel.transform.position = VOID_POSITION;
+                    objectGrabber.EnergyPanel.SetActive(true);
+                    objectGrabber.ComboPanel.SetActive(false);
+                    objectGrabber.ProgressPanel.SetActive(false);
+                    objectGrabber.ImmediateRankPanel.SetActive(false);
                     break;
                 case 2:
-                    host.MultiplierPanel.transform.position = VOID_POSITION;
-                    host.EnergyPanel.SetActive(false);
-                    host.ComboPanel.SetActive(true);
-                    host.ProgressPanel.SetActive(false);
-                    host.ImmediateRankPanel.SetActive(false);
+                    objectGrabber.MultiplierPanel.transform.position = VOID_POSITION;
+                    objectGrabber.EnergyPanel.SetActive(false);
+                    objectGrabber.ComboPanel.SetActive(true);
+                    objectGrabber.ProgressPanel.SetActive(false);
+                    objectGrabber.ImmediateRankPanel.SetActive(false);
 
-                    numText.text = rand.Next(0, 250).ToString();
-                    host.ComboPanel.transform.localPosition = Vector3.zero;
+                    comboNumberText.text = rand.Next(0, 250).ToString();
+                    objectGrabber.ComboPanel.transform.localPosition = Vector3.zero;
                     break;
                 case 3:
-                    host.MultiplierPanel.transform.position = VOID_POSITION;
-                    host.EnergyPanel.SetActive(false);
-                    host.ComboPanel.SetActive(false);
-                    host.ProgressPanel.SetActive(true);
-                    host.ImmediateRankPanel.SetActive(false);
+                    objectGrabber.MultiplierPanel.transform.position = VOID_POSITION;
+                    objectGrabber.EnergyPanel.SetActive(false);
+                    objectGrabber.ComboPanel.SetActive(false);
+                    objectGrabber.ProgressPanel.SetActive(true);
+                    objectGrabber.ImmediateRankPanel.SetActive(false);
                     break;
                 case 4:
-                    host.MultiplierPanel.transform.position = VOID_POSITION;
-                    host.EnergyPanel.SetActive(false);
-                    host.ComboPanel.SetActive(true);
-                    host.ProgressPanel.SetActive(false);
-                    host.ImmediateRankPanel.SetActive(true);
+                    objectGrabber.MultiplierPanel.transform.position = VOID_POSITION;
+                    objectGrabber.EnergyPanel.SetActive(false);
+                    objectGrabber.ComboPanel.SetActive(true);
+                    objectGrabber.ProgressPanel.SetActive(false);
+                    objectGrabber.ImmediateRankPanel.SetActive(true);
 
                     rank = Utilities.Utilities.RandomDecimal(100, 1);
                     percentText.text = rank.ToString() + "%";
-                    numText.text = rand.Next(0, 250).ToString();
+                    comboNumberText.text = rand.Next(0, 250).ToString();
                     scoreText.text = rand.Next(0, 999999).ToString();
 
-                    host.ComboPanel.transform.localPosition = new Vector3(-0.75f, 0, 0);
+                    objectGrabber.ComboPanel.transform.localPosition = new Vector3(-0.75f, 0, 0);
                     break;
 
                 default:
@@ -241,9 +236,7 @@ namespace UITweaks.UI
                     UpdateComboPanel();
                     UpdateImmediateRankPanel();
                     if (rank >= 90.00m && miscConfig.RainbowOnSSRank)
-                    {
                         rankText.color = rainbowEffectManager.Rainbow;
-                    }
                     break;
             }
         }
@@ -397,14 +390,14 @@ namespace UITweaks.UI
             {
                 comboText.fontStyle = TMPro.FontStyles.Italic | TMPro.FontStyles.UpperCase;
                 comboText.text = "COMBO";
-                numText.fontStyle = TMPro.FontStyles.Italic;
-                numText.transform.localPosition = new Vector3(-2.5f, 4);
+                comboNumberText.fontStyle = TMPro.FontStyles.Italic;
+                comboNumberText.transform.localPosition = new Vector3(-2.5f, 4);
             }
             else
             {
                 comboText.fontStyle = TMPro.FontStyles.UpperCase;
-                numText.fontStyle = TMPro.FontStyles.UpperCase;
-                numText.transform.localPosition = new Vector3(0, 4);
+                comboNumberText.fontStyle = TMPro.FontStyles.UpperCase;
+                comboNumberText.transform.localPosition = new Vector3(0, 4);
             }
         }
 
