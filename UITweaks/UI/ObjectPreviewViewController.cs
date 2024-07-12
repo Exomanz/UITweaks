@@ -95,7 +95,6 @@ namespace UITweaks.UI
         {
             yield return new WaitUntil(() => objectGrabber.IsCompleted);
 
-            // Grab all of the important parts of the panels for previewer.
             try
             {
                 objectGrabber.MultiplierPanel.SetActive(true);
@@ -235,7 +234,7 @@ namespace UITweaks.UI
                 case 4:
                     UpdateComboPanel();
                     UpdateImmediateRankPanel();
-                    if (rank >= 90.00m && miscConfig.RainbowOnSSRank)
+                    if (rank >= 90.00m && miscConfig.RainbowOnSSRank && miscConfig.AllowRankColoring)
                         rankText.color = rainbowEffectManager.Rainbow;
                     break;
             }
@@ -455,9 +454,8 @@ namespace UITweaks.UI
             }
 
             if (miscConfig.AllowRankColoring)
-            {
                 rankText.color = ConvertRankToColor(rank);
-            }
+            else rankText.color = Color.white.ColorWithAlpha(0.5f);
         }
 
         public void HandleRankLetterRequest(string rankString)
