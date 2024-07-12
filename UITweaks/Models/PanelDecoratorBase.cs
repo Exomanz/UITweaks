@@ -12,7 +12,7 @@ namespace UITweaks.Models
         [Inject] protected readonly SiraLog logger;
         [Inject] protected readonly CoreGameHUDController gameHUDController;
 
-        public bool CanBeUsedSafely { get; set; } = true;
+        public bool CanBeUsedSafely { get; protected set; } = true;
         public Color RainbowColor => rainbowEffectManager.Rainbow;
         public UITweaksConfigBase config;
         public GameObject parentPanel;
