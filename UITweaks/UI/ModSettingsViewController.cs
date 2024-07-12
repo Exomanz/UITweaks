@@ -66,7 +66,7 @@ namespace UITweaks.UI
         protected override void DidActivate(bool firstActivation, bool addedToHierarchy, bool screenSystemEnabling)
         {
             base.DidActivate(firstActivation, addedToHierarchy, screenSystemEnabling);
-            if (firstActivation && rainbowSpeedSetting != null)
+            if (firstActivation && rainbowSpeedSetting.gameObject != null)
             {
                 rainbowSpeedSetting.slider.valueDidChangeEvent += HandleRainbowSliderValueChanged;
             }
