@@ -11,19 +11,11 @@ namespace UITweaks.Installers
 
         public override void InstallBindings()
         {
-            if (config.Multiplier.Enabled) 
-                BindPanelModifier<ScoreMultiplierPanelDecorator>();
-
-            if (config.Energy.Enabled) 
-                BindPanelModifier<EnergyBarPanelDecorator>();
-
-            if (config.Combo.Enabled) 
-                BindPanelModifier<ComboPanelDecorator>();
-
-            if (config.Progress.Enabled) 
-                BindPanelModifier<SongProgressPanelDecorator>();
-
-            BindPanelModifier<ExtraPanelDecorator>();
+            BindPanelDecorator<ScoreMultiplierPanelDecorator>();
+            BindPanelDecorator<EnergyBarPanelDecorator>();
+            BindPanelDecorator<ComboPanelDecorator>();
+            BindPanelDecorator<SongProgressPanelDecorator>();
+            BindPanelDecorator<ExtraPanelDecorator>();
 
             if (Plugin.APRIL_FOOLS && config.AllowAprilFools)
                 Container.Bind<ExtraPanelDecorator.AprilFools>().FromNewComponentOn(new GameObject("UITweaks-AprilFoolsController")).AsSingle().NonLazy();

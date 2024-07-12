@@ -10,9 +10,10 @@ namespace UITweaks.PanelModifiers
             ModPanel(this);
         }
 
-        protected override void ModPanel(in PanelDecoratorBase decorator)
+        protected override bool ModPanel(in PanelDecoratorBase decorator)
         {
-            base.ModPanel(this);
+            if (!base.ModPanel(this)) return false;
+            return true;
         }
 
         protected override void OnDestroy()

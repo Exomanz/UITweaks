@@ -16,18 +16,18 @@ namespace UITweaks.PanelModifiers
             comboUIController = base.gameHUDController.GetComponentInChildren<ComboUIController>();
             parentPanel = comboUIController.gameObject;
             config = comboConfig;
-            transform.SetParent(parentPanel.transform);
+            transform.SetParent(parentPanel?.transform);
 
             ModPanel(this);
         }
 
-        protected override void ModPanel(in PanelDecoratorBase decorator)
+        protected override bool ModPanel(in PanelDecoratorBase decorator)
         {
-            base.ModPanel(this);
+            if (!base.ModPanel(this)) return false;
 
-            ImageView[] fcLines;
             if (comboUIController.isActiveAndEnabled)
             {
+                ImageView[] fcLines;
                 fcLines = comboUIController.GetComponentsInChildren<ImageView>();
 
                 if (comboConfig.UseGradient)
@@ -55,6 +55,8 @@ namespace UITweaks.PanelModifiers
                     fcLines[1].color = comboConfig.BottomLine;
                 }
             }
+
+            return true;
         }
 
         protected override void OnDestroy() => base.OnDestroy();

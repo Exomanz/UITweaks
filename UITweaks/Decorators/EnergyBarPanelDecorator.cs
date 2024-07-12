@@ -1,6 +1,7 @@
 ﻿using HMUI;
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using UITweaks.Config;
 using UITweaks.Models;
 using UnityEngine;
@@ -23,20 +24,24 @@ namespace UITweaks.PanelModifiers
             gameEnergyUIPanel = base.gameHUDController.GetComponentInChildren<GameEnergyUIPanel>();
             parentPanel = gameEnergyUIPanel.gameObject;
             config = energyConfig;
-            transform.SetParent(gameEnergyUIPanel.transform);
+            transform.SetParent(parentPanel?.transform);
 
             ModPanel(this);
         }
 
-        protected override void ModPanel(in PanelDecoratorBase decorator)
+        protected override bool ModPanel(in PanelDecoratorBase decorator)
         {
-            base.ModPanel(this);
+            if (!base.ModPanel(this)) return false;
 
             StartCoroutine(PrepareColorsForEnergyType(gameplayModifiers.energyType));
+
+            return true;
         }
 
         private IEnumerator PrepareColorsForEnergyType(GameplayModifiers.EnergyType type)
         {
+            if (!CanBeUsedSafely) yield break;
+
             yield return new WaitUntil(() => gameEnergyUIPanel.gameObject != null);
 
             if (type == GameplayModifiers.EnergyType.Battery)
@@ -87,7 +92,7 @@ namespace UITweaks.PanelModifiers
 
         public void Update()
         {
-            if (!gameEnergyUIPanel.isActiveAndEnabled) return;
+            if (!gameEnergyUIPanel.isActiveAndEnabled || !CanBeUsedSafely) return;
 
             if (energyConfig.RainbowOnFullEnergy)
             {

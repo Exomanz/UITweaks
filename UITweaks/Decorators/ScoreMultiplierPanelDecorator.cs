@@ -11,29 +11,32 @@ namespace UITweaks.PanelModifiers
         [Inject] private readonly IScoreController scoreController;
 
         private ScoreMultiplierUIController scoreMultiplierUIController;
-        private int currentMultiplier = 0;
         private Image bg;
         private Image fg;
+        private int currentMultiplier = 0;
 
         [Inject] protected override void Init()
         {
             scoreMultiplierUIController = base.gameHUDController.GetComponentInChildren<ScoreMultiplierUIController>();
             parentPanel = scoreMultiplierUIController.gameObject;
             config = multiplierConfig;
-            transform.SetParent(parentPanel.transform);
+            
+            transform.SetParent(parentPanel?.transform);
 
             ModPanel(this);
         }
 
-        protected override void ModPanel(in PanelDecoratorBase decorator)
+        protected override bool ModPanel(in PanelDecoratorBase decorator)
         {
-            base.ModPanel(this);
+            if (!base.ModPanel(this)) return false;
 
             scoreController.multiplierDidChangeEvent += HandleMultiplierDidChange;
 
             bg = parentPanel.transform.Find("BGCircle").GetComponent<Image>();
             fg = parentPanel.transform.Find("FGCircle").GetComponent<Image>();
             HandleMultiplierDidChange(1, 0);
+
+            return true;
         }
 
         private void HandleMultiplierDidChange(int multiplier, float progress)
@@ -61,7 +64,7 @@ namespace UITweaks.PanelModifiers
 
         public void Update()
         {
-            if (!scoreMultiplierUIController.isActiveAndEnabled) return;
+            if (!scoreMultiplierUIController.isActiveAndEnabled || !CanBeUsedSafely) return;
 
             if (multiplierConfig.SmoothTransition)
             {

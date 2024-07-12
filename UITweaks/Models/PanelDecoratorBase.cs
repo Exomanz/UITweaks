@@ -12,36 +12,42 @@ namespace UITweaks.Models
         [Inject] protected readonly SiraLog logger;
         [Inject] protected readonly CoreGameHUDController gameHUDController;
 
-        public Color RainbowColor { get; private set; }
+        public bool CanBeUsedSafely { get; set; } = true;
+        public Color RainbowColor => rainbowEffectManager.Rainbow;
         public UITweaksConfigBase config;
         public GameObject parentPanel;
 
-        [Inject] protected abstract void Init();
+        protected abstract void Init();
 
-        protected virtual void ModPanel(in PanelDecoratorBase callingDecorator)
+        protected virtual bool ModPanel(in PanelDecoratorBase callingDecorator)
         {
             string callingTypeName = callingDecorator.GetType().Name;
-            logger.Logger.Debug($"Initializing new PanelDecorator of type {callingTypeName}");
+            logger.Logger.Debug($"Setting up new PanelDecorator of type {callingTypeName}");
 
             try
             {
                 if (callingDecorator.parentPanel == null)
-                    throw new NullReferenceException($"'parentPanel' cannot be null when creating an object of type {callingTypeName}");
+                    throw new NullReferenceException($"Field 'parentPanel' cannot be null when creating an object of type {callingTypeName}");
 
                 if (callingDecorator.config == null)
-                    throw new NullReferenceException($"'config' cannot be null when creating an object of type {callingTypeName}");
+                    throw new NullReferenceException($"Field 'config' cannot be null when creating an object of type {callingTypeName}");
             }
             catch (NullReferenceException ex)
             {
-                logger.Error(ex);
+                logger.Logger.Error(ex);
+                callingDecorator.CanBeUsedSafely = false;
+                return false;
             }
 
-            logger.Logger.Debug($"Successfully bound new PanelDecorator of type {callingTypeName}");
-        }
+            if (!callingDecorator.config.Enabled)
+            {
+                callingDecorator.CanBeUsedSafely = false;
+                return false;
+            }
 
-        public void LateUpdate()
-        {
-            RainbowColor = rainbowEffectManager.Rainbow;
+            logger.Logger.Debug($"Successfully initialized new PanelDecorator of type {callingTypeName}");
+            callingDecorator.CanBeUsedSafely = true;
+            return true;
         }
 
         protected virtual void OnDestroy()

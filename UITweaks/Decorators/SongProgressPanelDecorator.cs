@@ -14,7 +14,6 @@ namespace UITweaks.PanelModifiers
 
         private SongProgressUIController songProgressUIController;
         private readonly List<ImageView> barComponents = new List<ImageView>();
-        private bool canBeUsed = true;
 
         [Inject] protected override void Init()
         {
@@ -26,15 +25,15 @@ namespace UITweaks.PanelModifiers
             ModPanel(this);
         }
 
-        protected override void ModPanel(in PanelDecoratorBase decorator)
+        protected override bool ModPanel(in PanelDecoratorBase decorator)
         {
-            base.ModPanel(this);
+            if (!base.ModPanel(this)) return false;
 
             if (gameplaySceneSetupData?.beatmapKey.beatmapCharacteristic.containsRotationEvents == true)
             {
                 logger.Debug("Selected map is 360/90. Disabling the SongProgressPanelModifier");
-                canBeUsed = false;
-                return;
+                CanBeUsedSafely = false;
+                return false;
             }
 
             foreach (ImageView x in songProgressUIController.GetComponentsInChildren<ImageView>())
@@ -52,11 +51,13 @@ namespace UITweaks.PanelModifiers
             }
             barComponents[1].color = progressConfig.BG.ColorWithAlpha(0.25f);
             barComponents[2].color = progressConfig.Handle;
+
+            return true;
         }
 
         public void Update()
         {
-            if (!canBeUsed) return;
+            if (!CanBeUsedSafely) return;
 
             if (progressConfig.UseFadeDisplayType)
             {

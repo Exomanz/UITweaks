@@ -50,20 +50,21 @@ namespace UITweaks.PanelModifiers
             immediateRankUIPanel = base.gameHUDController.GetComponentInChildren<ImmediateRankUIPanel>();
             parentPanel = immediateRankUIPanel.gameObject;
             config = miscConfig;
-            transform.SetParent(parentPanel.transform);
+            transform.SetParent(parentPanel?.transform);
 
             ModPanel(this);
         }
 
-        protected override void ModPanel(in PanelDecoratorBase decorator)
+        protected override bool ModPanel(in PanelDecoratorBase decorator)
         {
-            base.ModPanel(this);
+            if (!base.ModPanel(this)) return false;
 
             rankText = immediateRankUIPanel._rankText;
             if (miscConfig.AllowRankColoring)
             {
-                scoreController.scoreDidChangeEvent += UpdateRankColorsOnScoreChanged;
-                UpdateRankColorsOnScoreChanged(0, 0);
+                rankCounter.relativeScoreOrImmediateRankDidChangeEvent += UpdateRankColorsOnScoreChanged;
+                //scoreController.scoringForNoteFinishedEvent += UpdateRankColorsOnScoreChanged;
+                UpdateRankColorsOnScoreChanged();
             }
 
             if (miscConfig.ItalicizeComboPanel)
@@ -90,11 +91,13 @@ namespace UITweaks.PanelModifiers
 
                 immediateRankUIPanel._relativeScoreText.fontStyle = FontStyles.Italic;
             }
+
+            return true;
         }
 
         public void Update()
         {
-            if (!immediateRankUIPanel.isActiveAndEnabled || !miscConfig.AllowRankColoring) return;
+            if (!immediateRankUIPanel.isActiveAndEnabled || !miscConfig.AllowRankColoring || !CanBeUsedSafely) return;
 
             if (miscConfig.RainbowOnSSRank && rankCounter.immediateRank == RankModel.Rank.SS)
             {
@@ -102,7 +105,7 @@ namespace UITweaks.PanelModifiers
             }
         }
 
-        private void UpdateRankColorsOnScoreChanged(int score, int modifiedScore)
+        private void UpdateRankColorsOnScoreChanged()
         {
             rankText.color = rankCounter.immediateRank switch
             {
@@ -120,7 +123,8 @@ namespace UITweaks.PanelModifiers
         protected override void OnDestroy()
         {
             base.OnDestroy();
-            scoreController.scoreDidChangeEvent -= UpdateRankColorsOnScoreChanged;
+            rankCounter.relativeScoreOrImmediateRankDidChangeEvent -= UpdateRankColorsOnScoreChanged;
+            //scoreController.scoringForNoteFinishedEvent -= UpdateRankColorsOnScoreChanged;
         }
     }
 }
