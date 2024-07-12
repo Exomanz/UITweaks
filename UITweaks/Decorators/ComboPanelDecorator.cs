@@ -25,35 +25,32 @@ namespace UITweaks.PanelModifiers
         {
             if (!base.ModPanel(this)) return false;
 
-            if (comboUIController.isActiveAndEnabled)
+            ImageView[] fcLines;
+            fcLines = parentPanel.GetComponentsInChildren<ImageView>();
+
+            if (comboConfig.UseGradient)
             {
-                ImageView[] fcLines;
-                fcLines = comboUIController.GetComponentsInChildren<ImageView>();
+                fcLines[0].gradient = true;
+                fcLines[1].gradient = true;
 
-                if (comboConfig.UseGradient)
+                fcLines[0].color0 = comboConfig.TopLeft;
+                fcLines[0].color1 = comboConfig.TopRight;
+
+                if (comboConfig.MirrorBottomLine)
                 {
-                    fcLines[0].gradient = true;
-                    fcLines[1].gradient = true;
-
-                    fcLines[0].color0 = comboConfig.TopLeft;
-                    fcLines[0].color1 = comboConfig.TopRight;
-
-                    if (comboConfig.MirrorBottomLine)
-                    {
-                        fcLines[1].color0 = comboConfig.TopRight;
-                        fcLines[1].color1 = comboConfig.TopLeft;
-                    }
-                    else
-                    {
-                        fcLines[1].color0 = comboConfig.BottomLeft;
-                        fcLines[1].color1 = comboConfig.BottomRight;
-                    }
+                    fcLines[1].color0 = comboConfig.TopRight;
+                    fcLines[1].color1 = comboConfig.TopLeft;
                 }
                 else
                 {
-                    fcLines[0].color = comboConfig.TopLine;
-                    fcLines[1].color = comboConfig.BottomLine;
+                    fcLines[1].color0 = comboConfig.BottomLeft;
+                    fcLines[1].color1 = comboConfig.BottomRight;
                 }
+            }
+            else
+            {
+                fcLines[0].color = comboConfig.TopLine;
+                fcLines[1].color = comboConfig.BottomLine;
             }
 
             return true;
