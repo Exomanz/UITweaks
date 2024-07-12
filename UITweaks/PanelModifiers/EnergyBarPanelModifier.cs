@@ -18,7 +18,7 @@ namespace UITweaks.PanelModifiers
         private GameEnergyUIPanel gameEnergyUIPanel;
         private ImageView energyBar = null!;
 
-        [Inject] protected override void Init(string _)
+        [Inject] protected override void Init()
         {
             base.Init();
             gameEnergyUIPanel = base.gameHUDController.GetComponentInChildren<GameEnergyUIPanel>();

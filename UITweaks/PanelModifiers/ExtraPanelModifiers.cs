@@ -44,7 +44,7 @@ namespace UITweaks.PanelModifiers
         private ImmediateRankUIPanel immediateRankUIPanel;
         private TextMeshProUGUI rankText;
 
-        [Inject] protected override void Init(string _)
+        [Inject] protected override void Init()
         {
             base.Init();
             comboUIController = base.gameHUDController.GetComponentInChildren<ComboUIController>();

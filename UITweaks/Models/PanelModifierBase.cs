@@ -17,9 +17,8 @@ namespace UITweaks.Models
         public UITweaksConfigBase config;
         public GameObject parentPanel;
 
-        [Inject] protected virtual void Init([CallerMemberName] string caller = "PanelModifierBase")
+        [Inject] protected virtual void Init()
         {
-            logger.Logger.Debug($"{caller}::Init()");
         } 
 
         protected virtual void ModPanel()

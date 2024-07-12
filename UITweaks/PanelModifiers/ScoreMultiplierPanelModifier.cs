@@ -15,7 +15,7 @@ namespace UITweaks.PanelModifiers
         private Image bg;
         private Image fg;
 
-        [Inject] protected override void Init(string _)
+        [Inject] protected override void Init()
         {
             base.Init();
             scoreMultiplierUIController = base.gameHUDController.GetComponentInChildren<ScoreMultiplierUIController>();
