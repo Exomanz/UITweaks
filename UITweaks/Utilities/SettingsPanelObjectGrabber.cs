@@ -20,7 +20,6 @@ namespace UITweaks.Utilities
         public GameObject ProgressPanel { get; private set; }
         public GameObject ImmediateRankPanel { get; private set; }
         
-        [Inject] private readonly SiraLog logger;
         private readonly List<MonoBehaviour> panelControllers = new List<MonoBehaviour>();
 
         public IEnumerator GetPanels()
