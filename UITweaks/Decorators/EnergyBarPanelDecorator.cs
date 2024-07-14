@@ -39,7 +39,23 @@ namespace UITweaks.PanelModifiers
         {
             if (!CanBeUsedSafely) return;
 
-            if (type == GameplayModifiers.EnergyType.Battery)
+            if (type == GameplayModifiers.EnergyType.Bar && !gameplayModifiers.instaFail)
+            {
+                energyBar = gameEnergyUIPanel.transform.Find("EnergyBarWrapper/EnergyBar").GetComponent<ImageView>();
+                energyBar.color = energyConfig.Mid;
+                gameEnergyCounter.gameEnergyDidChangeEvent += HandleEnergyDidChange;
+
+                return;
+            }
+
+            base.StartCoroutine(BatteryEnergyAndOneLifeSetup(type));
+        }
+
+        internal IEnumerator BatteryEnergyAndOneLifeSetup(GameplayModifiers.EnergyType energyType)
+        {
+            yield return new WaitUntil(() => gameEnergyUIPanel.isActiveAndEnabled);
+
+            if (energyType == GameplayModifiers.EnergyType.Battery)
             {
                 List<Image> batterySegments = gameEnergyUIPanel._batteryLifeSegments;
 
@@ -48,24 +64,16 @@ namespace UITweaks.PanelModifiers
                 batterySegments[2].color = HSBColor.Lerp(HSBColor.FromColor(energyConfig.Mid), HSBColor.FromColor(energyConfig.High), 0.5f).ToColor();
                 batterySegments[3].color = energyConfig.High;
 
-                return;
+                yield break;
             }
 
-            else if (type == GameplayModifiers.EnergyType.Bar)
-            {
-                if (gameplayModifiers.instaFail)
+            else if (energyType == GameplayModifiers.EnergyType.Bar && gameplayModifiers.instaFail)
                 {
                     energyBar = gameEnergyUIPanel.transform.Find("BatteryLifeSegment(Clone)").GetComponent<ImageView>();
                     energyBar.color = energyConfig.High;
                 }
-                else
-                {
-                    energyBar = gameEnergyUIPanel.transform.Find("EnergyBarWrapper/EnergyBar").GetComponent<ImageView>();
-                    energyBar.color = energyConfig.Mid;
-                }
-            }
 
-            gameEnergyCounter.gameEnergyDidChangeEvent += HandleEnergyDidChange;
+            else yield break;
         }
 
         private void HandleEnergyDidChange(float energy)
@@ -87,7 +95,7 @@ namespace UITweaks.PanelModifiers
 
         public void Update()
         {
-            if (!gameEnergyUIPanel.isActiveAndEnabled || !CanBeUsedSafely) return;
+            if (!gameEnergyUIPanel.isActiveAndEnabled || energyBar?.gameObject == null || !CanBeUsedSafely) return;
 
             if (energyConfig.RainbowOnFullEnergy)
             {
