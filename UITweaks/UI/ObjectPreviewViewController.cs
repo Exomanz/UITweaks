@@ -4,8 +4,6 @@ using HMUI;
 using SiraUtil.Logging;
 using System;
 using System.Collections;
-using System.ComponentModel;
-using System.Drawing.Design;
 using System.Linq;
 using Tweening;
 using UITweaks.Config;
