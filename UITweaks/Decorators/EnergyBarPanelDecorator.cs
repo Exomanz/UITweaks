@@ -44,8 +44,8 @@ namespace UITweaks.PanelModifiers
                 List<Image> batterySegments = gameEnergyUIPanel._batteryLifeSegments;
 
                 batterySegments[0].color = energyConfig.Low;
-                batterySegments[1].color = HSBColor.Lerp(HSBColor.FromColor(energyConfig.Low), HSBColor.FromColor(energyConfig.Mid), 0.34f).ToColor();
-                batterySegments[2].color = HSBColor.Lerp(HSBColor.FromColor(energyConfig.Mid), HSBColor.FromColor(energyConfig.High), 0.66f).ToColor();
+                batterySegments[1].color = HSBColor.Lerp(HSBColor.FromColor(energyConfig.Low), HSBColor.FromColor(energyConfig.Mid), 0.5f).ToColor();
+                batterySegments[2].color = HSBColor.Lerp(HSBColor.FromColor(energyConfig.Mid), HSBColor.FromColor(energyConfig.High), 0.5f).ToColor();
                 batterySegments[3].color = energyConfig.High;
 
                 return;
