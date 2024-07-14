@@ -15,14 +15,14 @@ namespace UITweaks.Config
         public virtual bool HideFirstPlaceAnimation { get; set; } = false;
 
         /// <summary>
-        /// If set to <see langword="true"/>, the player count panel will use a static color regardless of your position.
-        /// </summary>
-        public virtual bool UseStaticColorForStaticPanel { get; set; } = false;
-
-        /// <summary>
         /// Controls the rainbow effect of the <i>dynamic</i> first place text.
         /// </summary>
         public virtual bool RainbowOnFirstPlace { get; set; } = false;
+
+        /// <summary>
+        /// If set to <see langword="true"/>, the player count panel will use a static color regardless of your position.
+        /// </summary>
+        public virtual bool UseStaticColorForStaticPanel { get; set; } = false;
 
         /// <summary>
         /// The <see cref="Color"/> of the player count section of the Position Panel.
