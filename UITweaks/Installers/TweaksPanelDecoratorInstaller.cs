@@ -1,5 +1,6 @@
 ﻿using UITweaks.Models;
 using UITweaks.PanelModifiers;
+using UITweaks.Utilities;
 using UnityEngine;
 using Zenject;
 
@@ -11,11 +12,19 @@ namespace UITweaks.Installers
 
         public override void InstallBindings()
         {
+            bool isMultiplayer = Container.HasBinding<MultiplayerController>();
+
             BindPanelDecorator<ScoreMultiplierPanelDecorator>();
             BindPanelDecorator<EnergyBarPanelDecorator>();
             BindPanelDecorator<ComboPanelDecorator>();
             BindPanelDecorator<SongProgressPanelDecorator>();
             BindPanelDecorator<ExtraPanelDecorator>();
+
+            if (isMultiplayer)
+            {
+                BindPanelDecorator<MultiplayerPositionPanelDecorator>();
+                Container.Bind<MultiplayerEnergyBarCoroutineHandler>().FromNewComponentOn(new GameObject("MultiplayerEnergyBarCoroutineHandler")).AsSingle().NonLazy();
+            }
 
             if (Plugin.APRIL_FOOLS && config.AllowAprilFools)
                 Container.Bind<ExtraPanelDecorator.AprilFools>().FromNewComponentOn(new GameObject("UITweaks-AprilFoolsController")).AsSingle().NonLazy();

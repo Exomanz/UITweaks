@@ -30,11 +30,16 @@ namespace UITweaks
             zenject.UseLogger(logger);
             zenject.UseMetadataBinder<Plugin>();
 
-            zenject.Expose<CoreGameHUDController>("Environment");
+            // Singleplayer and Campaign
+            zenject.Expose<CoreGameHUDController>("Environment"); 
+
+            // Multiplayer
+            zenject.Expose<CoreGameHUDController>("IsActiveObjects"); 
+            zenject.Expose<MultiplayerPositionHUDController>("IsActiveObjects");
 
             zenject.Install<TweaksAppInstaller>(Location.App, config.Generated<PluginConfig>());
             zenject.Install<TweaksMenuInstaller>(Location.Menu);
-            zenject.Install<TweaksPanelDecoratorInstaller>(Location.StandardPlayer | Location.CampaignPlayer);
+            zenject.Install<TweaksPanelDecoratorInstaller>(Location.Player);
         }
     }
 }
