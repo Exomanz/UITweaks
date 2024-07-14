@@ -1,7 +1,6 @@
 ﻿using HMUI;
 using System.Collections;
 using System.Collections.Generic;
-using System.Runtime.CompilerServices;
 using UITweaks.Config;
 using UITweaks.Models;
 using UnityEngine;
@@ -12,6 +11,7 @@ namespace UITweaks.PanelModifiers
 {
     public class EnergyBarPanelDecorator : PanelDecoratorBase
     {
+        [InjectOptional] internal readonly MultiplayerController mpController;
         [Inject] private readonly IGameEnergyCounter gameEnergyCounter;
         [Inject] private readonly GameplayModifiers gameplayModifiers;
         [Inject] private readonly EnergyConfig energyConfig;
@@ -33,44 +33,51 @@ namespace UITweaks.PanelModifiers
         {
             if (!base.ModPanel(this)) return false;
 
-            StartCoroutine(PrepareColorsForEnergyType(gameplayModifiers.energyType));
+            PrepareColorsForEnergyType(gameplayModifiers.energyType);
 
             return true;
         }
 
-        private IEnumerator PrepareColorsForEnergyType(GameplayModifiers.EnergyType type)
+        private void PrepareColorsForEnergyType(GameplayModifiers.EnergyType type)
         {
-            if (!CanBeUsedSafely) yield break;
+            if (!CanBeUsedSafely) return;
 
-            yield return new WaitUntil(() => gameEnergyUIPanel.gameObject != null);
+            if (type == GameplayModifiers.EnergyType.Bar && !gameplayModifiers.instaFail)
+            {
+                energyBar = gameEnergyUIPanel.transform.Find("EnergyBarWrapper/EnergyBar").GetComponent<ImageView>();
+                energyBar.color = energyConfig.Mid;
+                gameEnergyCounter.gameEnergyDidChangeEvent += HandleEnergyDidChange;
 
-            if (type == GameplayModifiers.EnergyType.Battery)
+                return;
+            }
+
+            if (mpController?.gameObject == null)
+                base.StartCoroutine(BatteryEnergyAndOneLifeSetup(type));
+        }
+
+        internal IEnumerator BatteryEnergyAndOneLifeSetup(GameplayModifiers.EnergyType energyType)
+        {
+            yield return new WaitUntil(() => gameEnergyUIPanel.isActiveAndEnabled);
+
+            if (energyType == GameplayModifiers.EnergyType.Battery)
             {
                 List<Image> batterySegments = gameEnergyUIPanel._batteryLifeSegments;
 
                 batterySegments[0].color = energyConfig.Low;
-                batterySegments[1].color = HSBColor.Lerp(HSBColor.FromColor(energyConfig.Low), HSBColor.FromColor(energyConfig.Mid), 0.34f).ToColor();
-                batterySegments[2].color = HSBColor.Lerp(HSBColor.FromColor(energyConfig.Mid), HSBColor.FromColor(energyConfig.High), 0.66f).ToColor();
+                batterySegments[1].color = HSBColor.Lerp(HSBColor.FromColor(energyConfig.Low), HSBColor.FromColor(energyConfig.Mid), 0.5f).ToColor();
+                batterySegments[2].color = HSBColor.Lerp(HSBColor.FromColor(energyConfig.Mid), HSBColor.FromColor(energyConfig.High), 0.5f).ToColor();
                 batterySegments[3].color = energyConfig.High;
 
                 yield break;
             }
 
-            else if (type == GameplayModifiers.EnergyType.Bar)
+            else if (energyType == GameplayModifiers.EnergyType.Bar && gameplayModifiers.instaFail)
             {
-                if (gameplayModifiers.instaFail)
-                {
-                    energyBar = gameEnergyUIPanel.transform.Find("BatteryLifeSegment(Clone)").GetComponent<ImageView>();
-                    energyBar.color = energyConfig.High;
-                }
-                else
-                {
-                    energyBar = gameEnergyUIPanel.transform.Find("EnergyBarWrapper/EnergyBar").GetComponent<ImageView>();
-                    energyBar.color = energyConfig.Mid;
-                }
+                energyBar = gameEnergyUIPanel.transform.Find("BatteryLifeSegment(Clone)").GetComponent<ImageView>();
+                energyBar.color = energyConfig.High;
             }
 
-            gameEnergyCounter.gameEnergyDidChangeEvent += HandleEnergyDidChange;
+            else yield break;
         }
 
         private void HandleEnergyDidChange(float energy)
@@ -92,7 +99,7 @@ namespace UITweaks.PanelModifiers
 
         public void Update()
         {
-            if (!gameEnergyUIPanel.isActiveAndEnabled || !CanBeUsedSafely) return;
+            if (!gameEnergyUIPanel.isActiveAndEnabled || energyBar?.gameObject == null || !CanBeUsedSafely) return;
 
             if (energyConfig.RainbowOnFullEnergy)
             {

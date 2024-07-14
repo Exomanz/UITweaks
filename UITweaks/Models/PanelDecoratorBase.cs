@@ -12,7 +12,7 @@ namespace UITweaks.Models
         [Inject] protected readonly SiraLog logger;
         [Inject] protected readonly CoreGameHUDController gameHUDController;
 
-        public bool CanBeUsedSafely { get; set; } = true;
+        public bool CanBeUsedSafely { get; protected set; } = true;
         public Color RainbowColor => rainbowEffectManager.Rainbow;
         public UITweaksConfigBase config;
         public GameObject parentPanel;
@@ -34,6 +34,7 @@ namespace UITweaks.Models
             }
             catch (NullReferenceException ex)
             {
+                logger.Logger.Error($"PanelDecorator of type {callingTypeName} cannot be properly initialized.");
                 logger.Logger.Error(ex);
                 callingDecorator.CanBeUsedSafely = false;
                 return false;
@@ -42,6 +43,7 @@ namespace UITweaks.Models
             if (!callingDecorator.config.Enabled)
             {
                 callingDecorator.CanBeUsedSafely = false;
+                logger.Logger.Debug($"PanelDecorator of type {callingTypeName} is disabled and will not be initialized.");
                 return false;
             }
 

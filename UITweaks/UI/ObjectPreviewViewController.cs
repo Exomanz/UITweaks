@@ -4,8 +4,6 @@ using HMUI;
 using SiraUtil.Logging;
 using System;
 using System.Collections;
-using System.ComponentModel;
-using System.Drawing.Design;
 using System.Linq;
 using Tweening;
 using UITweaks.Config;
@@ -33,7 +31,7 @@ namespace UITweaks.UI
         [Inject] private readonly EnergyConfig energyConfig;
         [Inject] private readonly MiscConfig miscConfig;
         [Inject] private readonly MultiplierConfig multiplierConfig;
-        //[Inject] private readonly PositionConfig positionConfig;
+        [Inject] private readonly PositionConfig positionConfig;
         [Inject] private readonly ProgressConfig progressConfig;
 
         private readonly Vector3 DEFAULT_POSITION = new(3.53f, 1.3f, 2.4f);
@@ -189,6 +187,13 @@ namespace UITweaks.UI
                 case 4:
                     objectGrabber.MultiplierPanel.transform.position = VOID_POSITION;
                     objectGrabber.EnergyPanel.SetActive(false);
+                    objectGrabber.ComboPanel.SetActive(false);
+                    objectGrabber.ProgressPanel.SetActive(false);
+                    objectGrabber.ImmediateRankPanel.SetActive(false);
+                    break;
+                case 5:
+                    objectGrabber.MultiplierPanel.transform.position = VOID_POSITION;
+                    objectGrabber.EnergyPanel.SetActive(false);
                     objectGrabber.ComboPanel.SetActive(true);
                     objectGrabber.ProgressPanel.SetActive(false);
                     objectGrabber.ImmediateRankPanel.SetActive(true);
@@ -231,7 +236,7 @@ namespace UITweaks.UI
                 case 3:
                     UpdateProgressBar(modSettingsViewController.ProgressBarFillAmount);
                     break;
-                case 4:
+                case 5:
                     UpdateComboPanel();
                     UpdateImmediateRankPanel();
                     if (rank >= 90.00m && miscConfig.RainbowOnSSRank && miscConfig.AllowRankColoring)

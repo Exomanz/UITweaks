@@ -361,11 +361,7 @@ namespace UITweaks.UI
         [UIValue("position-enabled")] private bool PositionEnabled
         {
             get => positionConfig.Enabled;
-            set
-            {
-                positionConfig.Enabled = value;
-                //NotifyPropertyChanged();
-            }
+            set => positionConfig.Enabled = value;
         }
 
         [UIValue("hide-first-place-anim")] private bool HideFirstPlace
@@ -374,10 +370,20 @@ namespace UITweaks.UI
             set => positionConfig.HideFirstPlaceAnimation = value;
         }
 
+        [UIValue("rainbow-on-first-place")] private bool RainbowOnFirstPlace
+        {
+            get => positionConfig.RainbowOnFirstPlace;
+            set => positionConfig.RainbowOnFirstPlace = value;
+        }
+
         [UIValue("use-static-color")] private bool UseStaticColor
         {
             get => positionConfig.UseStaticColorForStaticPanel;
-            set => positionConfig.UseStaticColorForStaticPanel = value;
+            set
+            {
+                positionConfig.UseStaticColorForStaticPanel = value;
+                NotifyPropertyChanged();
+            }
         }
 
         [UIValue("color-static-panel")] private Color StaticPanelColor

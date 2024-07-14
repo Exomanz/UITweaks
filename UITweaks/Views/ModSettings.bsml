@@ -82,6 +82,28 @@ one color to another as the song progresses.'/>
 				<slider-setting text='Preview Song Progress' on-change='update-progress-preview' min='0.01' max='1' increment='0.01' interactable='~progress-enabled' active='~use-fade-display-type'/>
 			</modifier-container>
 		</tab>
+		
+		<!--Position Tab-->
+		<tab tab-name='Position (MP)' tags='_'>
+			<modifier-container child-expand-width='true' horizontal-fit='PreferredSize'>
+				<checkbox text='Enabled' value='position-enabled' apply-on-change='true'/>
+				<checkbox text='Hide 1st Place Animation' value='hide-first-place-anim' apply-on-change='true' interactable='~position-enabled'/>
+				<checkbox text='Rainbow on 1st Place' value='rainbow-on-first-place' apply-on-change='true' interactable='~position-enabled'/>
+				<checkbox text='Static Player Count Color' value='use-static-color' apply-on-change='true' interactable='~position-enabled'/>
+				<color-setting text='Static Panel Color' value='color-static-panel' apply-on-change='true' active='~use-static-color'/>
+				<button text='Modify Position Colors' click-event='open-position-settings'/>
+				<modal show-event='open-position-settings' hide-event='hide-all-modals' click-off-closes='true' move-to-center='true' size-delta-x='60' size-delta-y='55'>
+					<vertical horizontal-fit='PreferredSize' pref-width='55' vertical-fit='PreferredSize' pref-height='45'>
+						<color-setting text='1st Place' value='color-first-place' apply-on-change='true' interactable='~position-enabled'/>
+						<color-setting text='2nd Place' value='color-second-place' apply-on-change='true' interactable='~position-enabled'/>
+						<color-setting text='3rd Place' value='color-third-place' apply-on-change='true' interactable='~position-enabled'/>
+						<color-setting text='4th Place' value='color-fourth-place' apply-on-change='true' interactable='~position-enabled'/>
+						<color-setting text='5th Place' value='color-fifth-place' apply-on-change='true' interactable='~position-enabled'/>
+						<button text='Close' click-event='hide-all-modals'/>
+					</vertical>
+				</modal>
+			</modifier-container>
+		</tab>
 
 		<!--Miscellaneous Tab-->
 		<tab tab-name='Extras' tags='_'>
@@ -107,9 +129,7 @@ one color to another as the song progresses.'/>
 								<color-setting text='C' value='rank-c-color' apply-on-change='true' interactable='~allow-rank-colors'/>
 								<color-setting text='D' value='rank-d-color' apply-on-change='true' interactable='~allow-rank-colors'/>
 								<color-setting text='E' value='rank-e-color' apply-on-change='true' interactable='~allow-rank-colors'/>
-								<horizontal align='bottom'>
-									<button text='Close' click-event='hide-all-modals'/>
-								</horizontal>
+								<button text='Close' click-event='hide-all-modals'/>
 							</vertical>
 						</modal>
 						<text text='Set Rank Letter' align='Center' italics='True' underlined='True'/>
