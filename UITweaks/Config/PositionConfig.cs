@@ -20,6 +20,11 @@ namespace UITweaks.Config
         public virtual bool UseStaticColorForStaticPanel { get; set; } = false;
 
         /// <summary>
+        /// Controls the rainbow effect of the <i>dynamic</i> first place text.
+        /// </summary>
+        public virtual bool RainbowOnFirstPlace { get; set; } = false;
+
+        /// <summary>
         /// The <see cref="Color"/> of the player count section of the Position Panel.
         /// <br></br>This will only take effect if <see cref="UseStaticColorForPlayerCount"/> is <see langword="true"/>.
         /// </summary>
