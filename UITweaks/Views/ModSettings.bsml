@@ -107,9 +107,7 @@ one color to another as the song progresses.'/>
 								<color-setting text='C' value='rank-c-color' apply-on-change='true' interactable='~allow-rank-colors'/>
 								<color-setting text='D' value='rank-d-color' apply-on-change='true' interactable='~allow-rank-colors'/>
 								<color-setting text='E' value='rank-e-color' apply-on-change='true' interactable='~allow-rank-colors'/>
-								<horizontal align='bottom'>
 									<button text='Close' click-event='hide-all-modals'/>
-								</horizontal>
 							</vertical>
 						</modal>
 						<text text='Set Rank Letter' align='Center' italics='True' underlined='True'/>
