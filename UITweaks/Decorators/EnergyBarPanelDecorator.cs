@@ -1,7 +1,9 @@
 ﻿using HMUI;
+using System.Collections;
 using System.Collections.Generic;
 using UITweaks.Config;
 using UITweaks.Models;
+using UnityEngine;
 using UnityEngine.UI;
 using Zenject;
 
@@ -9,6 +11,7 @@ namespace UITweaks.PanelModifiers
 {
     public class EnergyBarPanelDecorator : PanelDecoratorBase
     {
+        [InjectOptional] internal readonly MultiplayerController mpController;
         [Inject] private readonly IGameEnergyCounter gameEnergyCounter;
         [Inject] private readonly GameplayModifiers gameplayModifiers;
         [Inject] private readonly EnergyConfig energyConfig;
@@ -30,7 +33,8 @@ namespace UITweaks.PanelModifiers
         {
             if (!base.ModPanel(this)) return false;
 
-            PrepareColorsForEnergyType(gameplayModifiers.energyType);
+            if (mpController?.gameObject == null)
+                PrepareColorsForEnergyType(gameplayModifiers.energyType);
 
             return true;
         }
@@ -68,10 +72,10 @@ namespace UITweaks.PanelModifiers
             }
 
             else if (energyType == GameplayModifiers.EnergyType.Bar && gameplayModifiers.instaFail)
-                {
-                    energyBar = gameEnergyUIPanel.transform.Find("BatteryLifeSegment(Clone)").GetComponent<ImageView>();
-                    energyBar.color = energyConfig.High;
-                }
+            {
+                energyBar = gameEnergyUIPanel.transform.Find("BatteryLifeSegment(Clone)").GetComponent<ImageView>();
+                energyBar.color = energyConfig.High;
+            }
 
             else yield break;
         }
