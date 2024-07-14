@@ -33,8 +33,7 @@ namespace UITweaks.PanelModifiers
         {
             if (!base.ModPanel(this)) return false;
 
-            if (mpController?.gameObject == null)
-                PrepareColorsForEnergyType(gameplayModifiers.energyType);
+            PrepareColorsForEnergyType(gameplayModifiers.energyType);
 
             return true;
         }
@@ -52,7 +51,8 @@ namespace UITweaks.PanelModifiers
                 return;
             }
 
-            base.StartCoroutine(BatteryEnergyAndOneLifeSetup(type));
+            if (mpController?.gameObject == null)
+                base.StartCoroutine(BatteryEnergyAndOneLifeSetup(type));
         }
 
         internal IEnumerator BatteryEnergyAndOneLifeSetup(GameplayModifiers.EnergyType energyType)
