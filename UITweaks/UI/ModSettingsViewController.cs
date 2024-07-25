@@ -137,6 +137,8 @@ namespace UITweaks.UI
 
         [UIValue("invert-ufdt")] private bool _FadeDisplayToggle => !UseFadeDisplayType;
 
+        [UIValue("invert-rainbow-first-place")] private bool _InvertRainbowFirstPlace => !RainbowOnFirstPlace;
+
         [UIValue("invert-rainbow-ss")] private bool _InvertRainbowSS => !RainbowOnSSRank;
         #endregion
 
@@ -388,7 +390,14 @@ namespace UITweaks.UI
         [UIValue("position-enabled")] private bool PositionEnabled
         {
             get => positionConfig.Enabled;
-            set => positionConfig.Enabled = value;
+            set
+            {
+                if (positionConfig.Enabled != value) 
+                {
+                    positionConfig.Enabled = value;
+                    NotifyPropertyChanged();
+                }
+            }
         }
 
         [UIValue("hide-first-place-anim")] private bool HideFirstPlace
@@ -400,7 +409,15 @@ namespace UITweaks.UI
         [UIValue("rainbow-on-first-place")] private bool RainbowOnFirstPlace
         {
             get => positionConfig.RainbowOnFirstPlace;
-            set => positionConfig.RainbowOnFirstPlace = value;
+            set
+            {
+                if (positionConfig.RainbowOnFirstPlace != value)
+                {
+                    positionConfig.RainbowOnFirstPlace = value;
+                    NotifyPropertyChanged();
+                    NotifyPropertyChanged(nameof(_InvertRainbowFirstPlace));
+                }
+            }
         }
 
         [UIValue("use-static-color")] private bool UseStaticColor

@@ -88,13 +88,13 @@ one color to another as the song progresses.'/>
 			<modifier-container child-expand-width='true' horizontal-fit='PreferredSize'>
 				<checkbox text='Enabled' value='position-enabled' apply-on-change='true'/>
 				<checkbox text='Hide 1st Place Animation' value='hide-first-place-anim' apply-on-change='true' interactable='~position-enabled'/>
-				<checkbox text='Rainbow on 1st Place' value='rainbow-on-first-place' apply-on-change='true' interactable='~position-enabled'/>
 				<checkbox text='Static Player Count Color' value='use-static-color' apply-on-change='true' interactable='~position-enabled'/>
 				<color-setting text='Static Panel Color' value='color-static-panel' apply-on-change='true' active='~use-static-color'/>
-				<button text='Modify Position Colors' click-event='open-position-settings'/>
+				<button text='Modify Position Colors' click-event='open-position-settings' interactable='~position-enabled'/>
 				<modal show-event='open-position-settings' hide-event='hide-all-modals' click-off-closes='true' move-to-center='true' size-delta-x='60' size-delta-y='55'>
 					<vertical horizontal-fit='PreferredSize' pref-width='55' vertical-fit='PreferredSize' pref-height='45'>
-						<color-setting text='1st Place' value='color-first-place' apply-on-change='true' interactable='~position-enabled'/>
+						<checkbox text='Rainbow on 1st Place' value='rainbow-on-first-place' apply-on-change='true' interactable='~position-enabled'/>
+						<color-setting text='1st Place' value='color-first-place' apply-on-change='true' interactable='~position-enabled' active='~invert-rainbow-first-place'/>
 						<color-setting text='2nd Place' value='color-second-place' apply-on-change='true' interactable='~position-enabled'/>
 						<color-setting text='3rd Place' value='color-third-place' apply-on-change='true' interactable='~position-enabled'/>
 						<color-setting text='4th Place' value='color-fourth-place' apply-on-change='true' interactable='~position-enabled'/>
