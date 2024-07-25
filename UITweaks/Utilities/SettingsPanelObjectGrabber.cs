@@ -19,46 +19,34 @@ namespace UITweaks.Utilities
         public GameObject ComboPanel { get; private set; }
         public GameObject ProgressPanel { get; private set; }
         public GameObject ImmediateRankPanel { get; private set; }
-        
-        private readonly List<MonoBehaviour> panelControllers = new List<MonoBehaviour>();
 
         public IEnumerator GetPanels()
         {
-            try
-            {
-                AsyncOperationHandle<SceneInstance> defaultSceneInstanceLoader = Addressables.LoadSceneAsync("DefaultEnvironment", LoadSceneMode.Additive);
+            AsyncOperationHandle<SceneInstance> defaultSceneInstanceLoader = Addressables.LoadSceneAsync("DefaultEnvironment", LoadSceneMode.Additive);
 
-                while (!defaultSceneInstanceLoader.IsDone)
-                    yield return new WaitForSecondsRealtime(0.1f);
+            while (!defaultSceneInstanceLoader.IsDone)
+                yield return new WaitForSecondsRealtime(0.1f);
 
-                // I would use Object.FindObjectsOfType<>() but it returns null since the objects aren't active.
-                panelControllers.Add(Resources.FindObjectsOfTypeAll<ScoreMultiplierUIController>().FirstOrDefault());
-                panelControllers.Add(Resources.FindObjectsOfTypeAll<GameEnergyUIPanel>().FirstOrDefault());
-                panelControllers.Add(Resources.FindObjectsOfTypeAll<ComboUIController>().FirstOrDefault());
-                panelControllers.Add(Resources.FindObjectsOfTypeAll<SongProgressUIController>().FirstOrDefault());
-                panelControllers.Add(Resources.FindObjectsOfTypeAll<ImmediateRankUIPanel>().FirstOrDefault());
+            CoreGameHUDController gameHudController = Resources.FindObjectsOfTypeAll<CoreGameHUDController>().FirstOrDefault();
 
-                MultiplierPanel = FinalizePanel(panelControllers[0]);
-                EnergyPanel = FinalizePanel(panelControllers[1]);
-                ComboPanel = FinalizePanel(panelControllers[2]);
-                ProgressPanel = FinalizePanel(panelControllers[3]);
-                ImmediateRankPanel = FinalizePanel(panelControllers[4]);
-                GameObject.Destroy(ImmediateRankPanel.transform.Find("ScoreText").GetComponent<ScoreUIController>());
+            ScoreMultiplierUIController multiplierController = gameHudController.transform.Find("RightPanel/MultiplierCanvas").GetComponent<ScoreMultiplierUIController>();
+            MultiplierPanel = FinalizePanel(multiplierController);
 
-                MultiplierPanel.name = "Preview_MultiplierPanel";
-                EnergyPanel.name = "Preview_EnergyPanel";
-                ComboPanel.name = "Preview_ComboPanel";
-                ProgressPanel.name = "Preview_ProgressPanel";
-                ImmediateRankPanel.name = "Preview_ScoreRankPanel";
+            GameEnergyUIPanel energyPanel = gameHudController.transform.Find("EnergyPanel").GetComponent<GameEnergyUIPanel>();
+            EnergyPanel = FinalizePanel(energyPanel);
 
-                if (MultiplierPanel && EnergyPanel && ComboPanel && ProgressPanel && ImmediateRankPanel)
-                    IsCompleted = true;
-                else
-                    throw new System.NullReferenceException("One or more PanelModifiers is null. Unable to load the Object Previewer.");
+            ComboUIController comboController = gameHudController.transform.Find("LeftPanel/ComboPanel").GetComponent<ComboUIController>();
+            ComboPanel = FinalizePanel(comboController);
 
-                SceneManager.UnloadSceneAsync("DefaultEnvironment");
-            }
-            finally { }
+            SongProgressUIController progressController = gameHudController.transform.Find("RightPanel/SongProgressCanvas").GetComponent<SongProgressUIController>();
+            ProgressPanel = FinalizePanel(progressController);
+
+            ImmediateRankUIPanel rankController = gameHudController.transform.Find("LeftPanel/ScoreCanvas").GetComponent<ImmediateRankUIPanel>();
+            GameObject.Destroy(rankController.transform.Find("ScoreText").GetComponent<ScoreUIController>());
+            ImmediateRankPanel = FinalizePanel(rankController);
+
+            SceneManager.UnloadSceneAsync("DefaultEnvironment");
+            IsCompleted = true;
 
             yield break;
         }
@@ -72,6 +60,7 @@ namespace UITweaks.Utilities
                 go.transform.SetParent(transform);
                 go.transform.localPosition = Vector3.zero;
                 go.transform.localRotation = Quaternion.identity;
+                go.name = "UIT_Preview-" + controller.GetType().Name;
                 return go;
             }
             catch (System.Exception ex)
