@@ -20,7 +20,6 @@ namespace UITweaks.UI
 
         [Inject] internal void Construct(UBinder<Plugin, PluginMetadata> metadata)
         {
-            logger.Debug("ModInfoViewController:Construct()");
             meta = metadata.Value;
         }
 
