@@ -146,8 +146,11 @@ namespace UITweaks.UI
             get => multiplierConfig.Enabled;
             set
             {
-                multiplierConfig.Enabled = value;
-                NotifyPropertyChanged();
+                if (multiplierConfig.Enabled != value)
+                {
+                    multiplierConfig.Enabled = value;
+                    NotifyPropertyChanged();
+                };
             }
         }
 
@@ -156,8 +159,11 @@ namespace UITweaks.UI
             get => multiplierConfig.RainbowOnMaxMultiplier;
             set
             {
-                multiplierConfig.RainbowOnMaxMultiplier = value;
-                NotifyPropertyChanged(nameof(_RainbowToggle));
+                if (multiplierConfig.RainbowOnMaxMultiplier != value)
+                {
+                    multiplierConfig.RainbowOnMaxMultiplier = value;
+                    NotifyPropertyChanged(nameof(_RainbowToggle));
+                }
             }
         }
 
@@ -198,8 +204,11 @@ namespace UITweaks.UI
             get => energyConfig.Enabled;
             set
             {
-                energyConfig.Enabled = value;
-                NotifyPropertyChanged();
+                if (energyConfig.Enabled != value)
+                {
+                    energyConfig.Enabled = value;
+                    NotifyPropertyChanged();
+                }
             }
         }
 
@@ -208,8 +217,11 @@ namespace UITweaks.UI
             get => energyConfig.RainbowOnFullEnergy;
             set
             {
-                energyConfig.RainbowOnFullEnergy = value;
-                NotifyPropertyChanged();
+                if (energyConfig.RainbowOnFullEnergy != value)
+                {
+                    energyConfig.RainbowOnFullEnergy = value;
+                    NotifyPropertyChanged();
+                }
             }
         }
 
@@ -238,9 +250,12 @@ namespace UITweaks.UI
             get => comboConfig.Enabled;
             set
             {
-                comboConfig.Enabled = value;
-                NotifyPropertyChanged();
-                NotifyPropertyChanged(nameof(_Complex));
+                if (comboConfig.Enabled != value)
+                {
+                    comboConfig.Enabled = value;
+                    NotifyPropertyChanged();
+                    NotifyPropertyChanged(nameof(_Complex));
+                }
             }
         }
 
@@ -261,10 +276,13 @@ namespace UITweaks.UI
             get => comboConfig.UseGradient;
             set
             {
-                comboConfig.UseGradient = value;
-                NotifyPropertyChanged();
-                NotifyPropertyChanged(nameof(_Complex));
-                NotifyPropertyChanged(nameof(_GradientToggle));
+                if (comboConfig.UseGradient != value)
+                {
+                    comboConfig.UseGradient = value;
+                    NotifyPropertyChanged();
+                    NotifyPropertyChanged(nameof(_Complex));
+                    NotifyPropertyChanged(nameof(_GradientToggle));
+                }
             }
         }
 
@@ -285,8 +303,11 @@ namespace UITweaks.UI
             get => comboConfig.MirrorBottomLine;
             set
             {
-                comboConfig.MirrorBottomLine = value;
-                NotifyPropertyChanged(nameof(_MirrorBottomLineToggle));
+                if (comboConfig.MirrorBottomLine != value)
+                {
+                    comboConfig.MirrorBottomLine = value;
+                    NotifyPropertyChanged(nameof(_MirrorBottomLineToggle));
+                }
             }
         }
 
@@ -309,8 +330,11 @@ namespace UITweaks.UI
             get => progressConfig.Enabled;
             set
             {
-                progressConfig.Enabled = value;
-                NotifyPropertyChanged();
+                if (progressConfig.Enabled != value)
+                {
+                    progressConfig.Enabled = value;
+                    NotifyPropertyChanged();
+                }
             }
         }
 
@@ -338,9 +362,12 @@ namespace UITweaks.UI
             get => progressConfig.UseFadeDisplayType;
             set
             {
-                progressConfig.UseFadeDisplayType = value;
-                NotifyPropertyChanged();
-                NotifyPropertyChanged(nameof(_FadeDisplayToggle));
+                if (progressConfig.UseFadeDisplayType != value)
+                {
+                    progressConfig.UseFadeDisplayType = value;
+                    NotifyPropertyChanged();
+                    NotifyPropertyChanged(nameof(_FadeDisplayToggle));
+                }
             }
         }
 
@@ -381,8 +408,11 @@ namespace UITweaks.UI
             get => positionConfig.UseStaticColorForStaticPanel;
             set
             {
-                positionConfig.UseStaticColorForStaticPanel = value;
-                NotifyPropertyChanged();
+                if (positionConfig.UseStaticColorForStaticPanel != value)
+                {
+                    positionConfig.UseStaticColorForStaticPanel = value;
+                    NotifyPropertyChanged();
+                }
             }
         }
 
@@ -459,8 +489,11 @@ namespace UITweaks.UI
             get => miscConfig.AllowRankColoring;
             set 
             { 
-                miscConfig.AllowRankColoring = value;
-                NotifyPropertyChanged();
+                if (miscConfig.AllowRankColoring != value)
+                {
+                    miscConfig.AllowRankColoring = value;
+                    NotifyPropertyChanged();
+                }
             }
         }
 
@@ -469,9 +502,12 @@ namespace UITweaks.UI
             get => miscConfig.RainbowOnSSRank; 
             set
             { 
-                miscConfig.RainbowOnSSRank = value;
-                NotifyPropertyChanged(nameof(_InvertRainbowSS));
-                NotifyPropertyChanged();
+                if (miscConfig.RainbowOnSSRank != value)
+                {
+                    miscConfig.RainbowOnSSRank = value;
+                    NotifyPropertyChanged(nameof(_InvertRainbowSS));
+                    NotifyPropertyChanged();
+                }
             }
         }
 
