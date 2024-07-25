@@ -20,7 +20,7 @@ namespace UITweaks
                 if (Environment.GetCommandLineArgs().Any(x => x.ToLower() == "--uitweaks-aprilfools"))
                     return true;
 
-                DateTime time = Utils.CanUseDateTimeNowSafely ? DateTime.Now : DateTime.UtcNow;
+                DateTime time = Utils.CurrentTime();
                 return time.Month == 4 && time.Day == 1;
             } 
         }
