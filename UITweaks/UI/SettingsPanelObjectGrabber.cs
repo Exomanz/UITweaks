@@ -5,6 +5,7 @@ using UnityEngine.SceneManagement;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
 using UnityEngine.ResourceManagement.ResourceProviders;
+using IPA.Utilities;
 
 namespace UITweaks.UI
 {
@@ -15,6 +16,7 @@ namespace UITweaks.UI
         public GameObject EnergyPanel { get; private set; }
         public GameObject ComboPanel { get; private set; }
         public GameObject ProgressPanel { get; private set; }
+        public GameObject PositionPanel { get; private set; }
         public GameObject ImmediateRankPanel { get; private set; }
 
         public IEnumerator GetPanels()
@@ -43,6 +45,15 @@ namespace UITweaks.UI
             ImmediateRankPanel = FinalizePanel(rankController);
 
             SceneManager.UnloadSceneAsync("DefaultEnvironment");
+
+            MockMultiplayerPositionPanel positionPanel = new GameObject("UIT_Preview-MockMultipliayerPositionPanel").AddComponent<MockMultiplayerPositionPanel>();
+            while (!positionPanel.IsSetup)
+                yield return new WaitForSecondsRealtime(0.1f);
+            positionPanel.transform.SetParent(transform, false);
+            positionPanel.transform.localPosition = Vector3.zero;
+            positionPanel.transform.localRotation = Quaternion.identity;
+            PositionPanel = positionPanel.gameObject;
+            
             IsCompleted = true;
 
             yield break;

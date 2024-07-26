@@ -57,6 +57,12 @@ namespace UITweaks.UI
         // Progress Panel
         private Image[] progressPanelImages;
 
+        // Position Panel
+        private MockMultiplayerPositionPanel positionPanel;
+        private CurvedTextMeshPro positionText;
+        private CurvedTextMeshPro playerCountText;
+        private bool previewPositionIsFirst = false;
+
         // Score Panel
         private CurvedTextMeshPro scoreText;
         private CurvedTextMeshPro percentText;
@@ -79,6 +85,8 @@ namespace UITweaks.UI
             modSettingsViewController.TabWasChangedEvent += UpdatePanelVisibility;
             modSettingsViewController.RankShouldBeUpdatedEvent += HandleRankLetterRequest;
             this.StartCoroutine(MultiplierPreviewCoroutine());
+            this.StartCoroutine(MultiplayerPositionPreviewCoroutine());
+            
         }
 
         protected override void DidDeactivate(bool removedFromHierarchy, bool screenSystemDisabling)
@@ -126,6 +134,14 @@ namespace UITweaks.UI
                     texts[3].text = "01";
                 }
 
+                // Position Panel Setup 
+                {
+                    positionPanel = objectGrabber.PositionPanel.GetComponent<MockMultiplayerPositionPanel>();
+                    positionPanel.transform.localPosition = VOID_POSITION;
+                    positionText = positionPanel.positionText;
+                    playerCountText = positionPanel.playerCountText;
+                }
+
                 // Immediate Rank Panel Setup
                 {
                     Transform immediateRankTransform = objectGrabber.ImmediateRankPanel.transform;
@@ -158,6 +174,7 @@ namespace UITweaks.UI
                     objectGrabber.EnergyPanel.SetActive(false);
                     objectGrabber.ComboPanel.SetActive(false);
                     objectGrabber.ProgressPanel.SetActive(false);
+                    objectGrabber.PositionPanel.transform.localPosition = VOID_POSITION;
                     objectGrabber.ImmediateRankPanel.SetActive(false);
                     break;
                 case 1:
@@ -165,6 +182,7 @@ namespace UITweaks.UI
                     objectGrabber.EnergyPanel.SetActive(true);
                     objectGrabber.ComboPanel.SetActive(false);
                     objectGrabber.ProgressPanel.SetActive(false);
+                    objectGrabber.PositionPanel.transform.localPosition = VOID_POSITION;
                     objectGrabber.ImmediateRankPanel.SetActive(false);
                     break;
                 case 2:
@@ -172,6 +190,7 @@ namespace UITweaks.UI
                     objectGrabber.EnergyPanel.SetActive(false);
                     objectGrabber.ComboPanel.SetActive(true);
                     objectGrabber.ProgressPanel.SetActive(false);
+                    objectGrabber.PositionPanel.transform.localPosition = VOID_POSITION;
                     objectGrabber.ImmediateRankPanel.SetActive(false);
 
                     comboNumberText.text = rand.Next(0, 250).ToString();
@@ -182,6 +201,7 @@ namespace UITweaks.UI
                     objectGrabber.EnergyPanel.SetActive(false);
                     objectGrabber.ComboPanel.SetActive(false);
                     objectGrabber.ProgressPanel.SetActive(true);
+                    objectGrabber.PositionPanel.transform.localPosition = VOID_POSITION;
                     objectGrabber.ImmediateRankPanel.SetActive(false);
                     break;
                 case 4:
@@ -189,6 +209,7 @@ namespace UITweaks.UI
                     objectGrabber.EnergyPanel.SetActive(false);
                     objectGrabber.ComboPanel.SetActive(false);
                     objectGrabber.ProgressPanel.SetActive(false);
+                    objectGrabber.PositionPanel.transform.localPosition = Vector3.zero;
                     objectGrabber.ImmediateRankPanel.SetActive(false);
                     break;
                 case 5:
@@ -196,6 +217,7 @@ namespace UITweaks.UI
                     objectGrabber.EnergyPanel.SetActive(false);
                     objectGrabber.ComboPanel.SetActive(true);
                     objectGrabber.ProgressPanel.SetActive(false);
+                    objectGrabber.PositionPanel.transform.localPosition = VOID_POSITION;
                     objectGrabber.ImmediateRankPanel.SetActive(true);
 
                     rank = Utilities.Utilities.RandomDecimal(100, 1);
@@ -235,6 +257,13 @@ namespace UITweaks.UI
                     break;
                 case 3:
                     UpdateProgressBar(modSettingsViewController.ProgressBarFillAmount);
+                    break;
+                case 4:
+                    if (previewPositionIsFirst && positionConfig.RainbowOnFirstPlace && !positionConfig.UseStaticColorForStaticPanel)
+                    {
+                        positionPanel.positionText.color = rainbowEffectManager.Rainbow;
+                        positionPanel.playerCountText.color = rainbowEffectManager.Rainbow.ColorWithAlpha(0.25f);
+                    }
                     break;
                 case 5:
                     UpdateComboPanel();
@@ -428,6 +457,55 @@ namespace UITweaks.UI
                 progressPanelImages[2].transform.localPosition = Vector3.zero;
                 progressPanelImages[0].color = progressConfig.Fill;
             }
+        }
+
+        private IEnumerator MultiplayerPositionPreviewCoroutine()
+        {
+            yield return new WaitUntil(() => previewToggleIsReady);
+
+            positionPanel.positionText.text = "5";
+            positionPanel.positionText.color = positionConfig.Fifth;
+            positionPanel.playerCountText.color = positionConfig.UseStaticColorForStaticPanel ? positionConfig.StaticPanelColor : positionConfig.Fifth;
+            positionPanel.playerCountText.color = positionPanel.playerCountText.color.ColorWithAlpha(0.25f);
+            yield return new WaitForSecondsRealtime(1f);
+            
+            positionText.text = "4";
+            positionText.color = positionConfig.Fourth;
+            playerCountText.color = positionConfig.UseStaticColorForStaticPanel ? positionConfig.StaticPanelColor : positionConfig.Fourth;
+            positionPanel.playerCountText.color = positionPanel.playerCountText.color.ColorWithAlpha(0.25f);
+            yield return new WaitForSecondsRealtime(1f);
+
+            positionText.text = "3";
+            positionText.color = positionConfig.Third;
+            playerCountText.color = positionConfig.UseStaticColorForStaticPanel ? positionConfig.StaticPanelColor : positionConfig.Third;
+            positionPanel.playerCountText.color = positionPanel.playerCountText.color.ColorWithAlpha(0.25f);
+            yield return new WaitForSecondsRealtime(1f);
+
+            positionText.text = "2";
+            positionText.color = positionConfig.Second;
+            playerCountText.color = positionConfig.UseStaticColorForStaticPanel ? positionConfig.StaticPanelColor : positionConfig.Second;
+            positionPanel.playerCountText.color = positionPanel.playerCountText.color.ColorWithAlpha(0.25f);
+            yield return new WaitForSecondsRealtime(1f);
+
+            previewPositionIsFirst = true;
+            positionText.text = "1";
+            positionText.color = positionConfig.First;
+            playerCountText.color = positionConfig.UseStaticColorForStaticPanel ? positionConfig.StaticPanelColor : positionConfig.First;
+            positionPanel.playerCountText.color = positionPanel.playerCountText.color.ColorWithAlpha(0.25f);
+
+            var effectText = GameObject.Instantiate(positionText.gameObject, this.transform, true);
+            var effect = effectText.GetComponent<CurvedTextMeshPro>();
+            tweeningManager.AddTween(new FloatTween(1f, 1.02f, (time) =>
+            {
+                effectText.transform.localScale *= time;
+            }, 1f, EaseType.Linear), this);
+            yield return new WaitForSecondsRealtime(1f);
+
+            tweeningManager.KillAllTweens(this);
+            GameObject.Destroy(effectText);
+
+            previewPositionIsFirst = false;
+            yield return MultiplayerPositionPreviewCoroutine();
         }
 
         private void UpdateImmediateRankPanel()
