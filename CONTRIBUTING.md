@@ -1,6 +1,8 @@
 # Contributing to the UITweaks Repository 
 Are you a player and want to potentially see a feature added into this mod? A developer who found a bug and fixed it? There are multiple ways to contribute your ideas to the UITweaks Repository!
 
+This project is licensed under the [MIT License](LICENSE). Read the license file to learn more.
+
 ## [Open an Issue](https://github.com/Exomanz/UITweaks/issues/new)
 If you found a bug or have a feature request, please submit an issue. Fill out the form as fully as possible to make it easier to understand and reduce the back-and-forth trying to narrow down what is being discussed.
 
