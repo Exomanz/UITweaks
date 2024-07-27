@@ -59,10 +59,10 @@ namespace UITweaks.PanelModifiers
             localConnectedPlayer = scoreProvider.rankedPlayers[localPlayerIdx];
 
             dynamicPositionText.color = playerCountToConfigValuesMap[localPlayerIdx + 1];
-            playerCountText.color = playerCountToConfigValuesMap[scoreProvider.rankedPlayers.Count].ColorWithAlpha(0.25f); 
+            playerCountText.color = positionConfig.UseStaticColorForStaticPanel ? positionConfig.StaticPanelColor.ColorWithAlpha(0.25f) : playerCountToConfigValuesMap[scoreProvider.rankedPlayers.Count].ColorWithAlpha(0.25f);
 
             if (positionConfig.HideFirstPlaceAnimation)
-                positionHUDController._firstPlayerAnimationGo.SetActive(false);
+                positionHUDController._firstPlayerAnimationGo.transform.Rotate(0, 180, 0); // Text can't render upside-down
         }
 
         public void Update()
@@ -81,7 +81,8 @@ namespace UITweaks.PanelModifiers
             if (position == 1 && positionConfig.RainbowOnFirstPlace)
             {
                 dynamicPositionText.color = base.RainbowColor;
-                positionHUDController._firstPlayerAnimationGo.GetComponent<CurvedTextMeshPro>().color = base.RainbowColor;
+                if (positionHUDController._firstPlayerAnimationGo?.gameObject != null)
+                    positionHUDController._firstPlayerAnimationGo.GetComponent<CurvedTextMeshPro>().color = base.RainbowColor;
 
                 if (!positionConfig.UseStaticColorForStaticPanel)
                     playerCountText.color = base.RainbowColor.ColorWithAlpha(0.25f);
