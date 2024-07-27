@@ -59,6 +59,8 @@ namespace UITweaks.UI
 
         // Position Panel
         private MockMultiplayerPositionPanel positionPanel;
+        private GameObject firstPlaceAnimationGO;
+        private CurvedTextMeshPro firstPlaceAnimationGOText;
         private CurvedTextMeshPro positionText;
         private CurvedTextMeshPro playerCountText;
         private bool previewPositionIsFirst = false;
@@ -140,6 +142,13 @@ namespace UITweaks.UI
                     positionPanel.transform.localPosition = VOID_POSITION;
                     positionText = positionPanel.positionText;
                     playerCountText = positionPanel.playerCountText;
+
+                    firstPlaceAnimationGO = GameObject.Instantiate(positionText.gameObject, objectGrabber.PositionPanel.transform, true);
+                    firstPlaceAnimationGO.SetActive(false);
+
+                    firstPlaceAnimationGOText = firstPlaceAnimationGO.GetComponent<CurvedTextMeshPro>();
+                    firstPlaceAnimationGOText.text = "1";
+                    firstPlaceAnimationGOText.color = positionConfig.First;
                 }
 
                 // Immediate Rank Panel Setup
@@ -259,10 +268,21 @@ namespace UITweaks.UI
                     UpdateProgressBar(modSettingsViewController.ProgressBarFillAmount);
                     break;
                 case 4:
-                    if (previewPositionIsFirst && positionConfig.RainbowOnFirstPlace && !positionConfig.UseStaticColorForStaticPanel)
+                    if (previewPositionIsFirst && positionConfig.RainbowOnFirstPlace)
                     {
                         positionPanel.positionText.color = rainbowEffectManager.Rainbow;
-                        positionPanel.playerCountText.color = rainbowEffectManager.Rainbow.ColorWithAlpha(0.25f);
+                        if (firstPlaceAnimationGO.gameObject != null)
+                            firstPlaceAnimationGOText.color = rainbowEffectManager.Rainbow;
+
+                        if (!positionConfig.UseStaticColorForStaticPanel)
+                            positionPanel.playerCountText.color = rainbowEffectManager.Rainbow.ColorWithAlpha(0.25f);
+                        else positionPanel.playerCountText.color = positionConfig.StaticPanelColor.ColorWithAlpha(0.25f);
+                    }
+                    else if (previewPositionIsFirst)
+                    {
+                        positionPanel.positionText.color = positionConfig.First;
+                        if (firstPlaceAnimationGO.gameObject != null)
+                            firstPlaceAnimationGOText.color = positionConfig.First;
                     }
                     break;
                 case 5:
@@ -462,6 +482,7 @@ namespace UITweaks.UI
         private IEnumerator MultiplayerPositionPreviewCoroutine()
         {
             yield return new WaitUntil(() => previewToggleIsReady);
+            previewPositionIsFirst = false;
 
             positionPanel.positionText.text = "5";
             positionPanel.positionText.color = positionConfig.Fifth;
@@ -493,18 +514,26 @@ namespace UITweaks.UI
             playerCountText.color = positionConfig.UseStaticColorForStaticPanel ? positionConfig.StaticPanelColor : positionConfig.First;
             positionPanel.playerCountText.color = positionPanel.playerCountText.color.ColorWithAlpha(0.25f);
 
-            var effectText = GameObject.Instantiate(positionText.gameObject, this.transform, true);
-            var effect = effectText.GetComponent<CurvedTextMeshPro>();
-            tweeningManager.AddTween(new FloatTween(1f, 1.02f, (time) =>
+            if (!positionConfig.HideFirstPlaceAnimation)
             {
-                effectText.transform.localScale *= time;
-            }, 1f, EaseType.Linear), this);
+                firstPlaceAnimationGO.SetActive(true);
+
+                // Scale Tween
+                tweeningManager.AddTween(new FloatTween(1f, 3f, (time) =>
+                {
+                    firstPlaceAnimationGOText.transform.localScale = new Vector3(time, time, time);
+                }, 1f, EaseType.Linear), this);
+
+                // Opacity Tween. Colors are controlled outside of this method body.
+                tweeningManager.AddTween(new FloatTween(0.75f, 0f, (time) =>
+                {
+                    firstPlaceAnimationGOText.color = firstPlaceAnimationGOText.color.ColorWithAlpha(time);
+                }, 1f, EaseType.Linear), this);
+            }
             yield return new WaitForSecondsRealtime(1f);
-
             tweeningManager.KillAllTweens(this);
-            GameObject.Destroy(effectText);
+            firstPlaceAnimationGO.SetActive(false);
 
-            previewPositionIsFirst = false;
             yield return MultiplayerPositionPreviewCoroutine();
         }
 
