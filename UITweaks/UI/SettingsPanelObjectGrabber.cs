@@ -1,23 +1,25 @@
 ﻿using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
 using UnityEngine.ResourceManagement.ResourceProviders;
-using IPA.Utilities;
+using UITweaks.Models;
 
 namespace UITweaks.UI
 {
     internal class SettingsPanelObjectGrabber : MonoBehaviour
     {
         public bool IsCompleted { get; private set; } = false;
-        public GameObject MultiplierPanel { get; private set; }
-        public GameObject EnergyPanel { get; private set; }
-        public GameObject ComboPanel { get; private set; }
-        public GameObject ProgressPanel { get; private set; }
-        public GameObject PositionPanel { get; private set; }
-        public GameObject ImmediateRankPanel { get; private set; }
+        public List<PreviewPanel> PreviewPanels { get; private set; } = new List<PreviewPanel>();
+        private PreviewPanel multiplierPanel;
+        private PreviewPanel energyPanel;
+        private PreviewPanel comboPanel;
+        private PreviewPanel progressPanel;
+        private PreviewPanel positionPanel;
+        private PreviewPanel immediateRankPanel;
 
         public IEnumerator GetPanels()
         {
@@ -27,33 +29,46 @@ namespace UITweaks.UI
                 yield return new WaitForSecondsRealtime(0.1f);
 
             CoreGameHUDController gameHudController = Resources.FindObjectsOfTypeAll<CoreGameHUDController>().FirstOrDefault();
+            GameObject currentPanel;
 
-            ScoreMultiplierUIController multiplierController = gameHudController.transform.Find("RightPanel/MultiplierCanvas").GetComponent<ScoreMultiplierUIController>();
-            MultiplierPanel = FinalizePanel(multiplierController);
+            ScoreMultiplierUIController scoreMultiplierUIController = gameHudController.transform.Find("RightPanel/MultiplierCanvas").GetComponent<ScoreMultiplierUIController>();
+            currentPanel = FinalizePanel(scoreMultiplierUIController);
+            multiplierPanel = new PreviewPanel(0, currentPanel);
+            PreviewPanels.Add(multiplierPanel);
 
-            GameEnergyUIPanel energyPanel = gameHudController.transform.Find("EnergyPanel").GetComponent<GameEnergyUIPanel>();
-            EnergyPanel = FinalizePanel(energyPanel);
+            GameEnergyUIPanel gameEnergyUIPanel = gameHudController.transform.Find("EnergyPanel").GetComponent<GameEnergyUIPanel>();
+            currentPanel = FinalizePanel(gameEnergyUIPanel);
+            energyPanel = new PreviewPanel(1, currentPanel);
+            PreviewPanels.Add(energyPanel);
 
             ComboUIController comboController = gameHudController.transform.Find("LeftPanel/ComboPanel").GetComponent<ComboUIController>();
-            ComboPanel = FinalizePanel(comboController);
+            currentPanel = FinalizePanel(comboController);
+            comboPanel = new PreviewPanel(2, currentPanel);
+            PreviewPanels.Add(comboPanel);
 
             SongProgressUIController progressController = gameHudController.transform.Find("RightPanel/SongProgressCanvas").GetComponent<SongProgressUIController>();
-            ProgressPanel = FinalizePanel(progressController);
+            currentPanel = FinalizePanel(progressController);
+            progressPanel = new PreviewPanel(3, currentPanel);
+            PreviewPanels.Add(progressPanel);
+
+            MockMultiplayerPositionPanel mockMultiplayerPositionPanel = new GameObject("UIT_Preview-MockMultipliayerPositionPanel").AddComponent<MockMultiplayerPositionPanel>();
+            while (!mockMultiplayerPositionPanel.IsSetup)
+                yield return new WaitForSecondsRealtime(0.1f);
+            mockMultiplayerPositionPanel.transform.SetParent(transform, false);
+            mockMultiplayerPositionPanel.transform.localPosition = Vector3.zero;
+            mockMultiplayerPositionPanel.transform.localRotation = Quaternion.identity;
+            currentPanel = mockMultiplayerPositionPanel.gameObject;
+            positionPanel = new PreviewPanel(4, currentPanel);
+            PreviewPanels.Add(positionPanel);
 
             ImmediateRankUIPanel rankController = gameHudController.transform.Find("LeftPanel/ScoreCanvas").GetComponent<ImmediateRankUIPanel>();
-            Destroy(rankController.transform.Find("ScoreText").GetComponent<ScoreUIController>());
-            ImmediateRankPanel = FinalizePanel(rankController);
+            Destroy(rankController.transform.Find("ScoreText").GetComponent<ScoreUIController>()); // Fixes score randomization in menu not working on first open
+            currentPanel = FinalizePanel(rankController);
+            immediateRankPanel = new PreviewPanel(5, currentPanel);
+            PreviewPanels.Add(immediateRankPanel);
 
             SceneManager.UnloadSceneAsync("DefaultEnvironment");
 
-            MockMultiplayerPositionPanel positionPanel = new GameObject("UIT_Preview-MockMultipliayerPositionPanel").AddComponent<MockMultiplayerPositionPanel>();
-            while (!positionPanel.IsSetup)
-                yield return new WaitForSecondsRealtime(0.1f);
-            positionPanel.transform.SetParent(transform, false);
-            positionPanel.transform.localPosition = Vector3.zero;
-            positionPanel.transform.localRotation = Quaternion.identity;
-            PositionPanel = positionPanel.gameObject;
-            
             IsCompleted = true;
 
             yield break;

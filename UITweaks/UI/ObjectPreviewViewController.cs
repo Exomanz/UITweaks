@@ -4,9 +4,11 @@ using HMUI;
 using SiraUtil.Logging;
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using Tweening;
 using UITweaks.Config;
+using UITweaks.Models;
 using UITweaks.Utilities;
 using UnityEngine;
 using UnityEngine.UI;
@@ -26,7 +28,6 @@ namespace UITweaks.UI
         [Inject] private readonly SiraLog logger;
         [Inject] private readonly TimeTweeningManager tweeningManager;
         [Inject] private readonly RainbowEffectManager rainbowEffectManager;
-
         [Inject] private readonly ComboConfig comboConfig;
         [Inject] private readonly EnergyConfig energyConfig;
         [Inject] private readonly MiscConfig miscConfig;
@@ -39,26 +40,33 @@ namespace UITweaks.UI
         private readonly Vector3 DEFAULT_POSITION = new(3.53f, 1.3f, 2.4f);
         private readonly Vector3 VOID_POSITION = new(0, -1000, 0);
 
+        private List<PreviewPanel> enableablePanels;
+        private List<PreviewPanel> transformablePanels;
+
         #region Preview Objects
         // Multiplier Panel
-        public IPreviewPanel multiplierPanel;
+        public PreviewPanel MultiplierPanel => objectGrabber.PreviewPanels[0];
         private Image[] multiplierCircles;
         private CurvedTextMeshPro multiplierText;
         private bool previewCoroOn8x = false;
 
         // Energy Panel
+        public PreviewPanel EnergyPanel => objectGrabber.PreviewPanels[1];
         private Image energyBar;
         private float fillAmount = 0.01f;
 
         // Combo Panel
+        public PreviewPanel ComboPanel => objectGrabber.PreviewPanels[2];
         private ImageView[] comboLines;
         private CurvedTextMeshPro comboNumberText;
         private CurvedTextMeshPro comboText;
 
         // Progress Panel
+        public PreviewPanel ProgressPanel => objectGrabber.PreviewPanels[3];
         private Image[] progressPanelImages;
 
         // Position Panel
+        public PreviewPanel PositionPanel => objectGrabber.PreviewPanels[4];
         private MockMultiplayerPositionPanel positionPanel;
         private GameObject firstPlaceAnimationGO;
         private CurvedTextMeshPro firstPlaceAnimationGOText;
@@ -67,6 +75,7 @@ namespace UITweaks.UI
         private bool previewPositionIsFirst = false;
 
         // Score Panel
+        public PreviewPanel RankPanel => objectGrabber.PreviewPanels[5];
         private CurvedTextMeshPro scoreText;
         private CurvedTextMeshPro percentText;
         private CurvedTextMeshPro rankText;
@@ -108,31 +117,36 @@ namespace UITweaks.UI
 
             try
             {
-                objectGrabber.MultiplierPanel.SetActive(true);
+                MultiplierPanel.Panel.SetActive(true);
+                GameObject panel;
 
                 // Multiplier Panel Setup
                 {
-                    multiplierText = objectGrabber.MultiplierPanel.GetComponentsInChildren<CurvedTextMeshPro>().Last();
-                    multiplierCircles = objectGrabber.MultiplierPanel.transform.GetComponentsInChildren<Image>();
+                    panel = MultiplierPanel.Panel;
+                    multiplierText = panel.GetComponentsInChildren<CurvedTextMeshPro>().Last();
+                    multiplierCircles = panel.transform.GetComponentsInChildren<Image>();
 
                     multiplierCircles[1].color = multiplierConfig.One;
                     multiplierCircles[0].color = multiplierConfig.One.ColorWithAlpha(0.25f);
                 }
 
                 // Energy Bar Setup
-                energyBar = objectGrabber.EnergyPanel.transform.Find("EnergyBarWrapper/EnergyBar").GetComponent<Image>();
+                panel = EnergyPanel.Panel;
+                energyBar = panel.transform.Find("EnergyBarWrapper/EnergyBar").GetComponent<Image>();
 
                 // Combo Panel Setup
                 {
-                    comboLines = objectGrabber.ComboPanel.transform.GetComponentsInChildren<ImageView>();
-                    comboNumberText = objectGrabber.ComboPanel.transform.Find("ComboCanvas/NumText").GetComponent<CurvedTextMeshPro>();
-                    comboText = objectGrabber.ComboPanel.transform.Find("ComboText").GetComponent<CurvedTextMeshPro>();
+                    panel = ComboPanel.Panel;
+                    comboLines = panel.transform.GetComponentsInChildren<ImageView>();
+                    comboNumberText = panel.transform.Find("ComboCanvas/NumText").GetComponent<CurvedTextMeshPro>();
+                    comboText = panel.transform.Find("ComboText").GetComponent<CurvedTextMeshPro>();
                 }
 
                 // Progress Panel Setup
                 {
-                    progressPanelImages = objectGrabber.ProgressPanel.transform.GetComponentsInChildren<Image>();
-                    CurvedTextMeshPro[] texts = objectGrabber.ProgressPanel.transform.GetComponentsInChildren<CurvedTextMeshPro>();
+                    panel = ProgressPanel.Panel;
+                    progressPanelImages = panel.transform.GetComponentsInChildren<Image>();
+                    CurvedTextMeshPro[] texts = panel.transform.GetComponentsInChildren<CurvedTextMeshPro>();
                     texts[0].text = "0";
                     texts[1].text = "00";
                     texts[2].text = "0";
@@ -141,12 +155,13 @@ namespace UITweaks.UI
 
                 // Position Panel Setup 
                 {
-                    positionPanel = objectGrabber.PositionPanel.GetComponent<MockMultiplayerPositionPanel>();
+                    panel = PositionPanel.Panel;
+                    positionPanel = panel.GetComponent<MockMultiplayerPositionPanel>();
                     positionPanel.transform.localPosition = VOID_POSITION;
                     positionText = positionPanel.positionText;
                     playerCountText = positionPanel.playerCountText;
 
-                    firstPlaceAnimationGO = GameObject.Instantiate(positionText.gameObject, objectGrabber.PositionPanel.transform, true);
+                    firstPlaceAnimationGO = GameObject.Instantiate(positionText.gameObject, panel.transform, true);
                     firstPlaceAnimationGO.SetActive(false);
 
                     firstPlaceAnimationGOText = firstPlaceAnimationGO.GetComponent<CurvedTextMeshPro>();
@@ -156,7 +171,8 @@ namespace UITweaks.UI
 
                 // Immediate Rank Panel Setup
                 {
-                    Transform immediateRankTransform = objectGrabber.ImmediateRankPanel.transform;
+                    panel = RankPanel.Panel;
+                    Transform immediateRankTransform = panel.transform;
                     scoreText = immediateRankTransform.Find("ScoreText").GetComponent<CurvedTextMeshPro>();
                     percentText = immediateRankTransform.Find("RelativeScoreText").GetComponent<CurvedTextMeshPro>();
                     rankText = immediateRankTransform.Find("ImmediateRankText").GetComponent<CurvedTextMeshPro>();
@@ -167,6 +183,23 @@ namespace UITweaks.UI
             catch (Exception ex)
             {
                 logger.Error(ex);
+            }
+
+            if (objectGrabber.PreviewPanels.Count > 0)
+            {
+                enableablePanels = new List<PreviewPanel>()
+                {
+                    objectGrabber.PreviewPanels[1],
+                    objectGrabber.PreviewPanels[2],
+                    objectGrabber.PreviewPanels[3],
+                    objectGrabber.PreviewPanels[5],
+                };
+
+                transformablePanels = new List<PreviewPanel>()
+                {
+                    objectGrabber.PreviewPanels[0],
+                    objectGrabber.PreviewPanels[4],
+                };
             }
 
             objectGrabber.transform.position = DEFAULT_POSITION;
@@ -180,69 +213,31 @@ namespace UITweaks.UI
             if (!objectGrabber.IsCompleted) return;
             System.Random rand = new System.Random();
 
-            switch (tab)
+            foreach (PreviewPanel panel in enableablePanels)
             {
-                case 0:
-                    objectGrabber.MultiplierPanel.transform.localPosition = Vector3.zero;
-                    objectGrabber.EnergyPanel.SetActive(false);
-                    objectGrabber.ComboPanel.SetActive(false);
-                    objectGrabber.ProgressPanel.SetActive(false);
-                    objectGrabber.PositionPanel.transform.localPosition = VOID_POSITION;
-                    objectGrabber.ImmediateRankPanel.SetActive(false);
-                    break;
-                case 1:
-                    objectGrabber.MultiplierPanel.transform.position = VOID_POSITION;
-                    objectGrabber.EnergyPanel.SetActive(true);
-                    objectGrabber.ComboPanel.SetActive(false);
-                    objectGrabber.ProgressPanel.SetActive(false);
-                    objectGrabber.PositionPanel.transform.localPosition = VOID_POSITION;
-                    objectGrabber.ImmediateRankPanel.SetActive(false);
-                    break;
-                case 2:
-                    objectGrabber.MultiplierPanel.transform.position = VOID_POSITION;
-                    objectGrabber.EnergyPanel.SetActive(false);
-                    objectGrabber.ComboPanel.SetActive(true);
-                    objectGrabber.ProgressPanel.SetActive(false);
-                    objectGrabber.PositionPanel.transform.localPosition = VOID_POSITION;
-                    objectGrabber.ImmediateRankPanel.SetActive(false);
+                panel.Panel.SetActive(tab == panel.ActiveTab);
+            }
 
-                    comboNumberText.text = rand.Next(0, 250).ToString();
-                    objectGrabber.ComboPanel.transform.localPosition = Vector3.zero;
-                    break;
-                case 3:
-                    objectGrabber.MultiplierPanel.transform.position = VOID_POSITION;
-                    objectGrabber.EnergyPanel.SetActive(false);
-                    objectGrabber.ComboPanel.SetActive(false);
-                    objectGrabber.ProgressPanel.SetActive(true);
-                    objectGrabber.PositionPanel.transform.localPosition = VOID_POSITION;
-                    objectGrabber.ImmediateRankPanel.SetActive(false);
-                    break;
-                case 4:
-                    objectGrabber.MultiplierPanel.transform.position = VOID_POSITION;
-                    objectGrabber.EnergyPanel.SetActive(false);
-                    objectGrabber.ComboPanel.SetActive(false);
-                    objectGrabber.ProgressPanel.SetActive(false);
-                    objectGrabber.PositionPanel.transform.localPosition = Vector3.zero;
-                    objectGrabber.ImmediateRankPanel.SetActive(false);
-                    break;
-                case 5:
-                    objectGrabber.MultiplierPanel.transform.position = VOID_POSITION;
-                    objectGrabber.EnergyPanel.SetActive(false);
-                    objectGrabber.ComboPanel.SetActive(true);
-                    objectGrabber.ProgressPanel.SetActive(false);
-                    objectGrabber.PositionPanel.transform.localPosition = VOID_POSITION;
-                    objectGrabber.ImmediateRankPanel.SetActive(true);
+            foreach (PreviewPanel panel in transformablePanels)
+            {
+                panel.Panel.transform.localPosition = tab == panel.ActiveTab ? Vector3.zero : VOID_POSITION;
+            }
 
-                    rank = Utilities.Utilities.RandomDecimal(100, 1);
-                    percentText.text = rank.ToString() + "%";
-                    comboNumberText.text = rand.Next(0, 250).ToString();
-                    scoreText.text = rand.Next(0, 999999).ToString();
+            if (tab == 2)
+            {
+                comboNumberText.text = rand.Next(0, 250).ToString();
+                objectGrabber.PreviewPanels[2].Panel.transform.localPosition = Vector3.zero;
+            }
 
-                    objectGrabber.ComboPanel.transform.localPosition = new Vector3(-0.75f, 0, 0);
-                    break;
+            if (tab == 5)
+            { 
+                rank = Utilities.Utilities.RandomDecimal(100, 1);
+                percentText.text = rank.ToString() + "%";
+                comboNumberText.text = rand.Next(0, 250).ToString();
+                scoreText.text = rand.Next(0, 999999).ToString();
 
-                default:
-                    break;
+                objectGrabber.PreviewPanels[2].Panel.SetActive(true);
+                objectGrabber.PreviewPanels[2].Panel.transform.localPosition = new Vector3(-0.75f, 0, 0);
             }
         }
 

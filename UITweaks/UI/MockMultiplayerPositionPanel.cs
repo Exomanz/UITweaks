@@ -5,12 +5,18 @@ namespace UITweaks.UI
 {
     public class MockMultiplayerPositionPanel : MonoBehaviour
     {
+        public GameObject Panel { get; set; }
+        public int ActiveTab { get; set; }
+
+        [SerializeField] public bool IsSetup { get; private set; } = false;
         [SerializeField] public CurvedTextMeshPro positionText;
         [SerializeField] public CurvedTextMeshPro playerCountText;
-        [SerializeField] public bool IsSetup { get; private set; } = false;
 
         public void Start()
         {
+            Panel = this.gameObject;
+            ActiveTab = 4;
+
             gameObject.SetActive(false);
 
             var pt = new GameObject("PositionText").AddComponent<CurvedTextMeshPro>();
