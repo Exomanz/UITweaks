@@ -110,7 +110,7 @@ one color to another as the song progresses.'/>
 			<modifier-container child-expand-width='true' horizontal-fit='PreferredSize'>
 				<vertical vertical-fit='PreferredSize' spacing='3'>
 					<vertical vertical-fit='PreferredSize'>
-						<slider-setting id='rainbowspeed-slider' text='Rainbow Speed' min='0.1' max='1' increment='0.1'/>
+						<slider-setting id='rainbowspeed-slider' value='rainbow-speed' text='Rainbow Speed' min='0.1' max='1' increment='0.1'/>
 						<checkbox text='Italicize Combo Panel' value='combo-panel-italics' apply-on-change='true'/>
 						<checkbox text='Italicize Score Panel' value='score-panel-italics' apply-on-change='true'/>
 						<checkbox text='Italicize Immediate Rank' value='rank-panel-italics' apply-on-change='true'/>
