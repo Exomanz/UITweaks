@@ -34,10 +34,10 @@ namespace UITweaks.UI
         [Inject] private readonly PositionConfig positionConfig;
         [Inject] private readonly ProgressConfig progressConfig;
 
+        [UIComponent("loading-container")] private readonly VerticalLayoutGroup loadingContainer;
+
         private readonly Vector3 DEFAULT_POSITION = new(3.53f, 1.3f, 2.4f);
         private readonly Vector3 VOID_POSITION = new(0, -1000, 0);
-
-        private bool previewToggleIsReady = false;
 
         #region Preview Objects
         // Combo Panel
@@ -83,9 +83,11 @@ namespace UITweaks.UI
                 this.StartCoroutine(FinalizePanels());
             }
 
-            objectGrabber.transform.position = DEFAULT_POSITION;
+            loadingContainer?.gameObject.SetActive(!objectGrabber.IsCompleted);
+            objectGrabber.transform.position = objectGrabber.IsCompleted ? DEFAULT_POSITION : VOID_POSITION;
             modSettingsViewController.TabWasChangedEvent += UpdatePanelVisibility;
             modSettingsViewController.RankShouldBeUpdatedEvent += HandleRankLetterRequest;
+
             this.StartCoroutine(MultiplierPreviewCoroutine());
             this.StartCoroutine(MultiplayerPositionPreviewCoroutine());
             
@@ -166,7 +168,8 @@ namespace UITweaks.UI
                 logger.Error(ex);
             }
 
-            previewToggleIsReady = true;
+            objectGrabber.transform.position = DEFAULT_POSITION;
+            loadingContainer.gameObject.SetActive(false);
             modSettingsViewController.RaiseTabEvent(modSettingsViewController.SelectedTab);
             yield break;
         }
@@ -296,7 +299,7 @@ namespace UITweaks.UI
 
         private IEnumerator MultiplierPreviewCoroutine()
         {
-            yield return new WaitUntil(() => previewToggleIsReady);
+            yield return new WaitUntil(() => objectGrabber.IsCompleted);
             previewCoroOn8x = false;
             
             if (!multiplierConfig.SmoothTransition)
@@ -481,7 +484,7 @@ namespace UITweaks.UI
 
         private IEnumerator MultiplayerPositionPreviewCoroutine()
         {
-            yield return new WaitUntil(() => previewToggleIsReady);
+            yield return new WaitUntil(() => objectGrabber.IsCompleted);
             previewPositionIsFirst = false;
 
             positionPanel.positionText.text = "5";

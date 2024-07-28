@@ -8,4 +8,8 @@
 			</vertical>
 		</vertical>
 	</vertical>
+	<vertical vertical-fit='PreferredSize' id='loading-container'>
+		<loading-indicator preserve-aspect='true'/>
+		<text text='Loading Object Previewer...' font-size='6' italics='true'/>
+	</vertical>
 </bg>
