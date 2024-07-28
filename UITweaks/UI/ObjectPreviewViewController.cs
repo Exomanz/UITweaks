@@ -40,7 +40,8 @@ namespace UITweaks.UI
         private readonly Vector3 VOID_POSITION = new(0, -1000, 0);
 
         #region Preview Objects
-        // Combo Panel
+        // Multiplier Panel
+        public IPreviewPanel multiplierPanel;
         private Image[] multiplierCircles;
         private CurvedTextMeshPro multiplierText;
         private bool previewCoroOn8x = false;
