@@ -3,6 +3,7 @@ using BeatSaberMarkupLanguage.Components.Settings;
 using BeatSaberMarkupLanguage.ViewControllers;
 using HMUI;
 using System;
+using System.Collections.Generic;
 using UITweaks.Config;
 using UnityEngine;
 using Zenject;
@@ -25,6 +26,7 @@ namespace UITweaks.UI
         [Inject] private readonly MiscConfig miscConfig;
 
         [UIValue("fools-toggle-check")] private bool _aprilFoolsToggle => Plugin.APRIL_FOOLS;
+        [UIValue("progress-bar-render-modes")] private List<object> _renderModes = new List<object>() { "Fixed", "Fade" };
         [UIComponent("rainbowspeed-slider")] public SliderSetting rainbowSpeedSetting;
 
         public event Action<string> RankShouldBeUpdatedEvent = delegate { };
@@ -135,7 +137,9 @@ namespace UITweaks.UI
 
         [UIValue("complex")] private bool _Complex { get => ComboEnabled && GradientEnabled; }
 
-        [UIValue("invert-ufdt")] private bool _FadeDisplayToggle => !UseFadeDisplayType;
+        [UIValue("displaytype-is-fixed")] private bool _ProgressBarDisplayTypeIsFixed => RenderMode.Equals(ProgressConfig.DisplayType.Fixed.ToString());
+
+        [UIValue("displaytype-is-fade")] private bool _ProgressBarDisplayTypeIsFade => RenderMode.Equals(ProgressConfig.DisplayType.Fade.ToString());
 
         [UIValue("invert-rainbow-first-place")] private bool _InvertRainbowFirstPlace => !RainbowOnFirstPlace;
 
@@ -358,17 +362,18 @@ namespace UITweaks.UI
             set => progressConfig.Handle = value;
         }
 
-        [UIValue("use-fade-display-type")]
-        private bool UseFadeDisplayType
+        [UIValue("render-mode")] private string RenderMode
         {
-            get => progressConfig.UseFadeDisplayType;
+            get => progressConfig.Mode.ToString();
             set
             {
-                if (progressConfig.UseFadeDisplayType != value)
+                if (value != progressConfig.Mode.ToString())
                 {
-                    progressConfig.UseFadeDisplayType = value;
+                    ProgressConfig.DisplayType convertedValue = (ProgressConfig.DisplayType)Enum.Parse(typeof(ProgressConfig.DisplayType), value.ToString(), true);
+                    progressConfig.Mode = convertedValue;
                     NotifyPropertyChanged();
-                    NotifyPropertyChanged(nameof(_FadeDisplayToggle));
+                    NotifyPropertyChanged(nameof(_ProgressBarDisplayTypeIsFade));
+                    NotifyPropertyChanged(nameof(_ProgressBarDisplayTypeIsFixed));
                 }
             }
         }

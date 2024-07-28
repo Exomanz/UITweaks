@@ -71,15 +71,15 @@ smoothly transition between each of the colors below as your multiplier increase
 		<tab tab-name='Progress Bar' tags='_'>
 			<modifier-container child-expand-width='true' horizontal-fit='PreferredSize'>
 				<checkbox text='Enabled' value='progress-enabled' apply-on-change='true'/>
-				<checkbox text='Use Fade Type' value='use-fade-display-type' apply-on-change='true' interactable='~progress-enabled'
-						  hover-hint='Allows the &lt;color=#55BBFF&gt;Background&lt;/color&gt; of the progress bar to transition from
-one color to another as the song progresses.'/>
-				<color-setting text='Fill Color' value='color-fill' apply-on-change='true' interactable='~progress-enabled' active='~invert-ufdt'/>
+				<list-setting text='Display Type' value='render-mode' choices='progress-bar-render-modes' apply-on-change='true' interactable='~progress-enabled'
+							  hover-hint='&lt;color=#FF3333&gt;Fixed&lt;/color&gt;: All components will be the same color for the entire song.
+&#xA;&lt;color=#33CC33&gt;Fade&lt;/color&gt;: The BG will fade between two colors as the song progresses.'/>
 				<color-setting text='Handle Color' value='color-handle' apply-on-change='true' interactable='~progress-enabled'/>
-				<color-setting text='BG Color' value='color-bg' apply-on-change='true' interactable='~progress-enabled' active='~invert-ufdt'/>
-				<color-setting text='BG Start Color' value='color-song-start' apply-on-change='true' interactable='~progress-enabled' active='~use-fade-display-type'/>
-				<color-setting text='BG End Color' value='color-song-end' apply-on-change='true' interactable='~progress-enabled' active='~use-fade-display-type'/>
-				<slider-setting text='Preview Song Progress' on-change='update-progress-preview' min='0.01' max='1' increment='0.01' interactable='~progress-enabled' active='~use-fade-display-type'/>
+				<color-setting text='Fill Color' value='color-fill' apply-on-change='true' interactable='~progress-enabled' active='~displaytype-is-fixed'/>
+				<color-setting text='BG Color' value='color-bg' apply-on-change='true' interactable='~progress-enabled' active='~displaytype-is-fixed'/>
+				<color-setting text='BG Start Color' value='color-song-start' apply-on-change='true' interactable='~progress-enabled' active='~displaytype-is-fade'/>
+				<color-setting text='BG End Color' value='color-song-end' apply-on-change='true' interactable='~progress-enabled' active='~displaytype-is-fade'/>
+				<slider-setting text='Preview Song Progress' on-change='update-progress-preview' min='0.01' max='1' increment='0.01' interactable='~progress-enabled' active='~displaytype-is-fade'/>
 			</modifier-container>
 		</tab>
 		

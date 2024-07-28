@@ -45,7 +45,7 @@ namespace UITweaks.PanelModifiers
                 }
             }
 
-            if (!progressConfig.UseFadeDisplayType)
+            if (progressConfig.Mode == ProgressConfig.DisplayType.Fixed)
             {
                 barComponents[0].color = progressConfig.Fill;
             }
@@ -59,7 +59,7 @@ namespace UITweaks.PanelModifiers
         {
             if (!CanBeUsedSafely) return;
 
-            if (progressConfig.UseFadeDisplayType)
+            if (progressConfig.Mode == ProgressConfig.DisplayType.Fade)
             {
                 barComponents[0].color = HSBColor.Lerp(
                     HSBColor.FromColor(progressConfig.StartColor),

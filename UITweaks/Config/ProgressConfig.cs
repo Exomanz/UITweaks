@@ -7,6 +7,12 @@ namespace UITweaks.Config
 {
     public class ProgressConfig : UITweaksConfigBase
     {
+        public enum DisplayType
+        {
+            Fixed = 0,
+            Fade = 1,
+        }
+
         public override bool Enabled { get; set; } = true;
 
         /// <summary>
@@ -30,7 +36,7 @@ namespace UITweaks.Config
         /// <summary>
         /// If set to <see langword="true"/>, the Progress Bar will fade from one color to another as the song progresses.
         /// </summary>
-        public virtual bool UseFadeDisplayType { get; set; } = false;
+        public virtual DisplayType Mode { get; set; } = DisplayType.Fixed;
 
         /// <summary>
         /// The <see cref="Color"/> of the progress bar fill section at the start of the song.

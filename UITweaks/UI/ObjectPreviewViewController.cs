@@ -458,7 +458,7 @@ namespace UITweaks.UI
             progressPanelImages[1].color = progressConfig.BG.ColorWithAlpha(0.25f);
             progressPanelImages[2].color = progressConfig.Handle;
 
-            if (progressConfig.UseFadeDisplayType)
+            if (progressConfig.Mode == ProgressConfig.DisplayType.Fade)
             {
                 var x = (time - 0.5f) * 50;
                 progressPanelImages[0].rectTransform.anchorMax = new Vector2(time, 1);
