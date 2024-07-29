@@ -13,7 +13,7 @@ namespace UITweaks.Installers
             Container.Bind<ObjectPreviewViewController>().FromNewComponentAsViewController().AsSingle();
             Container.Bind<SettingsPanelObjectGrabber>().FromNewComponentOn(new GameObject("SettingsPanelObjectGrabber")).AsSingle();
 
-            Container.Bind<ModFlowCoordinator>().FromNewComponentOn(new GameObject("UITweaksFlowCoordinator")).AsSingle();
+            Container.Bind<UITweaksFlowCoordinator>().FromNewComponentOn(new GameObject("UITweaksFlowCoordinator")).AsSingle();
             Container.BindInterfacesAndSelfTo<MenuButtonManager>().AsSingle();
         }
     }

@@ -8,7 +8,7 @@ namespace UITweaks.UI
     internal class MenuButtonManager : IInitializable, IDisposable
     {
         [Inject] private readonly MainFlowCoordinator mainFlowCoordinator;
-        [Inject] private readonly ModFlowCoordinator modFlowCoordinator;
+        [Inject] private readonly UITweaksFlowCoordinator modFlowCoordinator;
         private MenuButton button;
 
         public void Initialize()
