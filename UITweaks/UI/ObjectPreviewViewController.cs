@@ -40,7 +40,6 @@ namespace UITweaks.UI
         private List<PreviewPanel> enableablePanels;
         private List<PreviewPanel> transformablePanels;
 
-
         #region Preview Objects
         // Multiplier Panel
         public PreviewPanel MultiplierPanel => objectGrabber.PreviewPanels[0];

@@ -1,11 +1,9 @@
 ﻿using HMUI;
 using System.Collections.Generic;
-using System.Linq;
 using TMPro;
 using UITweaks.Config;
 using UITweaks.Models;
 using UnityEngine;
-using UnityEngine.UI;
 using Zenject;
 
 namespace UITweaks.PanelModifiers

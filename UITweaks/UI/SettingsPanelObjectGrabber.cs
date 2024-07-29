@@ -1,12 +1,12 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using UITweaks.Models;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
 using UnityEngine.ResourceManagement.ResourceProviders;
-using UITweaks.Models;
+using UnityEngine.SceneManagement;
 
 namespace UITweaks.UI
 {

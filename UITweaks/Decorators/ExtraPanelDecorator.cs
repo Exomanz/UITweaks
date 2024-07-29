@@ -63,7 +63,6 @@ namespace UITweaks.PanelModifiers
             if (miscConfig.AllowRankColoring)
             {
                 rankCounter.relativeScoreOrImmediateRankDidChangeEvent += UpdateRankColorsOnScoreChanged;
-                //scoreController.scoringForNoteFinishedEvent += UpdateRankColorsOnScoreChanged;
                 UpdateRankColorsOnScoreChanged();
             }
 
@@ -124,7 +123,6 @@ namespace UITweaks.PanelModifiers
         {
             base.OnDestroy();
             rankCounter.relativeScoreOrImmediateRankDidChangeEvent -= UpdateRankColorsOnScoreChanged;
-            //scoreController.scoringForNoteFinishedEvent -= UpdateRankColorsOnScoreChanged;
         }
     }
 }

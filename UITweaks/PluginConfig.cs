@@ -7,22 +7,22 @@ namespace UITweaks
     {
         public virtual bool AllowAprilFools { get; set; } = true;
 
-        [NonNullable] 
+        [NonNullable]
         public virtual MultiplierConfig Multiplier { get; set; } = new MultiplierConfig();
 
-        [NonNullable] 
+        [NonNullable]
         public virtual ComboConfig Combo { get; set; } = new ComboConfig();
 
-        [NonNullable] 
+        [NonNullable]
         public virtual EnergyConfig Energy { get; set; } = new EnergyConfig();
 
-        [NonNullable] 
+        [NonNullable]
         public virtual ProgressConfig Progress { get; set; } = new ProgressConfig();
 
-        [NonNullable] 
+        [NonNullable]
         public virtual PositionConfig Position { get; set; } = new PositionConfig();
 
-        [NonNullable] 
+        [NonNullable]
         public virtual MiscConfig Misc { get; set; } = new MiscConfig();
     }
 }
