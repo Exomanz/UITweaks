@@ -43,6 +43,7 @@ namespace UITweaks.UI
         private List<PreviewPanel> enableablePanels;
         private List<PreviewPanel> transformablePanels;
 
+
         #region Preview Objects
         // Multiplier Panel
         public PreviewPanel MultiplierPanel => objectGrabber.PreviewPanels[0];
@@ -73,6 +74,10 @@ namespace UITweaks.UI
         private CurvedTextMeshPro positionText;
         private CurvedTextMeshPro playerCountText;
         private bool previewPositionIsFirst = false;
+        private float animationOpacity;
+        private Vector3 animationScale;
+        private FloatTween positionPanelScaleTween;
+        private FloatTween positionPanelOpacityTween;
 
         // Score Panel
         public PreviewPanel RankPanel => objectGrabber.PreviewPanels[5];
@@ -167,6 +172,16 @@ namespace UITweaks.UI
                     firstPlaceAnimationGOText = firstPlaceAnimationGO.GetComponent<CurvedTextMeshPro>();
                     firstPlaceAnimationGOText.text = "1";
                     firstPlaceAnimationGOText.color = positionConfig.First;
+
+                    positionPanelOpacityTween = new FloatTween(0.75f, 0f, time =>
+                    {
+                        animationOpacity = time;
+                    }, 1f, EaseType.Linear);
+
+                    positionPanelScaleTween = new FloatTween(1f, 3f, time =>
+                    {
+                        animationScale = new Vector3(time, time, time);
+                    }, 1f, EaseType.Linear);
                 }
 
                 // Immediate Rank Panel Setup
@@ -249,8 +264,12 @@ namespace UITweaks.UI
             switch (tab)
             {
                 case 0:
-                    if (previewCoroOn8x && multiplierConfig.RainbowOnMaxMultiplier)
-                        multiplierCircles[0].color = rainbowEffectManager.Rainbow;
+                    if (previewCoroOn8x)
+                    {
+                        if (multiplierConfig.RainbowOnMaxMultiplier)
+                            multiplierCircles[0].color = rainbowEffectManager.Rainbow;
+                        else multiplierCircles[0].color = multiplierConfig.Eight.ColorWithAlpha(0.25f);
+                    }
                     break;
                 case 1:
                     if (fillAmount == 1 && energyConfig.RainbowOnFullEnergy)
@@ -273,20 +292,26 @@ namespace UITweaks.UI
 
                         if (positionConfig.RainbowOnFirstPlace)
                         {
-                        positionPanel.positionText.color = rainbowEffectManager.Rainbow;
+                            positionPanel.positionText.color = rainbowEffectManager.Rainbow;
                             if (firstPlaceAnimPresent)
-                            firstPlaceAnimationGOText.color = rainbowEffectManager.Rainbow;
+                                firstPlaceAnimationGOText.color = rainbowEffectManager.Rainbow;
 
-                        if (!positionConfig.UseStaticColorForStaticPanel)
-                            positionPanel.playerCountText.color = rainbowEffectManager.Rainbow.ColorWithAlpha(0.25f);
-                        else positionPanel.playerCountText.color = positionConfig.StaticPanelColor.ColorWithAlpha(0.25f);
-                    }
+                            if (!positionConfig.UseStaticColorForStaticPanel)
+                                positionPanel.playerCountText.color = rainbowEffectManager.Rainbow.ColorWithAlpha(0.25f);
+                            else positionPanel.playerCountText.color = positionConfig.StaticPanelColor.ColorWithAlpha(0.25f);
+                        }
                         else
-                    {
-                        positionPanel.positionText.color = positionConfig.First;
+                        {
+                            positionPanel.positionText.color = positionConfig.First;
                             if (firstPlaceAnimPresent)
-                            firstPlaceAnimationGOText.color = positionConfig.First;
-                    }
+                                firstPlaceAnimationGOText.color = positionConfig.First;
+                        }
+
+                        if (firstPlaceAnimPresent)
+                        {
+                            firstPlaceAnimationGO.transform.localScale = animationScale;
+                            firstPlaceAnimationGOText.alpha = animationOpacity;
+                        }
                     }
                     break;
                 case 5:
@@ -364,7 +389,7 @@ namespace UITweaks.UI
                 yield return new WaitForSecondsRealtime(1);
 
                 multiplierText.text = "4";
-                tweeningManager.AddTween(new FloatTween(0, 1, (float time) =>
+                tweeningManager.AddTween(new FloatTween(0, 1, (time) =>
                 {
                     Color frame = HSBColor.Lerp(
                         HSBColor.FromColor(multiplierConfig.Four),
@@ -374,18 +399,14 @@ namespace UITweaks.UI
                     multiplierCircles[1].fillAmount = time;
                     multiplierCircles[1].color = frame;
                     multiplierCircles[0].color = frame.ColorWithAlpha(0.25f);
-                },
-                1, EaseType.Linear), this);
+                }, 0.98f, EaseType.Linear), this);
                 yield return new WaitForSecondsRealtime(1);
 
-                tweeningManager.KillAllTweens(this);
 
                 previewCoroOn8x = true;
                 multiplierText.text = "8";
+                multiplierCircles[1].color = Color.clear;
                 multiplierCircles[1].fillAmount = 0;
-                if (!multiplierConfig.RainbowOnMaxMultiplier)
-                    multiplierCircles[0].color = multiplierConfig.Eight.ColorWithAlpha(0.25f);
-                else { /* The rainbow effect is controlled outside of this method body */ }
 
                 yield return new WaitForSecondsRealtime(1);
             }
@@ -512,30 +533,20 @@ namespace UITweaks.UI
             positionPanel.playerCountText.color = positionPanel.playerCountText.color.ColorWithAlpha(0.25f);
             yield return new WaitForSecondsRealtime(1f);
 
-            previewPositionIsFirst = true;
             positionText.text = "1";
             positionText.color = positionConfig.First;
             playerCountText.color = positionConfig.UseStaticColorForStaticPanel ? positionConfig.StaticPanelColor : positionConfig.First;
             positionPanel.playerCountText.color = positionPanel.playerCountText.color.ColorWithAlpha(0.25f);
+            previewPositionIsFirst = true;
 
             if (!positionConfig.HideFirstPlaceAnimation)
             {
                 firstPlaceAnimationGO.SetActive(true);
-
-                // Scale Tween
-                tweeningManager.AddTween(new FloatTween(1f, 3f, (time) =>
-                {
-                    firstPlaceAnimationGOText.transform.localScale = new Vector3(time, time, time);
-                }, 1f, EaseType.Linear), this);
-
-                // Opacity Tween. Colors are controlled outside of this method body.
-                tweeningManager.AddTween(new FloatTween(0.75f, 0f, (time) =>
-                {
-                    firstPlaceAnimationGOText.color = firstPlaceAnimationGOText.color.ColorWithAlpha(time);
-                }, 1f, EaseType.Linear), this);
+                tweeningManager.RestartTween(positionPanelScaleTween, this);
+                tweeningManager.RestartTween(positionPanelOpacityTween, this);
             }
+
             yield return new WaitForSecondsRealtime(1f);
-            tweeningManager.KillAllTweens(this);
             firstPlaceAnimationGO.SetActive(false);
 
             yield return MultiplayerPositionPreviewCoroutine();
