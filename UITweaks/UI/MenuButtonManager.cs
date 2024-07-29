@@ -13,7 +13,8 @@ namespace UITweaks.UI
 
         public void Initialize()
         {
-            button = new MenuButton("UI Tweaks", "Spice up your HUD!", () => {
+            button = new MenuButton("UI Tweaks", "Spice up your HUD!", () =>
+            {
                 mainFlowCoordinator.PresentFlowCoordinator(modFlowCoordinator, null, ViewController.AnimationDirection.Vertical);
             });
             MenuButtons.instance.RegisterButton(button);

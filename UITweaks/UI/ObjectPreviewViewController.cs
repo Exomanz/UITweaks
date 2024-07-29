@@ -90,7 +90,6 @@ namespace UITweaks.UI
             if (firstActivation && objectGrabber.gameObject != null)
             {
                 objectGrabber.transform.Rotate(0, 57, 0);
-                this.StartCoroutine(objectGrabber.GetPanels()); 
                 this.StartCoroutine(FinalizePanels());
             }
 
@@ -101,7 +100,7 @@ namespace UITweaks.UI
 
             this.StartCoroutine(MultiplierPreviewCoroutine());
             this.StartCoroutine(MultiplayerPositionPreviewCoroutine());
-            
+
         }
 
         protected override void DidDeactivate(bool removedFromHierarchy, bool screenSystemDisabling)
@@ -114,6 +113,7 @@ namespace UITweaks.UI
 
         private IEnumerator FinalizePanels()
         {
+            this.StartCoroutine(objectGrabber.GetPanels());
             yield return new WaitUntil(() => objectGrabber.IsCompleted);
 
             try
@@ -241,7 +241,7 @@ namespace UITweaks.UI
             }
 
             if (tab == 5)
-            { 
+            {
                 rank = Utilities.Utilities.RandomDecimal(100, 1);
                 percentText.text = rank.ToString() + "%";
                 comboNumberText.text = rand.Next(0, 250).ToString();
@@ -271,7 +271,7 @@ namespace UITweaks.UI
                     if (fillAmount == 1 && energyConfig.RainbowOnFullEnergy)
                         energyBar.color = rainbowEffectManager.Rainbow;
                     else if (!energyConfig.RainbowOnFullEnergy)
-                        energyBar.color = energyConfig.High; 
+                        energyBar.color = energyConfig.High;
 
                     UpdateEnergyBar(modSettingsViewController.EnergyBarFillAmount);
                     break;
@@ -323,7 +323,7 @@ namespace UITweaks.UI
         {
             yield return new WaitUntil(() => objectGrabber.IsCompleted);
             previewCoroOn8x = false;
-            
+
             if (!multiplierConfig.SmoothTransition)
             {
                 multiplierCircles[1].fillAmount = 0.5f;
@@ -365,7 +365,7 @@ namespace UITweaks.UI
                     multiplierCircles[1].fillAmount = time;
                     multiplierCircles[1].color = frame;
                     multiplierCircles[0].color = frame.ColorWithAlpha(0.25f);
-                }, 
+                },
                 1, EaseType.Linear), this);
                 yield return new WaitForSecondsRealtime(1);
 
@@ -510,7 +510,7 @@ namespace UITweaks.UI
             positionPanel.playerCountText.color = positionConfig.UseStaticColorForStaticPanel ? positionConfig.StaticPanelColor : positionConfig.Fifth;
             positionPanel.playerCountText.color = positionPanel.playerCountText.color.ColorWithAlpha(0.25f);
             yield return new WaitForSecondsRealtime(1f);
-            
+
             positionText.text = "4";
             positionText.color = positionConfig.Fourth;
             playerCountText.color = positionConfig.UseStaticColorForStaticPanel ? positionConfig.StaticPanelColor : positionConfig.Fourth;

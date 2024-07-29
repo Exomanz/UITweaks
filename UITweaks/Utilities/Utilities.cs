@@ -4,7 +4,7 @@ namespace UITweaks.Utilities
 {
     internal static class Utilities
     {
-        private static readonly Random Rand = new(Environment.TickCount + 2);
+        private static readonly Random Rand = new Random(Environment.TickCount + 2);
 
         /// <summary>
         /// Generates a random decimal between 0.0 and <paramref name="max"></paramref>.
