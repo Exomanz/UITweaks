@@ -16,7 +16,7 @@ smoothly transition between each of the colors below as your multiplier increase
 				<color-setting text='1x Color' value='color-1x' apply-on-change='true' interactable='~multiplier-enabled'/>
 				<color-setting text='2x Color' value='color-2x' apply-on-change='true' interactable='~multiplier-enabled'/>
 				<color-setting text='4x Color' value='color-4x' apply-on-change='true' interactable='~multiplier-enabled'/>
-				<color-setting text='8x Color' value='color-8x' apply-on-change='true' interactable='~multiplier-enabled' active='~invert-rainbow'/>
+				<color-setting text='8x Color' value='color-8x' apply-on-change='true' interactable='~multiplier-enabled' active='~invert-rainbow-8x'/>
 			</modifier-container>
 		</tab>
 
@@ -28,7 +28,7 @@ smoothly transition between each of the colors below as your multiplier increase
 				<color-setting text='Low Energy Color' value='color-low' apply-on-change='true' interactable='~energy-enabled'/>
 				<color-setting text='Middle Energy Color' value='color-mid' apply-on-change='true' interactable='~energy-enabled'/>
 				<color-setting text='High Energy Color' value='color-high' apply-on-change='true' interactable='~energy-enabled'/>
-				<slider-setting text='(Preview) Fill Amount' on-change='update-energy-preview' min='0.01' max='1' increment='0.01' interactable='~energy-enabled'/>
+				<slider-setting text='Preview Fill Amount' on-change='update-energy-preview' min='0.01' max='1' increment='0.01' interactable='~energy-enabled'/>
 			</modifier-container>
 		</tab>
 
@@ -71,45 +71,80 @@ smoothly transition between each of the colors below as your multiplier increase
 		<tab tab-name='Progress Bar' tags='_'>
 			<modifier-container child-expand-width='true' horizontal-fit='PreferredSize'>
 				<checkbox text='Enabled' value='progress-enabled' apply-on-change='true'/>
-				<checkbox text='Use Fade Type' value='use-fade-display-type' apply-on-change='true' interactable='~progress-enabled'
-						  hover-hint='Allows the &lt;color=#55BBFF&gt;Background&lt;/color&gt; of the progress bar to transition from
-one color to another as the song progresses.'/>
-				<color-setting text='Fill Color' value='color-fill' apply-on-change='true' interactable='~progress-enabled' active='~invert-ufdt'/>
+				<list-setting text='Display Type' value='render-mode' choices='progress-bar-render-modes' apply-on-change='true' interactable='~progress-enabled'
+							  hover-hint='&lt;color=#FF3333&gt;Fixed&lt;/color&gt;: All components will be the same color for the entire song.
+&#xA;&lt;color=#33CC33&gt;Fade&lt;/color&gt;: The BG will fade between two colors as the song progresses.'/>
 				<color-setting text='Handle Color' value='color-handle' apply-on-change='true' interactable='~progress-enabled'/>
-				<color-setting text='BG Color' value='color-bg' apply-on-change='true' interactable='~progress-enabled' active='~invert-ufdt'/>
-				<color-setting text='BG Start Color' value='color-song-start' apply-on-change='true' interactable='~progress-enabled' active='~use-fade-display-type'/>
-				<color-setting text='BG End Color' value='color-song-end' apply-on-change='true' interactable='~progress-enabled' active='~use-fade-display-type'/>
-				<slider-setting text='Preview Song Progress' on-change='update-progress-preview' min='0.01' max='1' increment='0.01' interactable='~progress-enabled' active='~use-fade-display-type'/>
+				<color-setting text='Fill Color' value='color-fill' apply-on-change='true' interactable='~progress-enabled' active='~displaytype-is-fixed'/>
+				<color-setting text='BG Color' value='color-bg' apply-on-change='true' interactable='~progress-enabled' active='~displaytype-is-fixed'/>
+				<color-setting text='BG Start Color' value='color-song-start' apply-on-change='true' interactable='~progress-enabled' active='~displaytype-is-fade'/>
+				<color-setting text='BG End Color' value='color-song-end' apply-on-change='true' interactable='~progress-enabled' active='~displaytype-is-fade'/>
+				<slider-setting text='Preview Song Progress' on-change='update-progress-preview' min='0.01' max='1' increment='0.01' interactable='~progress-enabled' active='~displaytype-is-fade'/>
+			</modifier-container>
+		</tab>
+		
+		<!--Position Tab-->
+		<tab tab-name='Position (MP)' tags='_'>
+			<modifier-container child-expand-width='true' horizontal-fit='PreferredSize'>
+				<checkbox text='Enabled' value='position-enabled' apply-on-change='true'/>
+				<checkbox text='Hide 1st Place Animation' value='hide-first-place-anim' apply-on-change='true' interactable='~position-enabled'/>
+				<checkbox text='Static Player Count Color' value='use-static-color' apply-on-change='true' interactable='~position-enabled'/>
+				<color-setting text='Static Panel Color' value='color-static-panel' apply-on-change='true' active='~use-static-color'/>
+				<button text='Modify Position Colors' click-event='open-position-settings' interactable='~position-enabled'/>
+				<modal show-event='open-position-settings' hide-event='hide-all-modals' click-off-closes='true' move-to-center='true' size-delta-x='60' size-delta-y='55'>
+					<vertical horizontal-fit='PreferredSize' pref-width='55' vertical-fit='PreferredSize' pref-height='45'>
+						<checkbox text='Rainbow on 1st Place' value='rainbow-on-first-place' apply-on-change='true' interactable='~position-enabled'/>
+						<color-setting text='1st Place' value='color-first-place' apply-on-change='true' interactable='~position-enabled' active='~invert-rainbow-first-place'/>
+						<color-setting text='2nd Place' value='color-second-place' apply-on-change='true' interactable='~position-enabled'/>
+						<color-setting text='3rd Place' value='color-third-place' apply-on-change='true' interactable='~position-enabled'/>
+						<color-setting text='4th Place' value='color-fourth-place' apply-on-change='true' interactable='~position-enabled'/>
+						<color-setting text='5th Place' value='color-fifth-place' apply-on-change='true' interactable='~position-enabled'/>
+						<button text='Close' click-event='hide-all-modals'/>
+					</vertical>
+				</modal>
 			</modifier-container>
 		</tab>
 
-		<!--Position Tab-->
-		<tab tab-name='Multiplayer' tags='_'>
-			<vertical vertical-fit='PreferredSize' pref-width='95' bg='round-rect-panel' pad='3' spacing='-3'>
-				<text text='Notice' font-size='9' bold='true' font-color='#FF5555' align='Center'/>
-				<text text='- - - - - - - - - - -' font-size='7' align='Center'/>
-				<text text='Due to the migration to &lt;color=#22ddff&gt;SiraUtil v3&lt;/color&gt;, multiplayer support is currently broken.&#xA;
-I&apos;ll look into this eventually. As for now, these settings will remain non-adjustable, and no part of the mod will be active in multiplayer.'
-					  align='Center' word-wrapping='True'/>
-			</vertical>
-		</tab>
-
 		<!--Miscellaneous Tab-->
-		<tab tab-name='Italics' tags='_'>
-			<vertical vertical-fit='PreferredSize' spacing='3'>
-				<vertical vertical-fit='PreferredSize' pref-width='95' bg='round-rect-panel' pad='3'>
-					<text text='These settings are intended to restore a sort of "&lt;color=#FF9933&gt;Legacy&lt;/color&gt;" feel to the left HUD panel
-by re-italicizing the things that Beat Games undid in recent updates.' align='Center' word-wrapping='True'/>
+		<tab tab-name='Extras' tags='_'>
+			<modifier-container child-expand-width='true' horizontal-fit='PreferredSize'>
+				<vertical vertical-fit='PreferredSize' spacing='3'>
+					<vertical vertical-fit='PreferredSize'>
+						<slider-setting id='rainbowspeed-slider' value='rainbow-speed' text='Rainbow Speed' min='0.1' max='1' increment='0.1'/>
+						<checkbox text='Italicize Combo Panel' value='combo-panel-italics' apply-on-change='true'/>
+						<checkbox text='Italicize Score Panel' value='score-panel-italics' apply-on-change='true'/>
+						<checkbox text='Italicize Immediate Rank' value='rank-panel-italics' apply-on-change='true'/>
+						<macro.if value='fools-toggle-check'>
+							<checkbox text='Allow April Fools' value='allow-april-fools' apply-on-change='true'/>
+						</macro.if>
+						<checkbox text='Allow Rank Coloring' value='allow-rank-colors' apply-on-change='true'/>
+						<button text='Modify Rank Colors' click-event='open-rank-settings' interactable='~allow-rank-colors'/>
+						<modal show-event='open-rank-settings' hide-event='hide-all-modals' click-off-closes='true' move-to-center='true' size-delta-x='60' size-delta-y='80'>
+							<vertical horizontal-fit='PreferredSize' pref-width='45' vertical-fit='PreferredSize' pref-height='70'>
+								<checkbox text='Rainbow on SS' value='rainbow-on-ss-rank' apply-on-change='true' interactable='~allow-rank-colors'/>
+								<color-setting text='SS' value='rank-ss-color' apply-on-change='true' interactable='~allow-rank-colors' active='~invert-rainbow-ss'/>
+								<color-setting text='S' value='rank-s-color' apply-on-change='true' interactable='~allow-rank-colors'/>
+								<color-setting text='A' value='rank-a-color' apply-on-change='true' interactable='~allow-rank-colors'/>
+								<color-setting text='B' value='rank-b-color' apply-on-change='true' interactable='~allow-rank-colors'/>
+								<color-setting text='C' value='rank-c-color' apply-on-change='true' interactable='~allow-rank-colors'/>
+								<color-setting text='D' value='rank-d-color' apply-on-change='true' interactable='~allow-rank-colors'/>
+								<color-setting text='E' value='rank-e-color' apply-on-change='true' interactable='~allow-rank-colors'/>
+								<button text='Close' click-event='hide-all-modals'/>
+							</vertical>
+						</modal>
+						<text text='Set Rank Letter' align='Center' italics='True' underlined='True'/>
+						<horizontal>
+							<button text='SS' on-click='switch-rank-text.ss'/>
+							<button text='S' on-click='switch-rank-text.s'/>
+							<button text='A' on-click='switch-rank-text.a'/>
+							<button text='B' on-click='switch-rank-text.b'/>
+							<button text='C' on-click='switch-rank-text.c'/>
+							<button text='D' on-click='switch-rank-text.d'/>
+							<button text='E' on-click='switch-rank-text.e'/>
+						</horizontal>
+					</vertical>
 				</vertical>
-				<vertical vertical-fit='PreferredSize'>
-					<checkbox text='Restore Combo Panel Italics' value='legacy-combo-panel' apply-on-change='true'/>
-					<checkbox text='Restore Score Italics' value='legacy-score-panel' apply-on-change='true'/>
-					<checkbox text='Restore Immediate Rank Italics' value='legacy-rank-panel' apply-on-change='true'/>
-					<macro.if value='fools-toggle-check'>
-						<checkbox text='Allow April Fools' value='allow-april-fools' apply-on-change='true'/>
-					</macro.if>
-				</vertical>
-			</vertical>
+			</modifier-container>
 		</tab>
 	</vertical>
 </bg>

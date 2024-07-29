@@ -1,26 +1,21 @@
-# UITweaks
+# 🛠️ UITweaks - For Beat Saber 1.37.0+
 A Beat Saber mod that aims to bring more color to the in-game HUD!
 
+[![GitHub Release](https://img.shields.io/github/v/release/Exomanz/UITweaks?style=flat-square&color=cornflowerblue)](https://github.com/Exomanz/UITweaks/releases/latest)
+[![GitHub Commits Since Latest Release (branch)](https://img.shields.io/github/commits-since/Exomanz/UITweaks/latest?style=flat-square&color=green)](https://github.com/Exomanz/UITweaks/commits)
+
 ## Dependencies:
-- BSIPA v4.3.0+
-- SiraUtil v3.1.3+
-- BeatSaberMarkupLanguage v1.7.6+
+- BSIPA v4.3.4+
+- SiraUtil v3.1.10+
+- BeatSaberMarkupLanguage v1.11.2+
 
 ## Features
-- Multiplier ring colors, as well as an option to smoothly transition between them and a rainbow animation on 8x.
-- Energy bar colors corresponding to your available energy, and an optional rainbow animation on full.
+- Multiplier ring colors, as well as an option to smoothly transition between them, and an optional rainbow animation on full 8x multiplier.
+- Energy bar colors corresponding to your current energy, and an optional rainbow animation on full.
 - Combo FC line colors, including optional gradient lines.
-- Progress bar colors for the fill amount, background and slider. There is also an option to transition between 2 colors as the song progresses.
+- Colors for the progress bar, background, and slider knob. There also exists an option to smoothly transition between two colors as the song progresses.
 - Multiplayer player position panel colors for each position, an option to hide the first place animation, and an option for the static panel to use a static color.
-  - These features broke with SiraUtil v3. I will fix this at some point.
-- Additional options to re-italicize some UI elements.
+- And so much more!
 
-## Roadpath
-- Fix Multiplayer
-
-## Previews:
-### Standard Gameplay:
-![Standard Gameplay](https://github.com/Exomanz/UITweaks/blob/1.2.2/UITweaks/Images/standard.jpg)
-
-### Online:
-![Online Gameplay](https://github.com/Exomanz/UITweaks/blob/1.2.2/UITweaks/Images/online.jpg)
+## Contributing
+Please read the [contributing file](CONTRIBUTING.md) for more information.

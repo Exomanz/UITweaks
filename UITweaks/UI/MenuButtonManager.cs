@@ -1,5 +1,4 @@
-﻿using BeatSaberMarkupLanguage;
-using BeatSaberMarkupLanguage.MenuButtons;
+﻿using BeatSaberMarkupLanguage.MenuButtons;
 using HMUI;
 using System;
 using Zenject;
@@ -9,12 +8,13 @@ namespace UITweaks.UI
     internal class MenuButtonManager : IInitializable, IDisposable
     {
         [Inject] private readonly MainFlowCoordinator mainFlowCoordinator;
-        [Inject] private readonly ModFlowCoordinator modFlowCoordinator;
+        [Inject] private readonly UITweaksFlowCoordinator modFlowCoordinator;
         private MenuButton button;
 
         public void Initialize()
         {
-            button = new MenuButton("UI Tweaks", "Spice up your HUD!", () => {
+            button = new MenuButton("UI Tweaks", "Spice up your HUD!", () =>
+            {
                 mainFlowCoordinator.PresentFlowCoordinator(modFlowCoordinator, null, ViewController.AnimationDirection.Vertical);
             });
             MenuButtons.instance.RegisterButton(button);

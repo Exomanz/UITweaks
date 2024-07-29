@@ -13,16 +13,16 @@ namespace UITweaks
     [Plugin(RuntimeOptions.DynamicInit), NoEnableDisable]
     public class Plugin
     {
-        public static bool APRIL_FOOLS 
-        { 
+        public static bool APRIL_FOOLS
+        {
             get
             {
-                if (Environment.GetCommandLineArgs().Any(x => x.ToLower() == "--uitweaks.aprilfools"))
+                if (Environment.GetCommandLineArgs().Any(x => x.ToLower() == "--uitweaks-aprilfools"))
                     return true;
 
-                DateTime time = Utils.CanUseDateTimeNowSafely ? DateTime.Now : DateTime.UtcNow;
+                DateTime time = Utils.CurrentTime();
                 return time.Month == 4 && time.Day == 1;
-            } 
+            }
         }
 
         [Init]
@@ -31,19 +31,16 @@ namespace UITweaks
             zenject.UseLogger(logger);
             zenject.UseMetadataBinder<Plugin>();
 
-            // Basically expose the entire HUD to Zenject.
-            // I could just leave it at the CoreGameHUDController and look everything up then, but that's a lot more work than this.
+            // Singleplayer and Campaign
             zenject.Expose<CoreGameHUDController>("Environment");
-            zenject.Expose<GameEnergyUIPanel>("Environment");
-            zenject.Expose<ComboUIController>("Environment");
-            zenject.Expose<ScoreMultiplierUIController>("Environment");
-            zenject.Expose<SongProgressUIController>("Environment");
-            zenject.Expose<ImmediateRankUIPanel>("Environment");
 
-            // Multiplayer support broke with Sira3... maybe someday I'll look into it.
-            zenject.Install<AppConfigInstaller>(Location.App, config.Generated<PluginConfig>());
-            zenject.Install<MenuUIInstaller>(Location.Menu);
-            zenject.Install<PanelModifierInstaller>(Location.StandardPlayer | Location.CampaignPlayer);
+            // Multiplayer
+            zenject.Expose<CoreGameHUDController>("IsActiveObjects");
+            zenject.Expose<MultiplayerPositionHUDController>("IsActiveObjects");
+
+            zenject.Install<TweaksAppInstaller>(Location.App, config.Generated<PluginConfig>());
+            zenject.Install<TweaksMenuInstaller>(Location.Menu);
+            zenject.Install<TweaksPanelDecoratorInstaller>(Location.Player);
         }
     }
 }
