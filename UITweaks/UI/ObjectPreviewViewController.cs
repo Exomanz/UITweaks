@@ -16,9 +16,6 @@ using Zenject;
 
 namespace UITweaks.UI
 {
-    /// <summary>
-    /// Controller class for the Object Previewer ViewController.
-    /// </summary>
     [ViewDefinition("UITweaks.Views.ObjectPreview.bsml")]
     [HotReload(RelativePathToLayout = @"..\Views\ObjectPreview.bsml")]
     public class ObjectPreviewViewController : BSMLAutomaticViewController

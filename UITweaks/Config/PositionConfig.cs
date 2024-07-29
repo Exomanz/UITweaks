@@ -15,7 +15,7 @@ namespace UITweaks.Config
         public virtual bool HideFirstPlaceAnimation { get; set; } = false;
 
         /// <summary>
-        /// Controls the rainbow effect of the <i>dynamic</i> first place text.
+        /// Controls the rainbow effect of the PanelDecorator when in first place.
         /// </summary>
         public virtual bool RainbowOnFirstPlace { get; set; } = false;
 
@@ -26,39 +26,39 @@ namespace UITweaks.Config
 
         /// <summary>
         /// The <see cref="Color"/> of the player count section of the Position Panel.
-        /// <br></br>This will only take effect if <see cref="UseStaticColorForPlayerCount"/> is <see langword="true"/>.
         /// </summary>
+        /// <remarks>This will only take effect if <see cref="UseStaticColorForStaticPanel"/> is <see langword="true"/>.</remarks>
         [UseConverter(typeof(HexColorConverter))]
         public virtual Color StaticPanelColor { get; set; } = Color.white;
 
         /// <summary>
         /// The <see cref="Color"/> of the Position Panel when you are in first place.
         /// </summary>
-        [UseConverter(typeof(HexColorConverter))] 
+        [UseConverter(typeof(HexColorConverter))]
         public virtual Color First { get; set; } = Color.cyan;
 
         /// <summary>
         /// The <see cref="Color"/> of the Position Panel when you are in second place.
         /// </summary>
-        [UseConverter(typeof(HexColorConverter))] 
+        [UseConverter(typeof(HexColorConverter))]
         public virtual Color Second { get; set; } = Color.green;
 
         /// <summary>
         /// The <see cref="Color"/> of the Position Panel when you are in third place.
         /// </summary>
-        [UseConverter(typeof(HexColorConverter))] 
+        [UseConverter(typeof(HexColorConverter))]
         public virtual Color Third { get; set; } = Color.yellow;
 
         /// <summary>
         /// The <see cref="Color"/> of the Position Panel when you are in fourth place.
         /// </summary>
-        [UseConverter(typeof(HexColorConverter))] 
+        [UseConverter(typeof(HexColorConverter))]
         public virtual Color Fourth { get; set; } = new Color(1f, 0.5f, 0f);
 
         /// <summary>
         /// The <see cref="Color"/> of the Position Panel when you are in fifth place.
         /// </summary>
-        [UseConverter(typeof(HexColorConverter))] 
+        [UseConverter(typeof(HexColorConverter))]
         public virtual Color Fifth { get; set; } = Color.red;
     }
 }

@@ -10,9 +10,6 @@ using Zenject;
 
 namespace UITweaks.UI
 {
-    /// <summary>
-    /// Controller class for the Settings ViewController. Required for the Object Previewer ViewController.
-    /// </summary>
     [ViewDefinition("UITweaks.Views.ModSettings.bsml")]
     [HotReload(RelativePathToLayout = @"..\Views\ModSettings.bsml")]
     public class ModSettingsViewController : BSMLAutomaticViewController

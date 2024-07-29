@@ -14,8 +14,22 @@ namespace UITweaks.Config
         /// </summary>
         public virtual bool RainbowOnFullEnergy { get; set; } = false;
 
-        [UseConverter(typeof(HexColorConverter))] public virtual Color Low { get; set; } = Color.red;
-        [UseConverter(typeof(HexColorConverter))] public virtual Color Mid { get; set; } = Color.yellow;
-        [UseConverter(typeof(HexColorConverter))] public virtual Color High { get; set; } = Color.green;
+        /// <summary>
+        /// The <see cref="Color"/> of the leftmost anchor point in the energy bar (0%).
+        /// </summary>
+        [UseConverter(typeof(HexColorConverter))]
+        public virtual Color Low { get; set; } = Color.red;
+
+        /// <summary>
+        /// The <see cref="Color"/> of the center anchor point in the energy bar (50%).
+        /// </summary>
+        [UseConverter(typeof(HexColorConverter))]
+        public virtual Color Mid { get; set; } = Color.yellow;
+
+        /// <summary>
+        /// The <see cref="Color"/> of the rightmost anchor point in the energy bar (100%).
+        /// </summary>
+        [UseConverter(typeof(HexColorConverter))]
+        public virtual Color High { get; set; } = Color.green;
     }
 }

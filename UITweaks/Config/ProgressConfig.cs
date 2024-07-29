@@ -18,23 +18,27 @@ namespace UITweaks.Config
         /// <summary>
         /// The <see cref="Color"/> of the Progress Bar's fill section.
         /// </summary>
-        [UseConverter(typeof(HexColorConverter))] 
+        [UseConverter(typeof(HexColorConverter))]
         public virtual Color Fill { get; set; } = Color.white;
 
         /// <summary>
         /// The <see cref="Color"/> of the Progress Bar's background.
         /// </summary>
-        [UseConverter(typeof(HexColorConverter))] 
+        [UseConverter(typeof(HexColorConverter))]
         public virtual Color BG { get; set; } = Color.white;
 
         /// <summary>
         /// The <see cref="Color"/> of the Progress Bar's handle, which is anchored to the Fill section.
         /// </summary>
-        [UseConverter(typeof(HexColorConverter))] 
+        [UseConverter(typeof(HexColorConverter))]
         public virtual Color Handle { get; set; } = Color.white;
 
         /// <summary>
-        /// If set to <see langword="true"/>, the Progress Bar will fade from one color to another as the song progresses.
+        /// Controls the mode in which the progress bar is decorated.
+        /// <list type="bullet">
+        /// <item>Fixed: All components will be statically colored for the entire song.</item>
+        /// <item>Fade: The Background component of the progress bar will fade between <see cref="StartColor"/> and <see cref="EndColor"/> as the song progresses.</item>
+        /// </list>
         /// </summary>
         public virtual DisplayType Mode { get; set; } = DisplayType.Fixed;
 
@@ -42,14 +46,14 @@ namespace UITweaks.Config
         /// The <see cref="Color"/> of the progress bar fill section at the start of the song.
         /// <br></br>This will only take effect if <see cref="UseFadeDisplayType"/> is <see langword="true"/>.
         /// </summary>
-        [UseConverter(typeof(HexColorConverter))] 
+        [UseConverter(typeof(HexColorConverter))]
         public virtual Color StartColor { get; set; } = Color.red;
 
         /// <summary>
         /// The <see cref="Color"/> of the Progress Bar fill section at the end of the song.
         /// <br></br>This will only take effect if <see cref="UseFadeDisplayType"/> is <see langword="true"/>.
         /// </summary>
-        [UseConverter(typeof(HexColorConverter))] 
+        [UseConverter(typeof(HexColorConverter))]
         public virtual Color EndColor { get; set; } = Color.green;
     }
 }

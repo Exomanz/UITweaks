@@ -8,9 +8,6 @@ using Zenject;
 
 namespace UITweaks.UI
 {
-    /// <summary>
-    /// This class hosts the info panel for the mod, including the Source, Donate, and Changelog buttons.
-    /// </summary>
     [ViewDefinition("UITweaks.Views.Info.bsml")]
     [HotReload(RelativePathToLayout = @"..\Views\Info.bsml")]
     public class ModInfoViewController : BSMLAutomaticViewController

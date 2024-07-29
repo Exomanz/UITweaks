@@ -6,12 +6,19 @@ using Zenject;
 
 namespace UITweaks.Models
 {
+    /// <summary>
+    /// Helper class which contains shared resources for all UITweaks PanelDecorators, as well as helper methods to verify proper setup and disposal.
+    /// </summary>
     public abstract class PanelDecoratorBase : MonoBehaviour
     {
         [Inject] private readonly RainbowEffectManager rainbowEffectManager;
         [Inject] protected readonly SiraLog logger;
         [Inject] protected readonly CoreGameHUDController gameHUDController;
 
+        /// <summary>
+        /// Determines whether a PanelDecorator is safe to use in the given context.
+        /// </summary>
+        /// <remarks>Always evaluates to <see langword="false"/> if the base configuration has the PanelDecorator disabled.</remarks>
         public bool CanBeUsedSafely { get; protected set; } = true;
         public Color RainbowColor => rainbowEffectManager.Rainbow;
         public UITweaksConfigBase config;

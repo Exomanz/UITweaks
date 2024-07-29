@@ -7,7 +7,7 @@
     public abstract class UITweaksConfigBase
     {
         /// <summary>
-        /// Determines whether a panel modifier is active or not.
+        /// Controls whether a PanelDecorator is active in the given context.
         /// </summary>
         public virtual bool Enabled { get; set; }
     }

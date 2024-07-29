@@ -8,7 +8,11 @@ namespace UITweaks.Utilities
     {
         [Inject] private readonly MiscConfig miscConfig;
 
-        public Color Rainbow { get; private set; } 
+        /// <summary>
+        /// The <see cref="Color"/> which controls the rainbow effect that UITweaks uses. All objects which use this effect will be in sync.
+        /// </summary>
+        /// <remarks>This property is updated every frame.</remarks>
+        public Color Rainbow { get; private set; }
 
         [Inject] public RainbowEffectManager() { }
 

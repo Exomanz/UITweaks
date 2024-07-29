@@ -10,8 +10,7 @@ namespace UITweaks.Config
         public override bool Enabled { get; set; } = true;
 
         /// <summary>
-        /// If set to <see langword="true"/>, the multiplier ring will crossfade between each set <see cref="Color"/> for each stage, allowing for a more linear transition instead of jumping.
-        /// <br></br><b>The performance impact of this feature has not been tested.</b>
+        /// If set to <see langword="true"/>, the multiplier ring will crossfade between each set <see cref="Color"/> for each stage.
         /// </summary>
         public virtual bool SmoothTransition { get; set; } = false;
 
@@ -40,9 +39,8 @@ namespace UITweaks.Config
 
         /// <summary>
         /// The <see cref="Color"/> of the Multiplier ring when your combo is at 8x and <see cref="RainbowOnMaxMultiplier"/> is set to <see langword="false"/>.
-        /// <br></br>Otherwise, the rainbow animation will show.
         /// </summary>
-        [UseConverter(typeof(HexColorConverter))] 
+        [UseConverter(typeof(HexColorConverter))]
         public virtual Color Eight { get; set; } = Color.cyan;
     }
 }
