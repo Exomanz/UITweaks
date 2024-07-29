@@ -24,9 +24,9 @@ namespace UITweaks.PanelModifiers
         [Inject] protected override void Init() 
         {
             positionHUDController = base.gameHUDController.transform.parent.GetComponentInChildren<MultiplayerPositionHUDController>();
-            parentPanel = positionHUDController.gameObject;
-            config = positionConfig;
-            transform.SetParent(parentPanel?.transform);
+            ParentPanel = positionHUDController.gameObject;
+            Config = positionConfig;
+            transform.SetParent(ParentPanel?.transform);
 
             playerCountToConfigValuesMap = new Dictionary<int, Color>()
             {

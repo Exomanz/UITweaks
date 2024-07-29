@@ -21,8 +21,9 @@ namespace UITweaks.Models
         /// <remarks>Always evaluates to <see langword="false"/> if the base configuration has the PanelDecorator disabled.</remarks>
         public bool CanBeUsedSafely { get; protected set; } = true;
         public Color RainbowColor => rainbowEffectManager.Rainbow;
-        public UITweaksConfigBase config;
-        public GameObject parentPanel;
+
+        public UITweaksConfigBase Config;
+        public GameObject ParentPanel;
 
         protected abstract void Init();
 
@@ -33,10 +34,10 @@ namespace UITweaks.Models
 
             try
             {
-                if (callingDecorator.parentPanel == null)
+                if (callingDecorator.ParentPanel == null)
                     throw new NullReferenceException($"Field 'parentPanel' cannot be null when creating an object of type {callingTypeName}");
 
-                if (callingDecorator.config == null)
+                if (callingDecorator.Config == null)
                     throw new NullReferenceException($"Field 'config' cannot be null when creating an object of type {callingTypeName}");
             }
             catch (NullReferenceException ex)
@@ -47,7 +48,7 @@ namespace UITweaks.Models
                 return false;
             }
 
-            if (!callingDecorator.config.Enabled)
+            if (!callingDecorator.Config.Enabled)
             {
                 callingDecorator.CanBeUsedSafely = false;
                 logger.Logger.Debug($"PanelDecorator of type {callingTypeName} is disabled and will not be initialized.");
@@ -61,8 +62,8 @@ namespace UITweaks.Models
 
         protected virtual void OnDestroy()
         {
-            parentPanel = null;
-            config = null;
+            ParentPanel = null;
+            Config = null;
         }
     }
 }

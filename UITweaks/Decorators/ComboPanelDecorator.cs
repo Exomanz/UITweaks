@@ -14,9 +14,9 @@ namespace UITweaks.PanelModifiers
         [Inject] protected override void Init()
         {
             comboUIController = base.gameHUDController.GetComponentInChildren<ComboUIController>();
-            parentPanel = comboUIController.gameObject;
-            config = comboConfig;
-            transform.SetParent(parentPanel?.transform);
+            ParentPanel = comboUIController.gameObject;
+            Config = comboConfig;
+            transform.SetParent(ParentPanel?.transform);
 
             ModPanel(this);
         }
@@ -26,7 +26,7 @@ namespace UITweaks.PanelModifiers
             if (!base.ModPanel(this)) return false;
 
             ImageView[] fcLines;
-            fcLines = parentPanel.GetComponentsInChildren<ImageView>();
+            fcLines = ParentPanel.GetComponentsInChildren<ImageView>();
 
             if (comboConfig.UseGradient)
             {

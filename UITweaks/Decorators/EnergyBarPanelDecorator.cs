@@ -22,9 +22,9 @@ namespace UITweaks.PanelModifiers
         [Inject] protected override void Init()
         {
             gameEnergyUIPanel = base.gameHUDController.GetComponentInChildren<GameEnergyUIPanel>();
-            parentPanel = gameEnergyUIPanel.gameObject;
-            config = energyConfig;
-            transform.SetParent(parentPanel?.transform);
+            ParentPanel = gameEnergyUIPanel.gameObject;
+            Config = energyConfig;
+            transform.SetParent(ParentPanel?.transform);
 
             ModPanel(this);
         }

@@ -18,9 +18,9 @@ namespace UITweaks.PanelModifiers
         [Inject] protected override void Init()
         {
             songProgressUIController = base.gameHUDController.GetComponentInChildren<SongProgressUIController>();
-            parentPanel = songProgressUIController.gameObject;
-            config = progressConfig;
-            transform.SetParent(parentPanel?.transform);
+            ParentPanel = songProgressUIController.gameObject;
+            Config = progressConfig;
+            transform.SetParent(ParentPanel?.transform);
 
             ModPanel(this);
         }

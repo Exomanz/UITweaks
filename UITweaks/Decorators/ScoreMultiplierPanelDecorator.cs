@@ -18,10 +18,10 @@ namespace UITweaks.PanelModifiers
         [Inject] protected override void Init()
         {
             scoreMultiplierUIController = base.gameHUDController.GetComponentInChildren<ScoreMultiplierUIController>();
-            parentPanel = scoreMultiplierUIController.gameObject;
-            config = multiplierConfig;
+            ParentPanel = scoreMultiplierUIController.gameObject;
+            Config = multiplierConfig;
             
-            transform.SetParent(parentPanel?.transform);
+            transform.SetParent(ParentPanel?.transform);
 
             ModPanel(this);
         }
@@ -32,8 +32,8 @@ namespace UITweaks.PanelModifiers
 
             scoreController.multiplierDidChangeEvent += HandleMultiplierDidChange;
 
-            bg = parentPanel.transform.Find("BGCircle").GetComponent<Image>();
-            fg = parentPanel.transform.Find("FGCircle").GetComponent<Image>();
+            bg = ParentPanel.transform.Find("BGCircle").GetComponent<Image>();
+            fg = ParentPanel.transform.Find("FGCircle").GetComponent<Image>();
             HandleMultiplierDidChange(1, 0);
 
             return true;

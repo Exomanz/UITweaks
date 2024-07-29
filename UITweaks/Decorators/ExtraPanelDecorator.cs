@@ -48,9 +48,9 @@ namespace UITweaks.PanelModifiers
         {
             comboUIController = base.gameHUDController.GetComponentInChildren<ComboUIController>();
             immediateRankUIPanel = base.gameHUDController.GetComponentInChildren<ImmediateRankUIPanel>();
-            parentPanel = immediateRankUIPanel.gameObject;
-            config = miscConfig;
-            transform.SetParent(parentPanel?.transform);
+            ParentPanel = immediateRankUIPanel.gameObject;
+            Config = miscConfig;
+            transform.SetParent(ParentPanel?.transform);
 
             ModPanel(this);
         }
