@@ -16,23 +16,12 @@
     <OutputPath>bin\Debug\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)'=='Heck-Debug'">
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-  </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Heck-Debug' ">
     <Optimize>false</Optimize>
     <OutputPath>bin\Debug\</OutputPath>
     <DefineConstants>DEBUG;TRACE;HECK</DefineConstants>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)'=='Heck-Release'">
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
     <ErrorReport>prompt</ErrorReport>
@@ -86,6 +75,10 @@
       <HintPath>$(BeatSaberDir)\IPA\Libs\Hive.Versioning.dll</HintPath>
       <Private>False</Private>
     </Reference>
+	<Reference Include="Heck" Condition=" $(Configuration) == 'Heck-Debug' OR $(Configuration) == 'Heck-Release' ">
+      <Private>False</Private>
+	  <HintPath>$(BeatSaberDir)\Plugins\Heck.dll</HintPath>
+	</Reference>
     <Reference Include="SiraUtil, Version=3.0.2.0, Culture=neutral, processorArchitecture=MSIL">
       <Private>False</Private>
       <HintPath>$(BeatSaberDir)\Plugins\SiraUtil.dll</HintPath>
