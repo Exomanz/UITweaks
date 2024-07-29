@@ -15,7 +15,8 @@ namespace UITweaks.PanelModifiers
         private SongProgressUIController songProgressUIController;
         private readonly List<ImageView> barComponents = new List<ImageView>();
 
-        [Inject] protected override void Init()
+        [Inject]
+        protected override void Init()
         {
             songProgressUIController = base.gameHUDController.GetComponentInChildren<SongProgressUIController>();
             ParentPanel = songProgressUIController.gameObject;

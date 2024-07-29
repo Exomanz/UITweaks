@@ -10,7 +10,8 @@ namespace UITweaks.Installers
     {
         private readonly PluginConfig config;
 
-        [Inject] public TweaksAppInstaller(PluginConfig pluginConfig)
+        [Inject]
+        public TweaksAppInstaller(PluginConfig pluginConfig)
         {
             config = pluginConfig;
         }

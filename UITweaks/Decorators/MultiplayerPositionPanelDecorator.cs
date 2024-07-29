@@ -19,7 +19,8 @@ namespace UITweaks.PanelModifiers
         private TextMeshProUGUI playerCountText;
         private TextMeshProUGUI dynamicPositionText;
 
-        [Inject] protected override void Init() 
+        [Inject]
+        protected override void Init()
         {
             positionHUDController = base.gameHUDController.transform.parent.GetComponentInChildren<MultiplayerPositionHUDController>();
             ParentPanel = positionHUDController.gameObject;

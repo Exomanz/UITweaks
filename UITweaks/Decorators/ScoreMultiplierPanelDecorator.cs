@@ -15,12 +15,13 @@ namespace UITweaks.PanelModifiers
         private Image fg;
         private int currentMultiplier = 0;
 
-        [Inject] protected override void Init()
+        [Inject]
+        protected override void Init()
         {
             scoreMultiplierUIController = base.gameHUDController.GetComponentInChildren<ScoreMultiplierUIController>();
             ParentPanel = scoreMultiplierUIController.gameObject;
             Config = multiplierConfig;
-            
+
             transform.SetParent(ParentPanel?.transform);
 
             ModPanel(this);
@@ -59,7 +60,7 @@ namespace UITweaks.PanelModifiers
                 fg.color = multiplierConfig.Four;
             }
             else if (multiplier == 8 && !multiplierConfig.RainbowOnMaxMultiplier)
-                fg.color = multiplierConfig.Eight.ColorWithAlpha(0.25f); 
+                fg.color = multiplierConfig.Eight.ColorWithAlpha(0.25f);
         }
 
         public void Update()
@@ -71,42 +72,42 @@ namespace UITweaks.PanelModifiers
                 if (currentMultiplier == 1)
                 {
                     bg.color = HSBColor.Lerp(
-                        HSBColor.FromColor(multiplierConfig.One), 
-                        HSBColor.FromColor(multiplierConfig.Two), 
+                        HSBColor.FromColor(multiplierConfig.One),
+                        HSBColor.FromColor(multiplierConfig.Two),
                         fg.fillAmount)
                         .ToColor().ColorWithAlpha(0.25f);
 
                     fg.color = HSBColor.Lerp(
-                        HSBColor.FromColor(multiplierConfig.One), 
-                        HSBColor.FromColor(multiplierConfig.Two), 
+                        HSBColor.FromColor(multiplierConfig.One),
+                        HSBColor.FromColor(multiplierConfig.Two),
                         fg.fillAmount)
                         .ToColor();
                 }
                 else if (currentMultiplier == 2)
                 {
                     bg.color = HSBColor.Lerp(
-                        HSBColor.FromColor(multiplierConfig.Two), 
-                        HSBColor.FromColor(multiplierConfig.Four), 
+                        HSBColor.FromColor(multiplierConfig.Two),
+                        HSBColor.FromColor(multiplierConfig.Four),
                         fg.fillAmount)
                         .ToColor().ColorWithAlpha(0.25f);
 
                     fg.color = HSBColor.Lerp(
-                        HSBColor.FromColor(multiplierConfig.Two), 
-                        HSBColor.FromColor(multiplierConfig.Four), 
+                        HSBColor.FromColor(multiplierConfig.Two),
+                        HSBColor.FromColor(multiplierConfig.Four),
                         fg.fillAmount)
                         .ToColor();
                 }
                 else if (currentMultiplier == 4)
                 {
                     bg.color = HSBColor.Lerp(
-                        HSBColor.FromColor(multiplierConfig.Four), 
-                        HSBColor.FromColor(multiplierConfig.Eight), 
+                        HSBColor.FromColor(multiplierConfig.Four),
+                        HSBColor.FromColor(multiplierConfig.Eight),
                         fg.fillAmount)
                         .ToColor().ColorWithAlpha(0.25f);
 
                     fg.color = HSBColor.Lerp(
-                        HSBColor.FromColor(multiplierConfig.Four), 
-                        HSBColor.FromColor(multiplierConfig.Eight), 
+                        HSBColor.FromColor(multiplierConfig.Four),
+                        HSBColor.FromColor(multiplierConfig.Eight),
                         fg.fillAmount)
                         .ToColor();
                 }

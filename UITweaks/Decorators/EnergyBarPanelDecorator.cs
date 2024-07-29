@@ -19,7 +19,8 @@ namespace UITweaks.PanelModifiers
         private GameEnergyUIPanel gameEnergyUIPanel;
         private ImageView energyBar;
 
-        [Inject] protected override void Init()
+        [Inject]
+        protected override void Init()
         {
             gameEnergyUIPanel = base.gameHUDController.GetComponentInChildren<GameEnergyUIPanel>();
             ParentPanel = gameEnergyUIPanel.gameObject;
@@ -84,13 +85,13 @@ namespace UITweaks.PanelModifiers
         {
             if (energy == 0.5f) energyBar.color = energyConfig.Mid;
 
-            else if (energy > 0.5f) 
+            else if (energy > 0.5f)
                 energyBar.color = HSBColor.Lerp(
                     HSBColor.FromColor(energyConfig.Mid),
                     HSBColor.FromColor(energyConfig.High),
                     (energy - 0.5f) * 2).ToColor();
 
-            else if (energy < 0.5f) 
+            else if (energy < 0.5f)
                 energyBar.color = HSBColor.Lerp(
                     HSBColor.FromColor(energyConfig.Low),
                     HSBColor.FromColor(energyConfig.Mid),

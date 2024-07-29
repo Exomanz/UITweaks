@@ -22,7 +22,7 @@ namespace UITweaks.PanelModifiers
                     container.transform.Rotate(0, 0, 180);
                     return;
                 }
-                
+
                 var leftPanel = gameHUDController.transform.Find("LeftPanel");
                 leftPanel.position = new Vector3(3.2f, 2.2f, 7);
                 leftPanel.Rotate(0, 0, 180);
@@ -44,7 +44,8 @@ namespace UITweaks.PanelModifiers
         private ImmediateRankUIPanel immediateRankUIPanel;
         private TextMeshProUGUI rankText;
 
-        [Inject] protected override void Init()
+        [Inject]
+        protected override void Init()
         {
             comboUIController = base.gameHUDController.GetComponentInChildren<ComboUIController>();
             immediateRankUIPanel = base.gameHUDController.GetComponentInChildren<ImmediateRankUIPanel>();

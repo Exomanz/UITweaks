@@ -11,7 +11,8 @@ namespace UITweaks.PanelModifiers
 
         private ComboUIController comboUIController;
 
-        [Inject] protected override void Init()
+        [Inject]
+        protected override void Init()
         {
             comboUIController = base.gameHUDController.GetComponentInChildren<ComboUIController>();
             ParentPanel = comboUIController.gameObject;

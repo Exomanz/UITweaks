@@ -13,8 +13,8 @@ namespace UITweaks
     [Plugin(RuntimeOptions.DynamicInit), NoEnableDisable]
     public class Plugin
     {
-        public static bool APRIL_FOOLS 
-        { 
+        public static bool APRIL_FOOLS
+        {
             get
             {
                 if (Environment.GetCommandLineArgs().Any(x => x.ToLower() == "--uitweaks-aprilfools"))
@@ -22,19 +22,20 @@ namespace UITweaks
 
                 DateTime time = Utils.CurrentTime();
                 return time.Month == 4 && time.Day == 1;
-            } 
+            }
         }
 
-        [Init] public Plugin(IPALogger logger, IPAConfig config, Zenjector zenject)
+        [Init]
+        public Plugin(IPALogger logger, IPAConfig config, Zenjector zenject)
         {
             zenject.UseLogger(logger);
             zenject.UseMetadataBinder<Plugin>();
 
             // Singleplayer and Campaign
-            zenject.Expose<CoreGameHUDController>("Environment"); 
+            zenject.Expose<CoreGameHUDController>("Environment");
 
             // Multiplayer
-            zenject.Expose<CoreGameHUDController>("IsActiveObjects"); 
+            zenject.Expose<CoreGameHUDController>("IsActiveObjects");
             zenject.Expose<MultiplayerPositionHUDController>("IsActiveObjects");
 
             zenject.Install<TweaksAppInstaller>(Location.App, config.Generated<PluginConfig>());
