@@ -267,21 +267,26 @@ namespace UITweaks.UI
                     UpdateProgressBar(modSettingsViewController.ProgressBarFillAmount);
                     break;
                 case 4:
-                    if (previewPositionIsFirst && positionConfig.RainbowOnFirstPlace)
+                    if (previewPositionIsFirst)
                     {
+                        bool firstPlaceAnimPresent = firstPlaceAnimationGO.gameObject != null;
+
+                        if (positionConfig.RainbowOnFirstPlace)
+                        {
                         positionPanel.positionText.color = rainbowEffectManager.Rainbow;
-                        if (firstPlaceAnimationGO.gameObject != null)
+                            if (firstPlaceAnimPresent)
                             firstPlaceAnimationGOText.color = rainbowEffectManager.Rainbow;
 
                         if (!positionConfig.UseStaticColorForStaticPanel)
                             positionPanel.playerCountText.color = rainbowEffectManager.Rainbow.ColorWithAlpha(0.25f);
                         else positionPanel.playerCountText.color = positionConfig.StaticPanelColor.ColorWithAlpha(0.25f);
                     }
-                    else if (previewPositionIsFirst)
+                        else
                     {
                         positionPanel.positionText.color = positionConfig.First;
-                        if (firstPlaceAnimationGO.gameObject != null)
+                            if (firstPlaceAnimPresent)
                             firstPlaceAnimationGOText.color = positionConfig.First;
+                    }
                     }
                     break;
                 case 5:
