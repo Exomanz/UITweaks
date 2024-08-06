@@ -23,7 +23,7 @@ namespace UITweaks.PanelModifiers
         protected override void Init()
         {
             positionHUDController = base.gameHUDController.transform.parent.GetComponentInChildren<MultiplayerPositionHUDController>();
-            ParentPanel = positionHUDController.gameObject;
+            ParentPanel = positionHUDController?.gameObject;
             Config = positionConfig;
             transform.SetParent(ParentPanel?.transform);
 

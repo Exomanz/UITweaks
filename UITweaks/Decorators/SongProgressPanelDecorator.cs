@@ -9,6 +9,7 @@ namespace UITweaks.PanelModifiers
     public class SongProgressPanelDecorator : PanelDecoratorBase
     {
         [InjectOptional] private readonly StandardGameplaySceneSetupData gameplaySceneSetupData;
+        [Inject] private readonly CoreGameHUDController.InitData coreGameHudInitData;
         [Inject] private readonly AudioTimeSyncController audioTimeSyncController;
         [Inject] private readonly ProgressConfig progressConfig;
 
@@ -19,7 +20,7 @@ namespace UITweaks.PanelModifiers
         protected override void Init()
         {
             songProgressUIController = base.gameHUDController.GetComponentInChildren<SongProgressUIController>();
-            ParentPanel = songProgressUIController.gameObject;
+            ParentPanel = songProgressUIController?.gameObject;
             Config = progressConfig;
             transform.SetParent(ParentPanel?.transform);
 
@@ -28,6 +29,12 @@ namespace UITweaks.PanelModifiers
 
         protected override bool ModPanel(in PanelDecoratorBase decorator)
         {
+            if (!coreGameHudInitData.advancedHUD)
+            {
+                this.CanBeUsedSafely = false;
+                return false;
+            }
+
             if (!base.ModPanel(this)) return false;
 
             if (gameplaySceneSetupData?.beatmapKey.beatmapCharacteristic.containsRotationEvents == true)

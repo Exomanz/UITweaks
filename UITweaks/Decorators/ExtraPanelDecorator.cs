@@ -49,7 +49,7 @@ namespace UITweaks.PanelModifiers
         {
             comboUIController = base.gameHUDController.GetComponentInChildren<ComboUIController>();
             immediateRankUIPanel = base.gameHUDController.GetComponentInChildren<ImmediateRankUIPanel>();
-            ParentPanel = immediateRankUIPanel.gameObject;
+            ParentPanel = immediateRankUIPanel?.gameObject;
             Config = miscConfig;
             transform.SetParent(ParentPanel?.transform);
 
@@ -97,7 +97,7 @@ namespace UITweaks.PanelModifiers
 
         public void Update()
         {
-            if (!immediateRankUIPanel.isActiveAndEnabled || !miscConfig.AllowRankColoring || !CanBeUsedSafely) return;
+            if (!CanBeUsedSafely || !immediateRankUIPanel.isActiveAndEnabled || !miscConfig.AllowRankColoring) return;
 
             if (miscConfig.RainbowOnSSRank && rankCounter.immediateRank == RankModel.Rank.SS)
             {

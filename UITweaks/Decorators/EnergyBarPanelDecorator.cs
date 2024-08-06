@@ -23,7 +23,7 @@ namespace UITweaks.PanelModifiers
         protected override void Init()
         {
             gameEnergyUIPanel = base.gameHUDController.GetComponentInChildren<GameEnergyUIPanel>();
-            ParentPanel = gameEnergyUIPanel.gameObject;
+            ParentPanel = gameEnergyUIPanel?.gameObject;
             Config = energyConfig;
             transform.SetParent(ParentPanel?.transform);
 
@@ -100,7 +100,7 @@ namespace UITweaks.PanelModifiers
 
         public void Update()
         {
-            if (!gameEnergyUIPanel.isActiveAndEnabled || energyBar?.gameObject == null || !CanBeUsedSafely) return;
+            if (!CanBeUsedSafely || !gameEnergyUIPanel.isActiveAndEnabled || energyBar?.gameObject == null) return;
 
             if (energyConfig.RainbowOnFullEnergy)
             {

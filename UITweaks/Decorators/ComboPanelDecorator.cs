@@ -15,7 +15,7 @@ namespace UITweaks.PanelModifiers
         protected override void Init()
         {
             comboUIController = base.gameHUDController.GetComponentInChildren<ComboUIController>();
-            ParentPanel = comboUIController.gameObject;
+            ParentPanel = comboUIController?.gameObject;
             Config = comboConfig;
             transform.SetParent(ParentPanel?.transform);
 

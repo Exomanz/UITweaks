@@ -19,7 +19,7 @@ namespace UITweaks.PanelModifiers
         protected override void Init()
         {
             scoreMultiplierUIController = base.gameHUDController.GetComponentInChildren<ScoreMultiplierUIController>();
-            ParentPanel = scoreMultiplierUIController.gameObject;
+            ParentPanel = scoreMultiplierUIController?.gameObject;
             Config = multiplierConfig;
 
             transform.SetParent(ParentPanel?.transform);
@@ -65,7 +65,7 @@ namespace UITweaks.PanelModifiers
 
         public void Update()
         {
-            if (!scoreMultiplierUIController.isActiveAndEnabled || !CanBeUsedSafely) return;
+            if (!CanBeUsedSafely || !scoreMultiplierUIController.isActiveAndEnabled) return;
 
             if (multiplierConfig.SmoothTransition)
             {
