@@ -9,30 +9,18 @@
     <AppOutputBase>$(MSBuildProjectDirectory)\</AppOutputBase>
     <LangVersion>9</LangVersion>
     <TargetFramework>net48</TargetFramework>
-    <Configurations>Debug;Release;Heck-Debug;Heck-Release</Configurations>
+    <Configurations>Debug;Release</Configurations>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <Optimize>false</Optimize>
     <OutputPath>bin\Debug\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)' == 'Heck-Debug' ">
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE;HECK</DefineConstants>
-  </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)' == 'Heck-Release' ">
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <DefineConstants>HECK</DefineConstants>
   </PropertyGroup>
   <PropertyGroup Condition="$(DefineConstants.Contains('CIBuild')) OR '$(NCrunch)' == '1'">
     <DisableCopyToPlugins>True</DisableCopyToPlugins>
@@ -75,7 +63,7 @@
       <HintPath>$(BeatSaberDir)\IPA\Libs\Hive.Versioning.dll</HintPath>
       <Private>False</Private>
     </Reference>
-	<Reference Include="Heck" Condition=" $(Configuration) == 'Heck-Debug' OR $(Configuration) == 'Heck-Release' ">
+	<Reference Include="Heck">
       <Private>False</Private>
 	  <HintPath>$(BeatSaberDir)\Plugins\Heck.dll</HintPath>
 	</Reference>
