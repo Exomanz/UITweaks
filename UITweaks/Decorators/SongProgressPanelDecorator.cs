@@ -39,7 +39,7 @@ namespace UITweaks.PanelModifiers
 
             if (gameplaySceneSetupData?.beatmapKey.beatmapCharacteristic.containsRotationEvents == true)
             {
-                logger.Debug("Selected map is 360/90. Disabling the SongProgressPanelModifier");
+                logger.Logger.Debug("Selected map is 360/90. Disabling the SongProgressPanelModifier");
                 CanBeUsedSafely = false;
                 return false;
             }
