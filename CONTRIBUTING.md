@@ -4,10 +4,16 @@ Are you a player and want to potentially see a feature added into this mod? A de
 This project is licensed under the [MIT License](LICENSE). Read the license file to learn more.
 
 ## For Everyone - [Open an Issue](https://github.com/Exomanz/UITweaks/issues/new)
-If you found a bug or have a feature request, please submit an issue. Fill out the form as fully as possible to make it easier to understand and reduce the back-and-forth trying to narrow down what is being discussed.
+If you found a bug or have a feature request, please submit an issue. Fill out the form as fully as possible to make it easier to understand and reduce the back-and-forth trying to narrow down what is being discussed:
 
-## For Developers - Clone UITweaks and [Create a Pull Request](https://github.com/Exomanz/UITweaks/pulls)
-This repository targets .NET Framework v4.8.0 and runs within the Unity Mono runtime. 
+- **Title:** Short and to the point, include game and plugin versions if necessary.
+- **Description:** As verbose as necessary to explain the issue or feature request. Screenshots and steps to reproduce a bug are always appreciated.
+- **Attached Files:** If the issue pertains to a bug, please attach the `_latest.log` file from the Beat Saber directory and any additional screenshots/content you would like to include to aid in tracking down the cause of the problem. These can be videos, configuration files, etc. 
+
+The more complete the issue form is, the faster the bug can be fixed and a patch can be released.
+
+## For Developers - Clone UITweaks and [Create a Pull Request](https://github.com/Exomanz/UITweaks/compare)
+If you are itching for a feature and want to implement it yourself, or simply have a code suggestion to help make this plugin better, submit a pull request! I would love to incorporate your code into this mod.
 
 ### Dependencies for Building
 - .NET Framework v4.8.0
@@ -16,7 +22,7 @@ This repository targets .NET Framework v4.8.0 and runs within the Unity Mono run
 - BeatSaberMarkupLanguage v1.11.2+
 - _Heck v1.6.0+*
 
-**If you are building the project without a local version of Heck installed, build in either the `Debug` or `Release` configuration. If Heck is present, build with `Heck-Debug` or `Heck-Release` to enable features that integrate with Heck's API, such as `SettableSettings`.*
+**If you are building the project without a local version of Heck installed, build in the `Debug` configuration. If Heck is present, build with `Heck-Debug` to enable features that integrate with Heck's API, such as `SettableSettings`. **You should not be building as `Release`.***
 
 In order to build this project locally, clone the source code onto your machine, create the `UITweaks.csproj.user` file, and add your Beat Saber directory path to it.
 This file should not be uploaded to GitHub, and is filtered out by the `.gitignore`.
