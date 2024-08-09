@@ -3,9 +3,9 @@
   "id": "UITweaks",
   "name": "UITweaks",
   "author": "Exomanz",
-  "version": "4.0.0",
+  "version": "4.0.1",
   "description": "Add some color to your in-game HUD!",
-  "gameVersion": "1.37.0",
+  "gameVersion": "1.37.1",
   "dependsOn": {
     "BSIPA": "^4.3.4",
     "SiraUtil": "^3.1.10",
