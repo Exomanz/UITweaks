@@ -1,4 +1,5 @@
 ﻿using HMUI;
+using IPA.Loader;
 using TMPro;
 using UITweaks.Config;
 using UITweaks.Models;
@@ -59,6 +60,9 @@ namespace UITweaks.PanelModifiers
         protected override bool ModPanel(in PanelDecoratorBase decorator)
         {
             if (!base.ModPanel(this)) return false;
+
+            if (PluginManager.GetPlugin("Counters+") != null)
+                CanBeUsedSafely = false;
 
             rankText = immediateRankUIPanel._rankText;
             if (miscConfig.AllowRankColoring)
