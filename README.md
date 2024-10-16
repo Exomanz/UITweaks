@@ -1,13 +1,13 @@
-# 🛠️ UITweaks - For Beat Saber 1.37.0+
+# 🛠️ UITweaks
 A Beat Saber mod that aims to bring more color to the in-game HUD!
 
 [![GitHub Release](https://img.shields.io/github/v/release/Exomanz/UITweaks?style=flat-square&color=cornflowerblue)](https://github.com/Exomanz/UITweaks/releases/latest)
 [![GitHub Commits Since Latest Release (branch)](https://img.shields.io/github/commits-since/Exomanz/UITweaks/latest?style=flat-square&color=green)](https://github.com/Exomanz/UITweaks/commits)
 
 ## Dependencies:
-- BSIPA v4.3.4+
-- SiraUtil v3.1.10+
-- BeatSaberMarkupLanguage v1.11.2+
+- BSIPA v4.3.5+
+- SiraUtil v3.1.12+
+- BeatSaberMarkupLanguage v1.12.3+
 
 ## Features
 - Multiplier ring colors, as well as an option to smoothly transition between them, and an optional rainbow animation on full 8x multiplier.
