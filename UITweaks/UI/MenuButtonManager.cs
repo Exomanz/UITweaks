@@ -17,13 +17,13 @@ namespace UITweaks.UI
             {
                 mainFlowCoordinator.PresentFlowCoordinator(modFlowCoordinator, null, ViewController.AnimationDirection.Vertical);
             });
-            MenuButtons.instance.RegisterButton(button);
+            MenuButtons.Instance.RegisterButton(button);
         }
 
         public void Dispose()
         {
             if (button != null)
-                MenuButtons.instance.UnregisterButton(button);
+                MenuButtons.Instance.UnregisterButton(button);
         }
     }
 }

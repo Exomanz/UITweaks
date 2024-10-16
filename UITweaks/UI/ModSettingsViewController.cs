@@ -67,7 +67,7 @@ namespace UITweaks.UI
             base.DidActivate(firstActivation, addedToHierarchy, screenSystemEnabling);
             if (firstActivation && rainbowSpeedSetting.gameObject != null)
             {
-                rainbowSpeedSetting.slider.valueDidChangeEvent += HandleRainbowSliderValueChanged;
+                rainbowSpeedSetting.Slider.valueDidChangeEvent += HandleRainbowSliderValueChanged;
             }
             TabWasChangedEvent.Invoke(SelectedTab);
         }
@@ -75,7 +75,7 @@ namespace UITweaks.UI
         protected override void DidDeactivate(bool removedFromHierarchy, bool screenSystemDisabling)
         {
             base.DidDeactivate(removedFromHierarchy, screenSystemDisabling);
-            rainbowSpeedSetting.slider.valueDidChangeEvent -= HandleRainbowSliderValueChanged;
+            rainbowSpeedSetting.Slider.valueDidChangeEvent -= HandleRainbowSliderValueChanged;
         }
 
         [UIAction("update-tab")]

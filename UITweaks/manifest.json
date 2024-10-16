@@ -3,12 +3,12 @@
   "id": "UITweaks",
   "name": "UITweaks",
   "author": "Exomanz",
-  "version": "4.0.2",
+  "version": "4.0.3",
   "description": "Add some color to your in-game HUD!",
-  "gameVersion": "1.37.1",
+  "gameVersion": "1.38.0",
   "dependsOn": {
-    "BSIPA": "^4.3.4",
-    "SiraUtil": "^3.1.10",
-    "BeatSaberMarkupLanguage": "^1.11.2"
+    "BSIPA": "^4.3.5",
+    "SiraUtil": "^3.1.12",
+    "BeatSaberMarkupLanguage": "^1.12.3"
   }
 }
