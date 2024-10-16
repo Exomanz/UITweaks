@@ -12,7 +12,7 @@
 				<vertical vertical-fit='PreferredSize' spacing='2.5' pad-top='1'>
 					<text text='Mod  :  &lt;color=#3FF74D&gt;UITweaks' italics='True'/>
 					<text text='~version-text' italics='True'/>
-					<text text='Developer  :  &lt;color=#FF6666&gt;@exomanz' italics='True'/>
+					<text text='Developer  :  &lt;color=#FF6666&gt;exomanz' italics='True'/>
 				</vertical>
 				<vertical vertical-fit='PreferredSize'>
 					<button text='Source' face-color='#FFAA33' click-event='show-gh-modal' pref-width='20'/>
