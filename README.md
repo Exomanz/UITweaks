@@ -1,3 +1,5 @@
+<img src="Resources/uitweaks-logo-pdn.jpg" alt="UITweaks Logo" width=256px>
+
 # 🛠️ UITweaks
 A Beat Saber mod that aims to bring more color to the in-game HUD!
 
