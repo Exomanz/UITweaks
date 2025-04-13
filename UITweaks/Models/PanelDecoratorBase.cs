@@ -11,6 +11,8 @@ namespace UITweaks.Models
     /// </summary>
     public abstract class PanelDecoratorBase : MonoBehaviour
     {
+        [Inject] private readonly PlayerSpecificSettings playerSpecificSettings;
+        [Inject] private readonly GameplayModifiers gameplayModifiers;
         [Inject] private readonly RainbowEffectManager rainbowEffectManager;
         [Inject] protected readonly SiraLog logger;
         [Inject] protected readonly CoreGameHUDController gameHUDController;
@@ -45,6 +47,13 @@ namespace UITweaks.Models
                 logger.Logger.Error($"PanelDecorator of type {callingTypeName} cannot be properly initialized.");
                 logger.Logger.Error(ex);
                 callingDecorator.CanBeUsedSafely = false;
+                return false;
+            }
+
+            if (playerSpecificSettings.noTextsAndHuds || gameplayModifiers.zenMode)
+            {
+                callingDecorator.CanBeUsedSafely = false;
+                logger.Logger.Debug($"No Texts/HUDs OR Zen Mode are enabled. {callingTypeName} will not be initialized.");
                 return false;
             }
 
