@@ -155,7 +155,8 @@ namespace UITweaks.UI
                 {
                     multiplierConfig.Enabled = value;
                     NotifyPropertyChanged();
-                };
+                }
+                ;
             }
         }
 
