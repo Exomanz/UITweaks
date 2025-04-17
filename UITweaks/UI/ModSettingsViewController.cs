@@ -14,13 +14,13 @@ namespace UITweaks.UI
     [HotReload(RelativePathToLayout = @"..\Views\ModSettings.bsml")]
     public class ModSettingsViewController : BSMLAutomaticViewController
     {
-        [Inject] private readonly PluginConfig pluginConfig;
-        [Inject] private readonly MultiplierConfig multiplierConfig;
-        [Inject] private readonly EnergyConfig energyConfig;
-        [Inject] private readonly ComboConfig comboConfig;
-        [Inject] private readonly ProgressConfig progressConfig;
-        [Inject] private readonly PositionConfig positionConfig;
-        [Inject] private readonly MiscConfig miscConfig;
+        private PluginConfig pluginConfig;
+        private MultiplierConfig multiplierConfig;
+        private EnergyConfig energyConfig;
+        private ComboConfig comboConfig;
+        private ProgressConfig progressConfig;
+        private PositionConfig positionConfig;
+        private MiscConfig miscConfig;
 
         [UIValue("fools-toggle-check")] private bool _aprilFoolsToggle => Plugin.APRIL_FOOLS;
         [UIValue("progress-bar-render-modes")] private List<object> _renderModes = new List<object>() { "Fixed", "Fade" };
@@ -31,6 +31,17 @@ namespace UITweaks.UI
         private int selectedTab = 0;
         private float energyBarFillAmount = 0.01f;
         private float progressBarFillAmount = 0.01f;
+
+        [Inject] internal void Construct(PluginConfig c)
+        {
+            pluginConfig = c;
+            multiplierConfig = c.Multiplier;
+            energyConfig = c.Energy;
+            comboConfig = c.Combo;
+            progressConfig = c.Progress;
+            positionConfig = c.Position;
+            miscConfig = c.Misc;
+        }
 
         public int SelectedTab
         {
@@ -156,7 +167,6 @@ namespace UITweaks.UI
                     multiplierConfig.Enabled = value;
                     NotifyPropertyChanged();
                 }
-                ;
             }
         }
 

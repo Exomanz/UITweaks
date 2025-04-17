@@ -14,6 +14,8 @@ namespace UITweaks.UI
     {
         public bool IsCompleted { get; private set; } = false;
         public List<PreviewPanel> PreviewPanels { get; private set; } = new List<PreviewPanel>();
+
+        private readonly WaitForEndOfFrame DELAY = new WaitForEndOfFrame();
         private PreviewPanel multiplierPanel;
         private PreviewPanel energyPanel;
         private PreviewPanel comboPanel;
@@ -26,7 +28,7 @@ namespace UITweaks.UI
             AsyncOperationHandle<SceneInstance> defaultSceneInstanceLoader = Addressables.LoadSceneAsync("DefaultEnvironment", LoadSceneMode.Additive);
 
             while (!defaultSceneInstanceLoader.IsDone)
-                yield return new WaitForSecondsRealtime(0.1f);
+                yield return DELAY;
 
             CoreGameHUDController gameHudController = Resources.FindObjectsOfTypeAll<CoreGameHUDController>().FirstOrDefault();
             GameObject currentPanel;
@@ -53,7 +55,7 @@ namespace UITweaks.UI
 
             MockMultiplayerPositionPanel mockMultiplayerPositionPanel = new GameObject("UIT_Preview-MockMultipliayerPositionPanel").AddComponent<MockMultiplayerPositionPanel>();
             while (!mockMultiplayerPositionPanel.IsSetup)
-                yield return new WaitForSecondsRealtime(0.1f);
+                yield return DELAY;
             mockMultiplayerPositionPanel.transform.SetParent(transform, false);
             mockMultiplayerPositionPanel.transform.localPosition = Vector3.zero;
             mockMultiplayerPositionPanel.transform.localRotation = Quaternion.identity;

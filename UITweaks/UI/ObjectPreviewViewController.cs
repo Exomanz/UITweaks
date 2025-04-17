@@ -20,25 +20,34 @@ namespace UITweaks.UI
     [HotReload(RelativePathToLayout = @"..\Views\ObjectPreview.bsml")]
     public class ObjectPreviewViewController : BSMLAutomaticViewController
     {
+        [UIComponent("loading-container")] private readonly VerticalLayoutGroup loadingContainer;
         [Inject] private readonly SettingsPanelObjectGrabber objectGrabber;
         [Inject] private readonly ModSettingsViewController modSettingsViewController;
         [Inject] private readonly SiraLog logger;
         [Inject] private readonly TimeTweeningManager tweeningManager;
         [Inject] private readonly RainbowEffectManager rainbowEffectManager;
-        [Inject] private readonly ComboConfig comboConfig;
-        [Inject] private readonly EnergyConfig energyConfig;
-        [Inject] private readonly MiscConfig miscConfig;
-        [Inject] private readonly MultiplierConfig multiplierConfig;
-        [Inject] private readonly PositionConfig positionConfig;
-        [Inject] private readonly ProgressConfig progressConfig;
 
-        [UIComponent("loading-container")] private readonly VerticalLayoutGroup loadingContainer;
+        private MultiplierConfig multiplierConfig;
+        private EnergyConfig energyConfig;
+        private ComboConfig comboConfig;
+        private ProgressConfig progressConfig;
+        private PositionConfig positionConfig;
+        private MiscConfig miscConfig;
 
         private readonly Vector3 DEFAULT_POSITION = new(3.53f, 1.3f, 2.4f);
         private readonly Vector3 VOID_POSITION = new(0, -1000, 0);
-
+        private readonly WaitForSecondsRealtime MULTIPLIER_DELAY = new WaitForSecondsRealtime(1f);
+        private readonly WaitForSecondsRealtime POSITION_DELAY = new WaitForSecondsRealtime(1f);
+        private FloatTween oneTwoFloatTween;
+        private FloatTween twoFourFloatTween;
+        private FloatTween fourEightFloatTween;
         private List<PreviewPanel> enableablePanels;
         private List<PreviewPanel> transformablePanels;
+
+        private bool OBJECT_CHECK
+        {
+            get => objectGrabber.gameObject != null && objectGrabber.IsCompleted;
+        }
 
         #region Preview Objects
         // Multiplier Panel
@@ -83,6 +92,16 @@ namespace UITweaks.UI
         private decimal rank = 0.00m;
         #endregion
 
+        [Inject] internal void Construct(PluginConfig c)
+        {
+            multiplierConfig = c.Multiplier;
+            energyConfig = c.Energy;
+            comboConfig = c.Combo;
+            progressConfig = c.Progress;
+            positionConfig = c.Position;
+            miscConfig = c.Misc;
+        }
+
         protected override void DidActivate(bool firstActivation, bool addedToHierarchy, bool screenSystemEnabling)
         {
             base.DidActivate(firstActivation, addedToHierarchy, screenSystemEnabling);
@@ -97,10 +116,6 @@ namespace UITweaks.UI
             objectGrabber.transform.position = objectGrabber.IsCompleted ? DEFAULT_POSITION : VOID_POSITION;
             modSettingsViewController.TabWasChangedEvent += UpdatePanelVisibility;
             modSettingsViewController.RankShouldBeUpdatedEvent += HandleRankLetterRequest;
-
-            this.StartCoroutine(MultiplierPreviewCoroutine());
-            this.StartCoroutine(MultiplayerPositionPreviewCoroutine());
-
         }
 
         protected override void DidDeactivate(bool removedFromHierarchy, bool screenSystemDisabling)
@@ -129,6 +144,44 @@ namespace UITweaks.UI
 
                     multiplierCircles[1].color = multiplierConfig.One;
                     multiplierCircles[0].color = multiplierConfig.One.ColorWithAlpha(0.25f);
+
+                    oneTwoFloatTween = new FloatTween(0, 1, (float time) =>
+                    {
+                        Color frame = HSBColor.Lerp(
+                            HSBColor.FromColor(multiplierConfig.One),
+                            HSBColor.FromColor(multiplierConfig.Two), time)
+                            .ToColor();
+
+                        multiplierCircles[1].fillAmount = time;
+                        multiplierCircles[1].color = frame;
+                        multiplierCircles[0].color = frame.ColorWithAlpha(0.25f);
+                    },
+                    1, EaseType.Linear);
+
+                    twoFourFloatTween = new FloatTween(0, 1, (float time) =>
+                    {
+                        Color frame = HSBColor.Lerp(
+                            HSBColor.FromColor(multiplierConfig.Two),
+                            HSBColor.FromColor(multiplierConfig.Four), time)
+                            .ToColor();
+
+                        multiplierCircles[1].fillAmount = time;
+                        multiplierCircles[1].color = frame;
+                        multiplierCircles[0].color = frame.ColorWithAlpha(0.25f);
+                    },
+                    1, EaseType.Linear);
+
+                    fourEightFloatTween = new FloatTween(0, 1, (time) =>
+                    {
+                        Color frame = HSBColor.Lerp(
+                            HSBColor.FromColor(multiplierConfig.Four),
+                            HSBColor.FromColor(multiplierConfig.Eight), time)
+                            .ToColor();
+
+                        multiplierCircles[1].fillAmount = time;
+                        multiplierCircles[1].color = frame;
+                        multiplierCircles[0].color = frame.ColorWithAlpha(0.25f);
+                    }, 0.98f, EaseType.Linear);
                 }
 
                 // Energy Bar Setup
@@ -216,12 +269,14 @@ namespace UITweaks.UI
             objectGrabber.transform.position = DEFAULT_POSITION;
             loadingContainer.gameObject.SetActive(false);
             modSettingsViewController.RaiseTabEvent(modSettingsViewController.SelectedTab);
+            this.StartCoroutine(MultiplierPreviewCoroutine());
+            this.StartCoroutine(MultiplayerPositionPreviewCoroutine());
             yield break;
         }
 
         private void UpdatePanelVisibility(int tab)
         {
-            if (!objectGrabber.IsCompleted) return;
+            if (!OBJECT_CHECK) return;
             System.Random rand = new System.Random();
 
             foreach (PreviewPanel panel in enableablePanels)
@@ -254,7 +309,7 @@ namespace UITweaks.UI
 
         public void Update()
         {
-            if (!objectGrabber.IsCompleted) return;
+            if (!OBJECT_CHECK) return;
 
             int tab = modSettingsViewController.SelectedTab;
             switch (tab)
@@ -321,7 +376,6 @@ namespace UITweaks.UI
 
         private IEnumerator MultiplierPreviewCoroutine()
         {
-            yield return new WaitUntil(() => objectGrabber.IsCompleted);
             previewCoroOn8x = false;
 
             if (!multiplierConfig.SmoothTransition)
@@ -331,80 +385,46 @@ namespace UITweaks.UI
                 multiplierCircles[0].color = multiplierConfig.One.ColorWithAlpha(0.25f);
                 multiplierCircles[1].color = multiplierConfig.One;
                 multiplierText.text = "1";
-                yield return new WaitForSecondsRealtime(1);
+                yield return MULTIPLIER_DELAY;
 
                 multiplierCircles[0].color = multiplierConfig.Two.ColorWithAlpha(0.25f);
                 multiplierCircles[1].color = multiplierConfig.Two;
                 multiplierText.text = "2";
-                yield return new WaitForSecondsRealtime(1);
+                yield return MULTIPLIER_DELAY;
 
                 multiplierCircles[0].color = multiplierConfig.Four.ColorWithAlpha(0.25f);
                 multiplierCircles[1].color = multiplierConfig.Four;
                 multiplierText.text = "4";
-                yield return new WaitForSecondsRealtime(1);
+                yield return MULTIPLIER_DELAY;
 
                 previewCoroOn8x = true;
                 multiplierText.text = "8";
                 multiplierCircles[1].fillAmount = 0;
                 if (!multiplierConfig.RainbowOnMaxMultiplier)
                     multiplierCircles[0].color = multiplierConfig.Eight.ColorWithAlpha(0.25f);
-                else { /* The rainbow effect is controlled outside of this method body */ }
-
-                yield return new WaitForSecondsRealtime(1);
+                yield return MULTIPLIER_DELAY;
             }
+
             else
             {
                 multiplierText.text = "1";
-                tweeningManager.AddTween(new FloatTween(0, 1, (float time) =>
-                {
-                    Color frame = HSBColor.Lerp(
-                        HSBColor.FromColor(multiplierConfig.One),
-                        HSBColor.FromColor(multiplierConfig.Two), time)
-                        .ToColor();
-
-                    multiplierCircles[1].fillAmount = time;
-                    multiplierCircles[1].color = frame;
-                    multiplierCircles[0].color = frame.ColorWithAlpha(0.25f);
-                },
-                1, EaseType.Linear), this);
-                yield return new WaitForSecondsRealtime(1);
+                tweeningManager.RestartTween(oneTwoFloatTween, this);
+                yield return MULTIPLIER_DELAY;
 
                 multiplierText.text = "2";
-                tweeningManager.AddTween(new FloatTween(0, 1, (float time) =>
-                {
-                    Color frame = HSBColor.Lerp(
-                        HSBColor.FromColor(multiplierConfig.Two),
-                        HSBColor.FromColor(multiplierConfig.Four), time)
-                        .ToColor();
-
-                    multiplierCircles[1].fillAmount = time;
-                    multiplierCircles[1].color = frame;
-                    multiplierCircles[0].color = frame.ColorWithAlpha(0.25f);
-                },
-                1, EaseType.Linear), this);
-                yield return new WaitForSecondsRealtime(1);
+                tweeningManager.RestartTween(twoFourFloatTween, this);
+                yield return MULTIPLIER_DELAY;
 
                 multiplierText.text = "4";
-                tweeningManager.AddTween(new FloatTween(0, 1, (time) =>
-                {
-                    Color frame = HSBColor.Lerp(
-                        HSBColor.FromColor(multiplierConfig.Four),
-                        HSBColor.FromColor(multiplierConfig.Eight), time)
-                        .ToColor();
-
-                    multiplierCircles[1].fillAmount = time;
-                    multiplierCircles[1].color = frame;
-                    multiplierCircles[0].color = frame.ColorWithAlpha(0.25f);
-                }, 0.98f, EaseType.Linear), this);
-                yield return new WaitForSecondsRealtime(1);
+                tweeningManager.RestartTween(fourEightFloatTween, this);
+                yield return MULTIPLIER_DELAY;
 
 
                 previewCoroOn8x = true;
                 multiplierText.text = "8";
                 multiplierCircles[1].color = Color.clear;
                 multiplierCircles[1].fillAmount = 0;
-
-                yield return new WaitForSecondsRealtime(1);
+                yield return MULTIPLIER_DELAY;
             }
 
             yield return MultiplierPreviewCoroutine();
@@ -502,32 +522,31 @@ namespace UITweaks.UI
 
         private IEnumerator MultiplayerPositionPreviewCoroutine()
         {
-            yield return new WaitUntil(() => objectGrabber.IsCompleted);
             previewPositionIsFirst = false;
 
             positionPanel.positionText.text = "5";
             positionPanel.positionText.color = positionConfig.Fifth;
             positionPanel.playerCountText.color = positionConfig.UseStaticColorForStaticPanel ? positionConfig.StaticPanelColor : positionConfig.Fifth;
             positionPanel.playerCountText.color = positionPanel.playerCountText.color.ColorWithAlpha(0.25f);
-            yield return new WaitForSecondsRealtime(1f);
+            yield return POSITION_DELAY;
 
             positionText.text = "4";
             positionText.color = positionConfig.Fourth;
             playerCountText.color = positionConfig.UseStaticColorForStaticPanel ? positionConfig.StaticPanelColor : positionConfig.Fourth;
             positionPanel.playerCountText.color = positionPanel.playerCountText.color.ColorWithAlpha(0.25f);
-            yield return new WaitForSecondsRealtime(1f);
+            yield return POSITION_DELAY;
 
             positionText.text = "3";
             positionText.color = positionConfig.Third;
             playerCountText.color = positionConfig.UseStaticColorForStaticPanel ? positionConfig.StaticPanelColor : positionConfig.Third;
             positionPanel.playerCountText.color = positionPanel.playerCountText.color.ColorWithAlpha(0.25f);
-            yield return new WaitForSecondsRealtime(1f);
+            yield return POSITION_DELAY;
 
             positionText.text = "2";
             positionText.color = positionConfig.Second;
             playerCountText.color = positionConfig.UseStaticColorForStaticPanel ? positionConfig.StaticPanelColor : positionConfig.Second;
             positionPanel.playerCountText.color = positionPanel.playerCountText.color.ColorWithAlpha(0.25f);
-            yield return new WaitForSecondsRealtime(1f);
+            yield return POSITION_DELAY;
 
             positionText.text = "1";
             positionText.color = positionConfig.First;
@@ -542,7 +561,7 @@ namespace UITweaks.UI
                 tweeningManager.RestartTween(positionPanelOpacityTween, this);
             }
 
-            yield return new WaitForSecondsRealtime(1f);
+            yield return POSITION_DELAY;
             firstPlaceAnimationGO.SetActive(false);
 
             yield return MultiplayerPositionPreviewCoroutine();
