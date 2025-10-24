@@ -73,12 +73,18 @@ namespace UITweaks.PanelModifiers
 
             if (miscConfig.ItalicizeComboPanel)
             {
-                var comboText = comboUIController.transform.Find("ComboText").GetComponent<CurvedTextMeshPro>();
-                comboText.fontStyle = FontStyles.Italic | FontStyles.UpperCase;
+                if (comboUIController?.gameObject == null)
+                    logger.Warn("Setting 'ItalicizeComboPanel' is true, but the Combo Panel isn't here! Skipping...");
 
-                var num = comboUIController._comboText;
-                num.fontStyle = FontStyles.Italic;
-                num.transform.localPosition = new Vector3(-2.5f, 4);
+                else
+                {
+                    var comboText = comboUIController.transform.Find("ComboText").GetComponent<CurvedTextMeshPro>();
+                    comboText.fontStyle = FontStyles.Italic | FontStyles.UpperCase;
+
+                    var num = comboUIController._comboText;
+                    num.fontStyle = FontStyles.Italic;
+                    num.transform.localPosition = new Vector3(-2.5f, 4);
+                }
             }
 
             if (miscConfig.ItalicizeScore)
