@@ -36,7 +36,7 @@ namespace UITweaks.Models
             try
             {
                 if (callingDecorator.ParentPanel == null)
-                    throw new NullReferenceException($"Field 'parentPanel' cannot be null when creating an object of type {callingTypeName}");
+                    throw new NullReferenceException($"Field 'parentPanel' cannot be null when creating an object of type {callingTypeName} (is Counters+ hiding it?)");
 
                 if (callingDecorator.Config == null)
                     throw new NullReferenceException($"Field 'config' cannot be null when creating an object of type {callingTypeName}");
